@@ -1,4 +1,4 @@
-# Amplifier Evangelism Plan
+# Amplifier Onboarding
 
 > Transform how developers think about AI application development
 
@@ -27,7 +27,7 @@ This repository includes a simple "coming soon" landing page in `index.html`.
    ```bash
    git init
    git add .
-   git commit -m "Initial commit: Amplifier evangelism plan and coming soon page"
+   git commit -m "Initial commit: Amplifier Onboarding and coming soon page"
    git remote add origin https://github.com/YOUR-USERNAME/amplifier-evangelism-plan.git
    git branch -M main
    git push -u origin main

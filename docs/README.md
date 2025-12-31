@@ -1,4 +1,4 @@
-# Amplifier Evangelism Plan
+# Amplifier Onboarding
 
 ## Vision
 
