@@ -17,37 +17,33 @@ See the [docs/](./docs/) directory for detailed planning documents:
 - [Technical Architecture](./docs/06_TECHNICAL_ARCHITECTURE.md)
 - [Roadmap](./docs/07_ROADMAP.md)
 
-## 🌐 GitHub Pages Setup
+## 🌐 GitHub Pages
 
-This repository includes a simple "coming soon" landing page in `index.html`.
+This repository is configured with automated GitHub Pages deployment.
 
-### To enable GitHub Pages:
+### Automatic Deployment
 
-1. **Push this repository to GitHub:**
-   ```bash
-   git init
-   git add .
-   git commit -m "Initial commit: Amplifier Onboarding and coming soon page"
-   git remote add origin https://github.com/YOUR-USERNAME/amplifier-evangelism-plan.git
-   git branch -M main
-   git push -u origin main
-   ```
+The site automatically deploys to GitHub Pages when changes are pushed to the `main` branch using GitHub Actions (see `.github/workflows/pages.yml`).
 
-2. **Enable GitHub Pages:**
-   - Go to your repository settings
-   - Navigate to "Pages" in the left sidebar
-   - Under "Source", select "Deploy from a branch"
-   - Select the `main` branch and `/ (root)` folder
-   - Click Save
+**Site URL:** `https://marklicata.github.io/amplifier-onboarding/`
 
-3. **Access your site:**
-   - Your site will be live at: `https://YOUR-USERNAME.github.io/amplifier-evangelism-plan/`
-   - It may take a few minutes to deploy
+### Setup Requirements
+
+To enable GitHub Pages for this repository:
+
+1. **Configure GitHub Pages in repository settings:**
+   - Go to repository Settings → Pages
+   - Under "Source", select "GitHub Actions"
+   - The workflow will automatically deploy on the next push to `main`
+
+2. **Access your site:**
+   - Your site will be live at: `https://marklicata.github.io/amplifier-onboarding/`
+   - Initial deployment may take a few minutes
 
 ### Custom Domain (Optional)
 
-To use a custom domain like `amplifier.dev`:
-1. Add a `CNAME` file with your domain name
+To use a custom domain:
+1. Add a `CNAME` file with your domain name to the repository root
 2. Configure DNS settings with your domain provider
 3. Update GitHub Pages settings to use the custom domain
 
