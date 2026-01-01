@@ -38,6 +38,9 @@
     
     <!-- Stylesheet -->
     <link rel="stylesheet" href="/styles/main.css">
+    
+    <!-- Performance monitoring (development only) -->
+    <script defer src="/scripts/performance.js"></script>
 </head>
 <body>
     <!-- Skip to main content for accessibility -->
@@ -58,17 +61,14 @@
     </nav>
     
     <main id="main" class="container" role="main">
-        <!-- Hero Section -->
-        <header class="hero">
-            <h1 class="logo">Amplifier</h1>
-            <p class="tagline">Program Intelligence, Not Just Code</p>
-            
-            <p class="description">
-                Transform how you think about AI application development. Amplifier turns AI capabilities 
-                into composable, reusable systems that anyone can orchestrate. From chat-based interactions 
-                to declarative, composable workflows.
+        <!-- Header Section -->
+        <div class="page-header">
+            <h1>Welcome to Amplifier</h1>
+            <p class="page-description">
+                Transform how you think about AI application development. 
+                Amplifier turns AI capabilities into composable, reusable systems that anyone can orchestrate.
             </p>
-        </header>
+        </div>
 
         <!-- Features Section -->
         <section class="features" aria-label="Key Features">
@@ -112,7 +112,8 @@
         <footer class="status" role="contentinfo">
             <p>
                 <span aria-hidden="true">🚀</span> Coming Soon | 
-                Built with <span aria-hidden="true">❤️</span> by <a href="https://microsoft.com" target="_blank" rel="noopener noreferrer">Microsoft</a>
+                Built with <span aria-hidden="true">❤️</span> by <a href="https://microsoft.com" target="_blank" rel="noopener noreferrer">Microsoft</a> | 
+                <a href="/accessibility.html">Accessibility</a>
             </p>
         </footer>
     </main>

@@ -2,82 +2,204 @@
 
 > Transform how developers think about AI application development
 
-This repository contains the comprehensive evangelism strategy and planning documents for the Amplifier platform, plus a simple coming soon landing page.
+**Live Site**: [https://amplifier-onboarding.azurestaticapps.net](https://amplifier-onboarding.azurestaticapps.net)
+
+A web experience that showcases Amplifier's capabilities through interactive demos, tutorials, and a recipe gallery. Users can experience pre-configured AI workflows and learn to build their own.
+
+---
+
+## 🚀 Quick Start
+
+### View the Site
+
+**Live on Azure**: https://amplifier-onboarding.azurestaticapps.net
+
+### Run Locally
+
+```bash
+# 1. Clone the repository
+git clone https://github.com/yourusername/amplifier-onboarding.git
+cd amplifier-onboarding
+
+# 2. Start development server
+npm run dev
+
+# 3. Open http://localhost:3000
+```
+
+**That's it!** No build step, no dependencies to install. Pure static site.
+
+---
+
+## 📂 What's Here
+
+### Live Features (Phase 0 - In Progress)
+
+- ✅ **Landing Page** - Professional homepage with navigation
+- ✅ **Recipe Gallery** - Browse 5 showcase recipes with filtering and search
+- ✅ **Design System** - Documented color palette, typography, components
+- ✅ **Responsive Design** - Mobile-first, works on all devices
+- ✅ **Azure Deployment** - Auto-deploys from main branch
+
+### Coming Soon (Phase 1+)
+
+- ⏳ **Recipe Execution** - Run recipes in sandboxed environment
+- ⏳ **Real-time Viewer** - Watch AI agents execute step-by-step
+- ⏳ **Interactive Tutorials** - Learn by doing
+- ⏳ **Visual Builder** - Drag-and-drop recipe creation
+- ⏳ **Community Gallery** - Share and discover recipes
+
+---
+
+## 🎯 Current Progress
+
+**Phase 0: Foundation** (Weeks 1-2) - 28% Complete
+
+- ✅ Day 1: Enhanced landing page, CSS architecture, navigation, design system
+- ✅ Day 2: Component library, recipe gallery, filtering & search
+- 🔄 Day 3: Dev server, build pipeline, documentation ← IN PROGRESS
+- ⏳ Day 4: Recipe metadata, detailed content
+- ⏳ Day 5: Testing framework, accessibility audit
+- ⏳ Days 6-10: Backend, authentication, deployment automation
+
+See [execution_plans/EXECUTION_PLAN_PHASE_0.md](./execution_plans/EXECUTION_PLAN_PHASE_0.md) for detailed breakdown.
+
+---
+
+## 🏗️ Architecture
+
+**Current (Phase 0)**: Pure Static Site
+```
+HTML + CSS + JavaScript
+    ↓
+Azure Static Web Apps
+    ↓
+Global CDN + Free SSL
+```
+
+**Future (Phase 1+)**: Static Frontend + API Backend
+```
+Frontend (Static Web Apps) → Backend (Container Apps) → Database + Redis
+```
+
+See [docs/06_TECHNICAL_ARCHITECTURE.md](./docs/06_TECHNICAL_ARCHITECTURE.md) for full architecture.
+
+---
 
 ## 📋 Documentation
 
-See the [docs/](./docs/) directory for detailed planning documents:
+### For Users
+- **[Recipe Catalog](./docs/03_RECIPE_CATALOG.md)** - 18+ planned recipes
+- **[User Journey](./docs/01_USER_JOURNEY.md)** - Personas and transformation paths
 
-- [Executive Summary](./docs/00_EXECUTIVE_SUMMARY.md)
-- [User Journey & Personas](./docs/01_USER_JOURNEY.md)
-- [Web Experience Design](./docs/02_WEB_EXPERIENCE_DESIGN.md)
-- [Recipe Catalog](./docs/03_RECIPE_CATALOG.md)
-- [Builder Experience](./docs/04_BUILDER_EXPERIENCE.md)
-- [Content Strategy](./docs/05_CONTENT_STRATEGY.md)
-- [Technical Architecture](./docs/06_TECHNICAL_ARCHITECTURE.md)
-- [Roadmap](./docs/07_ROADMAP.md)
+### For Developers
+- **[Contributing Guide](./CONTRIBUTING.md)** - How to contribute
+- **[Design System](./docs/DESIGN_SYSTEM.md)** - Colors, typography, components
+- **[Execution Plan](./execution_plans/EXECUTION_PLAN_PHASE_0.md)** - Implementation roadmap
+- **[Azure Deployment](./execution_plans/AZURE_STATIC_WEB_APPS.md)** - Deployment guide
 
-## 🌐 GitHub Pages Setup
+### For Stakeholders
+- **[Executive Summary](./docs/00_EXECUTIVE_SUMMARY.md)** - Vision and approach
+- **[Roadmap](./docs/07_ROADMAP.md)** - 6-month timeline
+- **[Content Strategy](./docs/05_CONTENT_STRATEGY.md)** - Messaging and content plan
 
-This repository includes a simple "coming soon" landing page in `index.html`.
+---
 
-### To enable GitHub Pages:
+## 🛠️ Technology Stack
 
-1. **Push this repository to GitHub:**
-   ```bash
-   git init
-   git add .
-   git commit -m "Initial commit: Amplifier Onboarding and coming soon page"
-   git remote add origin https://github.com/YOUR-USERNAME/amplifier-evangelism-plan.git
-   git branch -M main
-   git push -u origin main
-   ```
+**Current (Phase 0)**:
+- Pure HTML5, CSS3, JavaScript (ES6+)
+- No framework, no build step (for simplicity)
+- Azure Static Web Apps (hosting)
 
-2. **Enable GitHub Pages:**
-   - Go to your repository settings
-   - Navigate to "Pages" in the left sidebar
-   - Under "Source", select "Deploy from a branch"
-   - Select the `main` branch and `/ (root)` folder
-   - Click Save
+**Future (Phase 1+)**:
+- Frontend: Next.js + React (when complexity justifies it)
+- Backend: FastAPI (Python)
+- Database: PostgreSQL (Azure or Supabase)
+- Cache: Redis (Upstash or Azure)
 
-3. **Access your site:**
-   - Your site will be live at: `https://YOUR-USERNAME.github.io/amplifier-evangelism-plan/`
-   - It may take a few minutes to deploy
+**Philosophy**: Start simple, add complexity only when needed.
 
-### Custom Domain (Optional)
+---
 
-To use a custom domain like `amplifier.dev`:
-1. Add a `CNAME` file with your domain name
-2. Configure DNS settings with your domain provider
-3. Update GitHub Pages settings to use the custom domain
+## 📊 Success Metrics
 
-## 🚀 Vision
+**Phase 0 Goals** (End of Week 2):
+- ✅ Live site on Azure with auto-deploy
+- ✅ Recipe gallery with 5 showcase recipes
+- ⏳ Component library and design system
+- ⏳ Development environment documented
+- ⏳ Test suite with >80% coverage
 
-**"Program Intelligence, Not Just Code"**
-
-Amplifier is the middleware for AI-native applications. It turns AI capabilities into composable, reusable systems that anyone can orchestrate.
-
-## 📅 Timeline
-
-**6 months from kickoff to full launch**
-
-- Weeks 1-2: Foundation
-- Weeks 3-6: MVP - Show (Recipe playground)
-- Weeks 7-10: Teach (Learning hub)
-- Weeks 11-14: Build (Visual recipe builder)
-- Weeks 15-18: Share (Community gallery)
-- Weeks 19-22: Extend (Advanced builders)
-- Weeks 23-26: Scale & polish
-- Week 27: Launch!
-
-## 🎯 Success Metrics
-
-**Launch Week:**
+**Launch Goals** (Week 27):
 - 10,000 site visits
 - 1,000 recipe executions
 - 100 custom recipes created
 - Top 5 on Product Hunt
 
-## 📝 License
+---
 
-This planning documentation is for internal Microsoft use.
+## 🤝 Contributing
+
+We welcome contributions! Please read [CONTRIBUTING.md](./CONTRIBUTING.md) for:
+- Local setup instructions
+- Code style guide
+- Development workflow
+- How to submit changes
+
+### Quick Contribution Guide
+
+1. Fork the repository
+2. Create feature branch: `git checkout -b feature/my-feature`
+3. Make changes and test locally: `npm run dev`
+4. Commit with clear message
+5. Push and create Pull Request
+
+---
+
+## 🚢 Deployment
+
+**Automatic Deployment**:
+- Push to `main` → Auto-deploys to Azure production
+- Open Pull Request → Creates preview environment
+- Merge PR → Deploys to production + removes preview
+
+**Manual Deployment**:
+See [execution_plans/AZURE_STATIC_WEB_APPS.md](./execution_plans/AZURE_STATIC_WEB_APPS.md) for Azure CLI commands.
+
+---
+
+## 🗺️ Roadmap
+
+**6 months from kickoff to full launch**
+
+- **Weeks 1-2**: Foundation (design system, structure, gallery) ← NOW
+- **Weeks 3-6**: MVP - Recipe playground with execution
+- **Weeks 7-10**: Learning hub with tutorials
+- **Weeks 11-14**: Visual recipe builder
+- **Weeks 15-18**: Community gallery
+- **Weeks 19-22**: Advanced builders (agents, bundles, modules)
+- **Weeks 23-26**: Scale & polish
+- **Week 27**: Launch!
+
+See [docs/07_ROADMAP.md](./docs/07_ROADMAP.md) for detailed roadmap.
+
+---
+
+## 📞 Contact
+
+- **GitHub**: https://github.com/microsoft/amplifier
+- **Issues**: https://github.com/yourusername/amplifier-onboarding/issues
+- **Discussions**: https://github.com/yourusername/amplifier-onboarding/discussions
+
+---
+
+## 📄 License
+
+MIT License - See LICENSE file for details
+
+This project is part of the [Amplifier](https://github.com/microsoft/amplifier) ecosystem.
+
+---
+
+**Built with ❤️ by Microsoft | Powered by Azure Static Web Apps**

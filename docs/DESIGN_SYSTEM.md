@@ -34,7 +34,7 @@ The Amplifier design system embodies **"Modular Intelligence"** - clean, modern,
 - CSS Variable: `--color-secondary`
 
 **Accent: Energetic Orange**
-- `#FF6B35` - Action, results, energy
+- `#DD5C2D` - Action, results, energy
 - Usage: CTAs, important actions, notifications
 - CSS Variable: `--color-accent`
 
@@ -213,7 +213,7 @@ box-shadow: 0 6px 30px rgba(255, 107, 53, 0.4);
 ```
 
 **Styling**:
-- Background: `--color-accent` (#FF6B35)
+- Background: `--color-accent` (#DD5C2D)
 - Text: White
 - Padding: `1rem 2rem` (16px 32px)
 - Border radius: `--radius-md` (8px)
@@ -565,7 +565,7 @@ All design tokens are defined in `/styles/main.css` as CSS custom properties:
     /* Colors */
     --color-primary: #0078D4;
     --color-secondary: #8B5CF6;
-    --color-accent: #FF6B35;
+    --color-accent: #DD5C2D;
     --color-white: #ffffff;
     --color-gray-50: #F5F5F5;
     --color-gray-900: #1A1A1A;

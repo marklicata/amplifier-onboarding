@@ -1,0 +1,151 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://amplifier-onboarding.azurestaticapps.net/schemas/recipe.json",
+  "title": "Amplifier Recipe Metadata Schema",
+  "description": "Schema for recipe metadata in the Amplifier showcase gallery",
+  "type": "object",
+  "required": ["id", "name", "description", "category", "difficulty", "duration", "agents", "valueProposition", "tags"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9-]+$",
+      "description": "Unique identifier (kebab-case)",
+      "examples": ["comprehensive-code-review", "api-documentation-generator"]
+    },
+    "name": {
+      "type": "string",
+      "minLength": 3,
+      "maxLength": 100,
+      "description": "Display name of the recipe"
+    },
+    "description": {
+      "type": "string",
+      "minLength": 50,
+      "maxLength": 500,
+      "description": "Detailed description (2-3 sentences)"
+    },
+    "category": {
+      "type": "string",
+      "enum": ["code-quality", "documentation", "security", "testing", "devops", "data", "content", "custom"],
+      "description": "Primary category"
+    },
+    "difficulty": {
+      "type": "string",
+      "enum": ["beginner", "intermediate", "advanced"],
+      "description": "Difficulty level"
+    },
+    "duration": {
+      "type": "string",
+      "pattern": "^[0-9]+-?[0-9]* (minute|minutes|min)$",
+      "description": "Estimated execution time",
+      "examples": ["2-3 minutes", "5 minutes"]
+    },
+    "agents": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": ["zen-architect", "bug-hunter", "security-guardian", "test-coverage", "modular-builder", "explorer", "integration-specialist", "post-task-cleanup"]
+      },
+      "minItems": 1,
+      "description": "Amplifier agents used in this recipe"
+    },
+    "valueProposition": {
+      "type": "string",
+      "minLength": 20,
+      "maxLength": 200,
+      "description": "One-sentence hook explaining the value"
+    },
+    "useCases": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "minItems": 3,
+      "maxItems": 8,
+      "description": "Specific use cases for this recipe"
+    },
+    "inputs": {
+      "type": "object",
+      "description": "Input parameters schema",
+      "patternProperties": {
+        "^[a-z_]+$": {
+          "type": "object",
+          "required": ["type", "description", "required"],
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": ["file", "files", "directory", "text", "number", "select", "multiselect", "boolean"]
+            },
+            "description": {
+              "type": "string"
+            },
+            "required": {
+              "type": "boolean"
+            },
+            "default": {},
+            "example": {
+              "type": "string"
+            },
+            "options": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "outputs": {
+      "type": "object",
+      "required": ["format", "includes"],
+      "properties": {
+        "format": {
+          "type": "string",
+          "enum": ["markdown", "code", "json", "yaml", "html", "text", "openapi"]
+        },
+        "includes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1
+        }
+      }
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z0-9-]+$"
+      },
+      "minItems": 2,
+      "maxItems": 10,
+      "description": "Searchable tags"
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$",
+      "description": "Semantic version",
+      "default": "1.0.0"
+    },
+    "author": {
+      "type": "string",
+      "description": "Recipe author"
+    },
+    "relatedRecipes": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "IDs of related recipes"
+    },
+    "prerequisites": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Required setup or knowledge"
+    }
+  }
+}

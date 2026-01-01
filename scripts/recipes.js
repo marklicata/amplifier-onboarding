@@ -93,11 +93,11 @@ function createRecipeCard(recipe) {
         </p>
         
         <div class="recipe-actions">
-            <a href="#recipe-${recipe.id}" class="btn-recipe">
+            <a href="/playground/recipes/${recipe.id}.html" class="btn-recipe">
                 View Recipe
             </a>
             <button class="btn-recipe-secondary" onclick="showRecipeDetails('${recipe.id}')">
-                Details
+                Quick Preview
             </button>
         </div>
     `;
