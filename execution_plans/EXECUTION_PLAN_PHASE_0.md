@@ -385,55 +385,97 @@
 
 ---
 
-### Day 8: Deployment Infrastructure (4-5 hours)
+### Day 8: Deployment Infrastructure (1-2 hours)
 
-#### Increment 8.1: Frontend Deployment to GitHub Pages (1 hour)
-**Current state**: Manual deployment  
-**Target**: Automated deployment on commit
+#### Increment 8.1: Azure Static Web Apps Deployment (15 minutes)
+**Current state**: Running locally only  
+**Target**: Live on Azure with auto-deploy
+
+**Prerequisites**:
+- Azure subscription
+- Azure CLI installed and logged in (`az login`)
+- GitHub personal access token (repo + workflow scope)
 
 **Tasks**:
-- [ ] Configure GitHub Pages settings
-- [ ] Create GitHub Actions workflow: `.github/workflows/deploy-frontend.yml`
-- [ ] Build on push to main
-- [ ] Deploy to GitHub Pages
-- [ ] Test deployment works
+- [ ] Run Azure Static Web Apps deployment script (see AZURE_STATIC_WEB_APPS.md)
+- [ ] Verify GitHub Actions workflow auto-created
+- [ ] Wait for first deployment to complete
+- [ ] Verify site accessible at `*.azurestaticapps.net`
 
-**Verification**: Commit triggers build, site updates automatically  
-**Commit**: "Add GitHub Actions for automatic frontend deployment"
+**Quick commands**:
+```bash
+# See execution_plans/AZURE_STATIC_WEB_APPS.md for full script
+az staticwebapp create \
+  --name "amplifier-onboarding" \
+  --resource-group "amplifier-rg" \
+  --location "eastus2" \
+  --source "https://github.com/yourusername/amplifier-onboarding" \
+  --branch "main" \
+  --app-location "/" \
+  --output-location "/" \
+  --token "$GITHUB_TOKEN"
+```
+
+**Verification**: 
+- Site live at `https://<app-name>.azurestaticapps.net`
+- GitHub Actions workflow in `.github/workflows/azure-static-web-apps-*.yml`
+- Commits to main trigger auto-deploy
+
+**Commit**: Not needed - Azure creates the workflow automatically
 
 ---
 
-#### Increment 8.2: Backend Deployment to Fly.io (2 hours)
-**Current state**: Local only  
-**Target**: Backend deployed to staging
+#### Increment 8.2: Backend Container Preparation (45 minutes)
+**Current state**: Backend runs locally only  
+**Target**: Backend ready for Azure Container Apps deployment (Phase 1)
 
 **Tasks**:
-- [ ] Create Fly.io account (if needed)
-- [ ] Create `fly.toml` configuration
-- [ ] Create Dockerfile for backend
-- [ ] Set up PostgreSQL on Fly.io (or external service)
-- [ ] Set up Redis on Fly.io (or Upstash)
-- [ ] Deploy to staging environment
-- [ ] Set environment variables in Fly.io
+- [ ] Create `backend/Dockerfile` (optimized for FastAPI)
+- [ ] Create `.dockerignore` file
+- [ ] Test Docker build locally: `docker build -t amplifier-api ./backend`
+- [ ] Test Docker run locally: `docker run -p 8000:8000 amplifier-api`
+- [ ] Document backend deployment process for Phase 1
 
-**Verification**: Backend accessible at https://amplifier-api-staging.fly.dev/health  
-**Commit**: "Deploy backend to Fly.io staging environment"
+**Verification**: 
+- Docker image builds successfully
+- Container runs and `/health` endpoint works
+- Image size is reasonable (<500MB)
+
+**Commit**: "Add Dockerfile for backend container deployment"
+
+**Note**: We're not deploying the backend yet - that comes in Phase 1. We're just preparing the container.
 
 ---
 
-#### Increment 8.3: CI/CD Pipeline (1-2 hours)
-**Current state**: Manual deployment  
-**Target**: Automated deployment on commit
+#### Increment 8.3: Custom Domain Setup (15 minutes - OPTIONAL)
+**Current state**: Using `*.azurestaticapps.net`  
+**Target**: Custom domain with free SSL
+
+**Prerequisites**: Own a domain and have DNS access
 
 **Tasks**:
-- [ ] Create GitHub Actions workflow: `.github/workflows/deploy-backend.yml`
-- [ ] Add tests to workflow (when we have tests)
-- [ ] Auto-deploy backend to Fly.io on main push
-- [ ] Add deployment status badge to README
-- [ ] Document deployment process
+- [ ] Add custom domain to Static Web App:
+  ```bash
+  az staticwebapp hostname set \
+    --name "amplifier-onboarding" \
+    --resource-group "amplifier-rg" \
+    --hostname "amplifier.dev"
+  ```
+- [ ] Add DNS CNAME record at your DNS provider:
+  - Name: `www` (or `@` for apex)
+  - Type: `CNAME`
+  - Value: `<app-name>.azurestaticapps.net`
+- [ ] Wait for DNS propagation (5-60 minutes)
+- [ ] Verify SSL certificate auto-provisioned
 
-**Verification**: Commit to main deploys both frontend and backend  
-**Commit**: "Add automated backend deployment pipeline"
+**Verification**: 
+- Custom domain resolves to Static Web App
+- HTTPS works on custom domain
+- Certificate is valid
+
+**Commit**: Not needed (infrastructure only)
+
+**Note**: Skip this if you don't have a custom domain yet. The `*.azurestaticapps.net` URL works perfectly fine.
 
 ---
 
@@ -535,8 +577,8 @@ At the end of Week 2, we should have:
 
 ### Technical
 - ✅ Local development environment runs with one command
-- ✅ Frontend deploys automatically to GitHub Pages on commit
-- ✅ Backend deploys automatically to Fly.io on commit
+- ✅ Frontend deploys automatically to Azure Static Web Apps on commit
+- ✅ Backend containerized and ready for Phase 1 deployment
 - ✅ Recipe gallery displays 5 showcase recipes
 - ✅ Filtering and search work
 - ✅ Basic authentication flow works (GitHub OAuth)
@@ -550,11 +592,12 @@ At the end of Week 2, we should have:
 - ✅ Documentation complete and clear
 
 ### Deliverables
-- ✅ Live site at https://[username].github.io/amplifier-onboarding/
-- ✅ Backend API at https://amplifier-api-staging.fly.dev
+- ✅ Live site at https://amplifier-onboarding.azurestaticapps.net
+- ✅ Backend containerized (Dockerfile) and tested locally
 - ✅ Design system documented
 - ✅ 5 showcase recipes with full content
 - ✅ Test suite with >80% coverage
+- ✅ Auto-deploy pipeline via GitHub Actions (Azure-managed)
 
 ---
 
@@ -601,10 +644,11 @@ Run through this before moving to Phase 1:
 - [ ] Database migrations run successfully
 
 ### DevOps
-- [ ] Commit to main triggers frontend deploy
-- [ ] Commit to main triggers backend deploy
+- [ ] Commit to main triggers frontend deploy to Azure Static Web Apps
+- [ ] GitHub Actions workflow auto-created by Azure
 - [ ] All tests pass in CI
-- [ ] Environment variables configured
+- [ ] Backend Dockerfile builds and runs locally
+- [ ] Environment variables documented for Phase 1
 - [ ] Monitoring/logging basics in place
 
 ### Documentation
@@ -618,13 +662,13 @@ Run through this before moving to Phase 1:
 
 ## Risk Mitigation
 
-### Risk: GitHub Pages deployment issues
-**Mitigation**: Test deployment early (Day 1), use simple static files first  
-**Fallback**: Use Netlify or Vercel instead
+### Risk: Azure Static Web Apps deployment issues
+**Mitigation**: Test deployment early (Day 8), use simple static files first  
+**Fallback**: GitHub Pages or Netlify as temporary alternative
 
-### Risk: Fly.io costs or complexity
-**Mitigation**: Use free tier, keep backend simple  
-**Fallback**: Deploy to Cloud Run or Railway
+### Risk: Azure Container Apps complexity (Phase 1)
+**Mitigation**: Use minimal configuration, leverage Supabase/Upstash free tiers  
+**Fallback**: Defer backend to Phase 2 if needed
 
 ### Risk: OAuth setup takes too long
 **Mitigation**: Defer to Day 7, use mock auth initially  

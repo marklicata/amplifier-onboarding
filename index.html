@@ -3,198 +3,118 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Amplifier - Transform how developers think about AI application development">
-    <title>Amplifier - Coming Soon</title>
+    
+    <!-- Primary Meta Tags -->
+    <title>Amplifier - Program Intelligence, Not Just Code</title>
+    <meta name="title" content="Amplifier - Program Intelligence, Not Just Code">
+    <meta name="description" content="Transform how you think about AI application development. Amplifier turns AI capabilities into composable, reusable systems that anyone can orchestrate.">
+    <meta name="keywords" content="AI development, AI workflows, AI orchestration, declarative AI, composable AI, AI recipes, AI agents">
+    <meta name="author" content="Microsoft">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://amplifier-onboarding.azurestaticapps.net/">
+    <meta property="og:title" content="Amplifier - Program Intelligence, Not Just Code">
+    <meta property="og:description" content="Transform how you think about AI application development. Composable, reusable AI systems for everyone.">
+    <meta property="og:image" content="https://amplifier-onboarding.azurestaticapps.net/assets/social-preview.png">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://amplifier-onboarding.azurestaticapps.net/">
+    <meta property="twitter:title" content="Amplifier - Program Intelligence, Not Just Code">
+    <meta property="twitter:description" content="Transform how you think about AI application development. Composable, reusable AI systems for everyone.">
+    <meta property="twitter:image" content="https://amplifier-onboarding.azurestaticapps.net/assets/social-preview.png">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            background: linear-gradient(135deg, #0078D4 0%, #8B5CF6 100%);
-            color: #ffffff;
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-
-        .container {
-            max-width: 800px;
-            text-align: center;
-            animation: fadeIn 1s ease-in;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .logo {
-            font-size: 3rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
-            letter-spacing: -0.02em;
-        }
-
-        .tagline {
-            font-size: 1.5rem;
-            font-weight: 600;
-            margin-bottom: 2rem;
-            color: #ffffff;
-            opacity: 0.95;
-        }
-
-        .description {
-            font-size: 1.125rem;
-            line-height: 1.7;
-            margin-bottom: 3rem;
-            color: #ffffff;
-            opacity: 0.9;
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        .features {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
-            margin-bottom: 3rem;
-            text-align: left;
-        }
-
-        .feature {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 12px;
-            padding: 1.5rem;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            transition: transform 0.3s ease, background 0.3s ease;
-        }
-
-        .feature:hover {
-            transform: translateY(-5px);
-            background: rgba(255, 255, 255, 0.15);
-        }
-
-        .feature-icon {
-            font-size: 2rem;
-            margin-bottom: 0.75rem;
-        }
-
-        .feature-title {
-            font-size: 1.125rem;
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-        }
-
-        .feature-description {
-            font-size: 0.9375rem;
-            opacity: 0.85;
-            line-height: 1.5;
-        }
-
-        .cta {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            background: #FF6B35;
-            color: #ffffff;
-            padding: 1rem 2rem;
-            border-radius: 8px;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 1.125rem;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-            box-shadow: 0 4px 20px rgba(255, 107, 53, 0.3);
-        }
-
-        .cta:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 30px rgba(255, 107, 53, 0.4);
-        }
-
-        .status {
-            margin-top: 3rem;
-            font-size: 0.9375rem;
-            opacity: 0.8;
-        }
-
-        @media (max-width: 640px) {
-            .logo {
-                font-size: 2rem;
-            }
-
-            .tagline {
-                font-size: 1.25rem;
-            }
-
-            .description {
-                font-size: 1rem;
-            }
-
-            .features {
-                grid-template-columns: 1fr;
-            }
-        }
-    </style>
+    
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="/styles/main.css">
 </head>
 <body>
-    <div class="container">
-        <div class="logo">Amplifier</div>
-        <div class="tagline">Program Intelligence, Not Just Code</div>
-        
-        <p class="description">
-            Transform how you think about AI application development. Amplifier turns AI capabilities 
-            into composable, reusable systems that anyone can orchestrate. From chat-based interactions 
-            to declarative, composable workflows.
-        </p>
+    <!-- Skip to main content for accessibility -->
+    <a href="#main" class="skip-to-main" aria-label="Skip to main content">Skip to main content</a>
+    
+    <!-- Navigation -->
+    <nav class="navbar" role="navigation" aria-label="Main navigation">
+        <div class="nav-container">
+            <a href="/" class="nav-logo">Amplifier</a>
+            <ul class="nav-menu">
+                <li><a href="/" class="nav-link active" aria-current="page">Home</a></li>
+                <li><a href="/playground/" class="nav-link">Playground</a></li>
+                <li><a href="/learn/" class="nav-link">Learn</a></li>
+                <li><a href="/docs/" class="nav-link">Docs</a></li>
+                <li><a href="https://github.com/microsoft/amplifier" class="nav-link" target="_blank" rel="noopener noreferrer">GitHub</a></li>
+            </ul>
+        </div>
+    </nav>
+    
+    <main id="main" class="container" role="main">
+        <!-- Hero Section -->
+        <header class="hero">
+            <h1 class="logo">Amplifier</h1>
+            <p class="tagline">Program Intelligence, Not Just Code</p>
+            
+            <p class="description">
+                Transform how you think about AI application development. Amplifier turns AI capabilities 
+                into composable, reusable systems that anyone can orchestrate. From chat-based interactions 
+                to declarative, composable workflows.
+            </p>
+        </header>
 
-        <div class="features">
-            <div class="feature">
-                <div class="feature-icon">🎯</div>
-                <div class="feature-title">Experience Pre-Configured Recipes</div>
-                <div class="feature-description">
+        <!-- Features Section -->
+        <section class="features" aria-label="Key Features">
+            <article class="feature">
+                <div class="feature-icon" aria-hidden="true">🎯</div>
+                <h2 class="feature-title">Experience Pre-Configured Recipes</h2>
+                <p class="feature-description">
                     18+ production-ready recipes for code quality, documentation, security, testing, and more. 
                     See what's possible in minutes.
-                </div>
-            </div>
+                </p>
+            </article>
 
-            <div class="feature">
-                <div class="feature-icon">🏗️</div>
-                <div class="feature-title">Build Custom Solutions</div>
-                <div class="feature-description">
+            <article class="feature">
+                <div class="feature-icon" aria-hidden="true">🏗️</div>
+                <h2 class="feature-title">Build Custom Solutions</h2>
+                <p class="feature-description">
                     Visual builders and YAML editors for creating custom recipes, agents, bundles, and modules. 
                     From parameter tweaking to full module development.
-                </div>
-            </div>
+                </p>
+            </article>
 
-            <div class="feature">
-                <div class="feature-icon">🌐</div>
-                <div class="feature-title">Share & Discover</div>
-                <div class="feature-description">
+            <article class="feature">
+                <div class="feature-icon" aria-hidden="true">🌐</div>
+                <h2 class="feature-title">Share & Discover</h2>
+                <p class="feature-description">
                     Community gallery for discovering, forking, and sharing workflows. Build on each other's work 
                     and join the future of AI development.
-                </div>
-            </div>
+                </p>
+            </article>
+        </section>
+
+        <!-- Call to Action -->
+        <div class="cta-container">
+            <a href="https://github.com/microsoft/amplifier" class="cta" aria-label="View Amplifier on GitHub">
+                <span>View on GitHub</span>
+                <span aria-hidden="true">→</span>
+            </a>
         </div>
 
-        <a href="https://github.com/microsoft/amplifier" class="cta">
-            <span>View on GitHub</span>
-            <span>→</span>
-        </a>
-
-        <div class="status">
-            🚀 Coming Soon | Built with ❤️ by Microsoft
-        </div>
-    </div>
+        <!-- Footer -->
+        <footer class="status" role="contentinfo">
+            <p>
+                <span aria-hidden="true">🚀</span> Coming Soon | 
+                Built with <span aria-hidden="true">❤️</span> by <a href="https://microsoft.com" target="_blank" rel="noopener noreferrer">Microsoft</a>
+            </p>
+        </footer>
+    </main>
 </body>
 </html>
