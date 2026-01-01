@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Card Component Examples | Amplifier</title>
+    <link rel="stylesheet" href="/styles/main.css">
+    <style>
+        body {
+            padding: 3rem;
+            background: var(--gradient-primary);
+        }
+        .component-showcase {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .showcase-header {
+            text-align: center;
+            margin-bottom: 3rem;
+            color: white;
+        }
+        .component-section {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+        h1, h2, h3 {
+            color: white;
+            margin-bottom: 1rem;
+        }
+        p {
+            color: white;
+            opacity: 0.9;
+            margin-bottom: 1rem;
+        }
+        .code-block {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+            overflow-x: auto;
+        }
+        .code-block code {
+            color: #a0d8f1;
+            font-family: 'Courier New', monospace;
+            font-size: 0.875rem;
+            white-space: pre;
+        }
+        .example-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="component-showcase">
+        <div class="showcase-header">
+            <h1>Card Components</h1>
+            <p>Reusable card templates for features, recipes, and content</p>
+        </div>
+        
+        <!-- Feature Card -->
+        <section class="component-section">
+            <h2>Feature Card</h2>
+            <p>Use for highlighting features on landing page and feature pages.</p>
+            
+            <div class="example-grid">
+                <article class="feature">
+                    <div class="feature-icon" aria-hidden="true">🎯</div>
+                    <h3 class="feature-title">Feature Title</h3>
+                    <p class="feature-description">
+                        Brief description of the feature and its value proposition. 
+                        Keep it concise and compelling.
+                    </p>
+                </article>
+                
+                <article class="feature">
+                    <div class="feature-icon" aria-hidden="true">🚀</div>
+                    <h3 class="feature-title">Another Feature</h3>
+                    <p class="feature-description">
+                        Each card automatically adjusts to grid layout and 
+                        responds to hover interactions.
+                    </p>
+                </article>
+            </div>
+            
+            <div class="code-block">
+                <code>&lt;article class="feature"&gt;
+    &lt;div class="feature-icon" aria-hidden="true"&gt;🎯&lt;/div&gt;
+    &lt;h3 class="feature-title"&gt;Feature Title&lt;/h3&gt;
+    &lt;p class="feature-description"&gt;
+        Brief description of the feature...
+    &lt;/p&gt;
+&lt;/article&gt;</code>
+            </div>
+            
+            <p><strong>CSS Classes:</strong> <code>.feature</code>, <code>.feature-icon</code>, <code>.feature-title</code>, <code>.feature-description</code></p>
+            <p><strong>Features:</strong> Glassmorphic background, hover lift effect, auto-responsive grid</p>
+        </section>
+        
+        <!-- Recipe Card (Template for Day 2) -->
+        <section class="component-section">
+            <h2>Recipe Card (Coming in Day 2)</h2>
+            <p>Use for displaying recipes in the gallery.</p>
+            
+            <div class="example-grid">
+                <article class="recipe-card" style="
+                    background: rgba(255, 255, 255, 0.1);
+                    backdrop-filter: blur(10px);
+                    border-radius: 12px;
+                    padding: 1.5rem;
+                    border: 1px solid rgba(255, 255, 255, 0.2);
+                    transition: transform 0.3s ease;
+                ">
+                    <div class="recipe-header" style="margin-bottom: 1rem;">
+                        <h3 style="color: white; font-size: 1.25rem; margin-bottom: 0.5rem;">Code Review</h3>
+                        <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                            <span style="background: rgba(255, 107, 53, 0.8); color: white; padding: 0.25rem 0.75rem; border-radius: 12px; font-size: 0.75rem; font-weight: 600;">Beginner</span>
+                            <span style="background: rgba(255, 255, 255, 0.2); color: white; padding: 0.25rem 0.75rem; border-radius: 12px; font-size: 0.75rem;">2-3 min</span>
+                        </div>
+                    </div>
+                    <p style="color: white; opacity: 0.85; font-size: 0.9375rem; margin-bottom: 1rem;">
+                        Multi-perspective code analysis covering architecture, bugs, and security.
+                    </p>
+                    <div style="display: flex; gap: 0.5rem;">
+                        <button style="flex: 1; background: var(--color-accent); color: white; border: none; padding: 0.75rem; border-radius: 6px; font-weight: 600; cursor: pointer;">
+                            View Recipe
+                        </button>
+                    </div>
+                </article>
+            </div>
+            
+            <p><strong>CSS Classes:</strong> <code>.recipe-card</code> (to be added in styles/main.css)</p>
+            <p><strong>Features:</strong> Metadata badges, difficulty indicator, quick actions</p>
+        </section>
+        
+        <div style="margin-top: 2rem; text-align: center;">
+            <a href="/" class="cta">
+                <span>← Back to Home</span>
+            </a>
+        </div>
+    </div>
+</body>
+</html>
