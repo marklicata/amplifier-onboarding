@@ -309,7 +309,7 @@ Guided, step-by-step builder:
 **Colors:**
 - Primary: Electric Blue (#0078D4) - Trust, technology
 - Secondary: Vibrant Purple (#8B5CF6) - Creativity, intelligence
-- Accent: Energetic Orange (#FF6B35) - Action, results
+- Accent: Energetic Orange (#DD5C2D) - Action, results
 - Neutrals: Clean grays (#F5F5F5 → #1A1A1A)
 
 **Typography:**
