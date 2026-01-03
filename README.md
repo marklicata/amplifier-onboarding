@@ -12,7 +12,7 @@ A web experience that showcases Amplifier's capabilities through interactive dem
 
 ### View the Site
 
-**Live on Azure**: https://amplifier-onboarding.azurestaticapps.net
+**Live on Azure**: https://icy-wave-001fa3d0f.1.azurestaticapps.net/
 
 ### Run Frontend Locally
 
