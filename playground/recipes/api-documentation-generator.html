@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Documentation Generator | Amplifier Recipes</title>
+    <meta name="description" content="Generate comprehensive API documentation from code. OpenAPI specs, examples, and guides in 2 minutes.">
+    
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/styles/main.css">
+</head>
+<body>
+    <a href="#main" class="skip-to-main">Skip to main content</a>
+    
+    <nav class="navbar" role="navigation" aria-label="Main navigation">
+        <div class="nav-container">
+            <a href="/" class="nav-logo">Amplifier</a>
+            <ul class="nav-menu">
+                <li><a href="/" class="nav-link">Home</a></li>
+                <li><a href="/playground/" class="nav-link active">Playground</a></li>
+                <li><a href="/learn/" class="nav-link">Learn</a></li>
+                <li><a href="/docs/" class="nav-link">Docs</a></li>
+                <li><a href="https://github.com/microsoft/amplifier" class="nav-link" target="_blank" rel="noopener noreferrer">GitHub</a></li>
+            </ul>
+        </div>
+    </nav>
+    
+    <main id="main" class="page-content" role="main">
+        <div class="recipe-detail">
+            <nav aria-label="Breadcrumb" class="breadcrumb">
+                <a href="/">Home</a> / 
+                <a href="/playground/">Playground</a> / 
+                <span>API Documentation Generator</span>
+            </nav>
+            
+            <header class="recipe-detail-header">
+                <div class="recipe-meta">
+                    <span class="badge badge-difficulty beginner">Beginner</span>
+                    <span class="badge badge-duration">⏱️ 2 minutes</span>
+                    <span class="badge badge-category">Documentation</span>
+                </div>
+                
+                <h1>API Documentation Generator</h1>
+                
+                <p class="recipe-tagline">
+                    Ship beautiful API docs without writing a single sentence.
+                </p>
+            </header>
+            
+            <section class="recipe-section">
+                <h2>What It Does</h2>
+                <p>
+                    Analyzes your API code and automatically generates comprehensive documentation including 
+                    OpenAPI/Swagger specs, usage examples, error handling guides, and quick start instructions.
+                </p>
+                <p>
+                    The explorer agent maps your API endpoints, parameters, and response types, while the 
+                    zen-architect generates clear descriptions, use cases, and example requests that make 
+                    your API easy to understand and use.
+                </p>
+            </section>
+            
+            <section class="recipe-section">
+                <h2>How It Works</h2>
+                <ol class="recipe-steps">
+                    <li>
+                        <strong>Parse API Endpoints</strong> (explorer)
+                        <p>Scans code to identify all API routes, HTTP methods, and handler functions.</p>
+                    </li>
+                    <li>
+                        <strong>Extract Parameters & Types</strong>
+                        <p>Identifies request parameters, query strings, body schemas, and response types.</p>
+                    </li>
+                    <li>
+                        <strong>Generate Descriptions</strong> (zen-architect)
+                        <p>Creates clear, concise descriptions for each endpoint based on code analysis.</p>
+                    </li>
+                    <li>
+                        <strong>Create Usage Examples</strong>
+                        <p>Generates realistic request/response examples with different scenarios.</p>
+                    </li>
+                    <li>
+                        <strong>Format & Validate</strong>
+                        <p>Outputs OpenAPI/Swagger spec or Markdown, validates against standards.</p>
+                    </li>
+                </ol>
+            </section>
+            
+            <section class="recipe-section">
+                <h2>When to Use</h2>
+                <ul class="use-cases">
+                    <li><strong>Generate OpenAPI/Swagger specs</strong> - Automatic API specification generation</li>
+                    <li><strong>Create API reference documentation</strong> - Complete endpoint reference with examples</li>
+                    <li><strong>Build getting started guides</strong> - Quick start tutorials for API consumers</li>
+                    <li><strong>Generate code examples</strong> - Request/response examples in multiple languages</li>
+                    <li><strong>Document REST endpoints</strong> - Comprehensive REST API documentation</li>
+                </ul>
+            </section>
+            
+            <section class="recipe-section">
+                <h2>Required Inputs</h2>
+                <div class="input-params">
+                    <div class="param-item">
+                        <div class="param-header">
+                            <code class="param-name">api_files</code>
+                            <span class="param-required">Required</span>
+                        </div>
+                        <p class="param-description">API code files to analyze and document.</p>
+                        <p class="param-example">Example: <code>src/api/**/*.py</code></p>
+                    </div>
+                    
+                    <div class="param-item">
+                        <div class="param-header">
+                            <code class="param-name">format</code>
+                            <span class="param-optional">Optional</span>
+                        </div>
+                        <p class="param-description">Output documentation format.</p>
+                        <p class="param-example">Options: openapi, markdown, html</p>
+                        <p class="param-example">Default: <code>openapi</code></p>
+                    </div>
+                </div>
+            </section>
+            
+            <section class="recipe-section">
+                <h2>What You Get</h2>
+                <div class="output-list">
+                    <div class="output-item">
+                        <span class="output-icon">📚</span>
+                        <div>
+                            <strong>Complete API Documentation</strong>
+                            <p>Full endpoint reference with methods, parameters, and responses</p>
+                        </div>
+                    </div>
+                    <div class="output-item">
+                        <span class="output-icon">💡</span>
+                        <div>
+                            <strong>Interactive Examples</strong>
+                            <p>Request/response examples you can copy and run immediately</p>
+                        </div>
+                    </div>
+                    <div class="output-item">
+                        <span class="output-icon">⚠️</span>
+                        <div>
+                            <strong>Error Handling Guide</strong>
+                            <p>All error codes documented with troubleshooting steps</p>
+                        </div>
+                    </div>
+                    <div class="output-item">
+                        <span class="output-icon">🚀</span>
+                        <div>
+                            <strong>Quick Start Guide</strong>
+                            <p>Step-by-step tutorial to get users started quickly</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <section class="recipe-cta">
+                <div class="cta-box">
+                    <h3>Ready to try this recipe?</h3>
+                    <p>Recipe execution coming in Phase 1. For now, install Amplifier locally:</p>
+                    <div class="cta-actions">
+                        <a href="https://github.com/microsoft/amplifier" class="cta" target="_blank" rel="noopener noreferrer">
+                            <span>View on GitHub</span>
+                            <span aria-hidden="true">→</span>
+                        </a>
+                        <a href="/playground/" class="btn-recipe-secondary">
+                            ← Back to Gallery
+                        </a>
+                    </div>
+                </div>
+            </section>
+            
+            <section class="recipe-section">
+                <h2>Related Recipes</h2>
+                <div class="related-recipes">
+                    <article class="related-recipe-card">
+                        <h3>Comprehensive Code Review</h3>
+                        <p>Multi-perspective code quality analysis</p>
+                        <a href="comprehensive-code-review.html">View Recipe →</a>
+                    </article>
+                    <article class="related-recipe-card">
+                        <h3>Test Coverage Improver</h3>
+                        <p>Generate tests and improve coverage automatically</p>
+                        <a href="test-coverage-improver.html">View Recipe →</a>
+                    </article>
+                </div>
+            </section>
+        </div>
+    </main>
+    
+    <footer class="page-footer" role="contentinfo">
+        <p>Built with ❤️ by <a href="https://microsoft.com" target="_blank" rel="noopener noreferrer">Microsoft</a></p>
+    </footer>
+</body>
+</html>

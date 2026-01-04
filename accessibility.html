@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Accessibility Statement | Amplifier</title>
+    <meta name="description" content="Accessibility commitment and features of the Amplifier onboarding experience.">
+    
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/styles/main.css">
+</head>
+<body>
+    <a href="#main" class="skip-to-main">Skip to main content</a>
+    
+    <nav class="navbar" role="navigation" aria-label="Main navigation">
+        <div class="nav-container">
+            <a href="/" class="nav-logo">Amplifier</a>
+            <ul class="nav-menu">
+                <li><a href="/" class="nav-link">Home</a></li>
+                <li><a href="/playground/" class="nav-link">Playground</a></li>
+                <li><a href="/learn/" class="nav-link">Learn</a></li>
+                <li><a href="/docs/" class="nav-link">Docs</a></li>
+                <li><a href="https://github.com/microsoft/amplifier" class="nav-link" target="_blank" rel="noopener noreferrer">GitHub</a></li>
+            </ul>
+        </div>
+    </nav>
+    
+    <main id="main" class="page-content" role="main">
+        <div class="recipe-detail">
+            <h1>Accessibility Statement</h1>
+            
+            <section class="recipe-section">
+                <h2>Our Commitment</h2>
+                <p>
+                    Amplifier is committed to ensuring digital accessibility for people with disabilities. 
+                    We are continually improving the user experience for everyone and applying the relevant 
+                    accessibility standards.
+                </p>
+            </section>
+            
+            <section class="recipe-section">
+                <h2>Conformance Status</h2>
+                <p>
+                    The <a href="https://www.w3.org/WAI/standards-guidelines/wcag/" target="_blank" rel="noopener noreferrer">Web Content Accessibility Guidelines (WCAG)</a> 
+                    defines requirements for designers and developers to improve accessibility for people with disabilities. 
+                    It defines three levels of conformance: Level A, Level AA, and Level AAA.
+                </p>
+                <p>
+                    <strong>Amplifier Onboarding is designed to be conformant with WCAG 2.1 Level AA.</strong>
+                </p>
+            </section>
+            
+            <section class="recipe-section">
+                <h2>Accessibility Features</h2>
+                <ul class="use-cases">
+                    <li><strong>Keyboard Navigation</strong> - All functionality available via keyboard</li>
+                    <li><strong>Screen Reader Support</strong> - Semantic HTML and ARIA labels throughout</li>
+                    <li><strong>High Contrast Mode</strong> - Enhanced borders and contrast in high contrast mode</li>
+                    <li><strong>Reduced Motion</strong> - Respects prefers-reduced-motion preference</li>
+                    <li><strong>Focus Indicators</strong> - Visible focus states for keyboard navigation</li>
+                    <li><strong>Responsive Text</strong> - Text scales with user preferences</li>
+                    <li><strong>Skip Links</strong> - Skip to main content on every page</li>
+                    <li><strong>Color Independence</strong> - Information not conveyed by color alone</li>
+                </ul>
+            </section>
+            
+            <section class="recipe-section">
+                <h2>Known Limitations</h2>
+                <p>
+                    Despite our best efforts, some limitations may be present:
+                </p>
+                <ul>
+                    <li>Interactive recipe execution (Phase 1) - Will be tested for accessibility when implemented</li>
+                    <li>Visual recipe builder (Phase 3) - Will have keyboard-accessible alternative</li>
+                    <li>Some third-party embedded content may have accessibility limitations</li>
+                </ul>
+            </section>
+            
+            <section class="recipe-section">
+                <h2>Feedback</h2>
+                <p>
+                    We welcome your feedback on the accessibility of Amplifier. Please let us know if you encounter 
+                    accessibility barriers:
+                </p>
+                <ul>
+                    <li><strong>GitHub Issues</strong>: <a href="https://github.com/microsoft/amplifier/issues" target="_blank" rel="noopener noreferrer">Report accessibility issues</a></li>
+                    <li><strong>Email</strong>: accessibility@microsoft.com</li>
+                </ul>
+                <p>
+                    We try to respond to feedback within 2 business days.
+                </p>
+            </section>
+            
+            <section class="recipe-section">
+                <h2>Technical Specifications</h2>
+                <p>
+                    Accessibility of Amplifier relies on the following technologies:
+                </p>
+                <ul>
+                    <li>HTML5</li>
+                    <li>WAI-ARIA</li>
+                    <li>CSS3</li>
+                    <li>JavaScript (progressive enhancement)</li>
+                </ul>
+                <p>
+                    These technologies are relied upon for conformance with the accessibility standards used.
+                </p>
+            </section>
+            
+            <section class="recipe-section">
+                <h2>Assessment Approach</h2>
+                <p>
+                    Microsoft assessed the accessibility of Amplifier by the following approaches:
+                </p>
+                <ul>
+                    <li>Self-evaluation</li>
+                    <li>Automated testing tools (Lighthouse, axe-core)</li>
+                    <li>Manual keyboard testing</li>
+                    <li>Screen reader testing (NVDA, VoiceOver)</li>
+                </ul>
+            </section>
+            
+            <div style="text-align: center; margin-top: 2rem;">
+                <a href="/" class="cta">← Back to Home</a>
+            </div>
+        </div>
+    </main>
+    
+    <footer class="page-footer" role="contentinfo">
+        <p>
+            Built with ❤️ by <a href="https://microsoft.com" target="_blank" rel="noopener noreferrer">Microsoft</a> | 
+            <a href="/accessibility.html">Accessibility</a>
+        </p>
+    </footer>
+</body>
+</html>
