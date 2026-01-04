@@ -2,7 +2,7 @@
 
 > Transform how developers think about AI application development
 
-**Live Site**: [https://amplifier-onboarding.azurestaticapps.net](https://amplifier-onboarding.azurestaticapps.net)
+**Live Site**: [https://icy-wave-001fa3d0f.1.azurestaticapps.net/](https://icy-wave-001fa3d0f.1.azurestaticapps.net/)
 
 A web experience that showcases Amplifier's capabilities through interactive demos, tutorials, and a recipe gallery. Users can experience pre-configured AI workflows and learn to build their own.
 
