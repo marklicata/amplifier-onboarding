@@ -310,10 +310,13 @@ amplifier-onboarding/
 │   └── main.css            # Main stylesheet with CSS variables
 │
 ├── scripts/
-│   └── recipes.js          # Recipe gallery logic
+│   ├── recipes.js          # Recipe gallery logic
+│   ├── performance.js      # Performance monitoring
+│   └── validate-recipes.js # Recipe validation
 │
 ├── data/
-│   └── recipes-showcase.json  # Recipe metadata (5 recipes)
+│   ├── recipes-showcase.json  # Recipe metadata (5 recipes)
+│   └── recipe-schema.json     # JSON Schema for validation
 │
 ├── components/
 │   ├── README.md           # Component documentation
@@ -321,7 +324,13 @@ amplifier-onboarding/
 │   └── card.html           # Card examples
 │
 ├── playground/
-│   └── index.html          # Recipe playground page
+│   ├── index.html          # Recipe playground page
+│   └── recipes/            # Individual recipe detail pages
+│       ├── comprehensive-code-review.html
+│       ├── api-documentation-generator.html
+│       ├── security-audit-suite.html
+│       ├── test-coverage-improver.html
+│       └── bug-finder-fixer.html
 │
 ├── learn/
 │   └── index.html          # Learning hub page
@@ -332,8 +341,25 @@ amplifier-onboarding/
 │   ├── 00_EXECUTIVE_SUMMARY.md     # Strategy docs
 │   └── ...                 # Other planning docs
 │
+├── tests/                  # Playwright tests
+│   ├── homepage.spec.js
+│   ├── recipe-gallery.spec.js
+│   ├── navigation.spec.js
+│   ├── accessibility.spec.js
+│   └── performance.spec.js
+│
+├── backend/                # Backend API (Phase 0 skeleton)
+│   ├── app/
+│   │   ├── main.py        # FastAPI application
+│   │   └── core/
+│   │       └── config.py  # Settings
+│   ├── requirements.txt    # Python dependencies
+│   ├── Dockerfile         # Container definition
+│   └── README.md          # Backend documentation
+│
 └── execution_plans/
-    ├── EXECUTION_PLAN_PHASE_0.md   # Implementation roadmap
+    ├── EXECUTION_PLAN_PHASE_0.md   # Phase 0 roadmap (COMPLETE)
+    ├── EXECUTION_PLAN_PHASE_1.md   # Phase 1 roadmap
     └── AZURE_STATIC_WEB_APPS.md    # Deployment guide
 ```
 

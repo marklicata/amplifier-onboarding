@@ -14,7 +14,7 @@ A web experience that showcases Amplifier's capabilities through interactive dem
 
 **Live on Azure**: https://icy-wave-001fa3d0f.1.azurestaticapps.net/
 
-### Run Locally
+### Run Frontend Locally
 
 ```bash
 # 1. Clone the repository
@@ -28,6 +28,27 @@ npm run dev
 ```
 
 **That's it!** No build step, no dependencies to install. Pure static site.
+
+### Run Backend Locally (Optional - Phase 0 skeleton only)
+
+```bash
+# 1. Navigate to backend directory
+cd backend
+
+# 2. Install dependencies
+pip install -r requirements.txt
+
+# 3. Run the server
+uvicorn app.main:app --reload
+
+# 4. Test health check
+curl http://localhost:8000/health
+
+# 5. View API docs
+# Open http://localhost:8000/api/docs
+```
+
+**Note**: Backend is a minimal skeleton in Phase 0. Recipe execution coming in Phase 1.
 
 ---
 
@@ -68,18 +89,47 @@ See [execution_plans/EXECUTION_PLAN_PHASE_0.md](./execution_plans/EXECUTION_PLAN
 
 ## 🏗️ Architecture
 
-**Current (Phase 0)**: Pure Static Site
+### Current (Phase 0): Static Frontend + Backend Skeleton
+
 ```
-HTML + CSS + JavaScript
-    ↓
-Azure Static Web Apps
-    ↓
-Global CDN + Free SSL
+┌─────────────────────────────────────┐
+│ Frontend (Azure Static Web Apps)   │
+│ - HTML, CSS, JavaScript             │
+│ - Recipe gallery with 5 recipes     │
+│ - Interactive filtering & search    │
+│ - Auto-deploy from GitHub           │
+│                                     │
+│ Live: amplifier-onboarding.         │
+│       azurestaticapps.net           │
+└─────────────────────────────────────┘
+
+┌─────────────────────────────────────┐
+│ Backend (Local Only - Phase 0)      │
+│ - FastAPI skeleton                  │
+│ - Health check endpoint             │
+│ - CORS configured                   │
+│ - Dockerfile ready                  │
+│                                     │
+│ Status: Ready for Phase 1 deploy   │
+└─────────────────────────────────────┘
 ```
 
-**Future (Phase 1+)**: Static Frontend + API Backend
+### Future (Phase 1): Add Live Recipe Execution
+
 ```
-Frontend (Static Web Apps) → Backend (Container Apps) → Database + Redis
+Frontend (Static Web Apps)
+    ↓ HTTP/WebSocket
+Backend (Azure Container Apps)
+    ↓ Sandboxed execution
+Amplifier Core
+```
+
+### Future (Phase 2+): Add Authentication & Community
+
+```
+Frontend → Backend → Database (PostgreSQL)
+                  ↓  Redis Cache
+                  ↓  OAuth (GitHub)
 ```
 
 See [docs/06_TECHNICAL_ARCHITECTURE.md](./docs/06_TECHNICAL_ARCHITECTURE.md) for full architecture.

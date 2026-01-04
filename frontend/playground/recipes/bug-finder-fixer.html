@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bug Finder & Fixer | Amplifier Recipes</title>
+    <meta name="description" content="Systematic debugging and fix generation. Find and fix bugs with AI-powered hypothesis-driven debugging.">
+    
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/styles/main.css">
+</head>
+<body>
+    <a href="#main" class="skip-to-main">Skip to main content</a>
+    
+    <nav class="navbar" role="navigation" aria-label="Main navigation">
+        <div class="nav-container">
+            <a href="/" class="nav-logo">Amplifier</a>
+            <ul class="nav-menu">
+                <li><a href="/" class="nav-link">Home</a></li>
+                <li><a href="/playground/" class="nav-link active">Playground</a></li>
+                <li><a href="/learn/" class="nav-link">Learn</a></li>
+                <li><a href="/docs/" class="nav-link">Docs</a></li>
+                <li><a href="https://github.com/microsoft/amplifier" class="nav-link" target="_blank" rel="noopener noreferrer">GitHub</a></li>
+            </ul>
+        </div>
+    </nav>
+    
+    <main id="main" class="page-content" role="main">
+        <div class="recipe-detail">
+            <nav aria-label="Breadcrumb" class="breadcrumb">
+                <a href="/">Home</a> / 
+                <a href="/playground/">Playground</a> / 
+                <span>Bug Finder & Fixer</span>
+            </nav>
+            
+            <header class="recipe-detail-header">
+                <div class="recipe-meta">
+                    <span class="badge badge-difficulty beginner">Beginner</span>
+                    <span class="badge badge-duration">⏱️ 3-4 minutes</span>
+                    <span class="badge badge-category">Code Quality</span>
+                </div>
+                
+                <h1>Bug Finder & Fixer</h1>
+                
+                <p class="recipe-tagline">
+                    Find and fix bugs systematically with AI-powered debugging.
+                </p>
+            </header>
+            
+            <section class="recipe-section">
+                <h2>What It Does</h2>
+                <p>
+                    Uses systematic, hypothesis-driven debugging to find bugs in your code. The bug-hunter agent 
+                    analyzes error messages, code structure, and test failures to isolate root causes, then 
+                    modular-builder generates and validates fixes.
+                </p>
+                <p>
+                    This recipe doesn't just find obvious bugs - it discovers edge cases, race conditions, 
+                    and subtle logic errors that are easy to miss in manual review.
+                </p>
+            </section>
+            
+            <section class="recipe-section">
+                <h2>How It Works</h2>
+                <ol class="recipe-steps">
+                    <li>
+                        <strong>Reproduce the Issue</strong> (bug-hunter)
+                        <p>Analyzes error messages and stack traces to understand the symptom.</p>
+                    </li>
+                    <li>
+                        <strong>Hypothesis Generation</strong>
+                        <p>Formulates hypotheses about potential root causes based on code analysis.</p>
+                    </li>
+                    <li>
+                        <strong>Isolate the Cause</strong>
+                        <p>Tests each hypothesis systematically to identify the actual bug.</p>
+                    </li>
+                    <li>
+                        <strong>Generate Fix</strong> (modular-builder)
+                        <p>Creates code fixes that address the root cause, not just symptoms.</p>
+                    </li>
+                    <li>
+                        <strong>Validate the Fix</strong>
+                        <p>Ensures fix resolves issue without introducing new bugs.</p>
+                    </li>
+                    <li>
+                        <strong>Add Regression Tests</strong>
+                        <p>Creates tests to prevent this bug from reoccurring.</p>
+                    </li>
+                </ol>
+            </section>
+            
+            <section class="recipe-section">
+                <h2>When to Use</h2>
+                <ul class="use-cases">
+                    <li><strong>Debug failing tests</strong> - Understand why tests are breaking</li>
+                    <li><strong>Find edge case bugs</strong> - Discover bugs in unusual conditions</li>
+                    <li><strong>Analyze error logs</strong> - Investigate production errors systematically</li>
+                    <li><strong>Fix runtime errors</strong> - Resolve crashes and exceptions</li>
+                    <li><strong>Systematic debugging workflow</strong> - Methodical bug hunting process</li>
+                </ul>
+            </section>
+            
+            <section class="recipe-section">
+                <h2>Required Inputs</h2>
+                <div class="input-params">
+                    <div class="param-item">
+                        <div class="param-header">
+                            <code class="param-name">code_file</code>
+                            <span class="param-required">Required</span>
+                        </div>
+                        <p class="param-description">Code file containing the bug.</p>
+                        <p class="param-example">Example: <code>src/app.py</code></p>
+                    </div>
+                    
+                    <div class="param-item">
+                        <div class="param-header">
+                            <code class="param-name">error_message</code>
+                            <span class="param-optional">Optional</span>
+                        </div>
+                        <p class="param-description">Error message or symptom description.</p>
+                        <p class="param-example">Example: <code>KeyError: 'user_id'</code></p>
+                    </div>
+                    
+                    <div class="param-item">
+                        <div class="param-header">
+                            <code class="param-name">test_file</code>
+                            <span class="param-optional">Optional</span>
+                        </div>
+                        <p class="param-description">Test file showing the failure (helps with reproduction).</p>
+                        <p class="param-example">Example: <code>tests/test_app.py</code></p>
+                    </div>
+                </div>
+            </section>
+            
+            <section class="recipe-section">
+                <h2>What You Get</h2>
+                <div class="output-list">
+                    <div class="output-item">
+                        <span class="output-icon">🔍</span>
+                        <div>
+                            <strong>Bug Analysis & Root Cause</strong>
+                            <p>Clear explanation of what's wrong and why it's happening</p>
+                        </div>
+                    </div>
+                    <div class="output-item">
+                        <span class="output-icon">🔧</span>
+                        <div>
+                            <strong>Proposed Fixes with Code</strong>
+                            <p>Ready-to-apply code changes that resolve the issue</p>
+                        </div>
+                    </div>
+                    <div class="output-item">
+                        <span class="output-icon">🧪</span>
+                        <div>
+                            <strong>Regression Test Cases</strong>
+                            <p>Tests to ensure the bug doesn't come back</p>
+                        </div>
+                    </div>
+                    <div class="output-item">
+                        <span class="output-icon">📝</span>
+                        <div>
+                            <strong>Explanation of the Issue</strong>
+                            <p>Educational breakdown of the bug for learning</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <section class="recipe-cta">
+                <div class="cta-box">
+                    <h3>Ready to try this recipe?</h3>
+                    <p>Recipe execution coming in Phase 1. For now, install Amplifier locally:</p>
+                    <div class="cta-actions">
+                        <a href="https://github.com/microsoft/amplifier" class="cta" target="_blank" rel="noopener noreferrer">
+                            <span>View on GitHub</span>
+                            <span aria-hidden="true">→</span>
+                        </a>
+                        <a href="/playground/" class="btn-recipe-secondary">
+                            ← Back to Gallery
+                        </a>
+                    </div>
+                </div>
+            </section>
+            
+            <section class="recipe-section">
+                <h2>Related Recipes</h2>
+                <div class="related-recipes">
+                    <article class="related-recipe-card">
+                        <h3>Test Coverage Improver</h3>
+                        <p>Generate comprehensive test suites</p>
+                        <a href="test-coverage-improver.html">View Recipe →</a>
+                    </article>
+                    <article class="related-recipe-card">
+                        <h3>Comprehensive Code Review</h3>
+                        <p>Find bugs as part of broader code review</p>
+                        <a href="comprehensive-code-review.html">View Recipe →</a>
+                    </article>
+                </div>
+            </section>
+        </div>
+    </main>
+    
+    <footer class="page-footer" role="contentinfo">
+        <p>Built with ❤️ by <a href="https://microsoft.com" target="_blank" rel="noopener noreferrer">Microsoft</a></p>
+    </footer>
+</body>
+</html>
