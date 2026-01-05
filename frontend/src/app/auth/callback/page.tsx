@@ -1,10 +1,10 @@
-export const dynamic = 'force-dynamic';
-  
 'use client';
 
 import { useEffect, useState } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { exchangeCodeForToken } from '@/lib/auth';
+
+export const dynamic = 'force-dynamic';
 
 export default function AuthCallback() {
   const searchParams = useSearchParams();
