@@ -41,6 +41,13 @@ jobs:
           cache-from: type=registry,ref=${{ secrets.ACR_REGISTRY }}/amplifier-api:latest
           cache-to: type=inline
 
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
       - name: Deploy to Azure Container Apps
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         uses: azure/CLI@v1
