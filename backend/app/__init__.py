@@ -1,5 +1,3 @@
-"""
-Amplifier Onboarding Backend API
-"""
+"""Amplifier Backend API"""
 
 __version__ = "0.1.0"
