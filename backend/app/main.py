@@ -1,81 +1,105 @@
-"""
-FastAPI Application Entry Point
-"""
+"""Main FastAPI application"""
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
 import logging
 
 from app.core.config import settings
+from app.core.session_pool import session_pool
+from app.core.database import init_db, close_db
+from app.api import auth, pool
 
 # Configure logging
 logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+    level=logging.INFO if not settings.DEBUG else logging.DEBUG,
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
 )
 logger = logging.getLogger(__name__)
 
-# Create FastAPI app
 app = FastAPI(
-    title="Amplifier Onboarding API",
+    title="Amplifier API",
     description="Backend API for Amplifier web experience",
     version="0.1.0",
-    docs_url="/api/docs",
-    redoc_url="/api/redoc",
-    openapi_url="/api/openapi.json"
+    docs_url="/docs" if settings.DEBUG else None,
+    redoc_url="/redoc" if settings.DEBUG else None,
 )
 
-# Configure CORS
+# CORS middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=settings.ALLOWED_ORIGINS,
+    allow_origins=settings.CORS_ORIGINS,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# Health check endpoint
-@app.get("/health", tags=["health"])
-async def health_check():
-    """
-    Health check endpoint for monitoring and load balancers.
-    Returns basic app status.
-    """
-    return JSONResponse(
-        status_code=200,
-        content={
-            "status": "healthy",
-            "version": "0.1.0",
-            "service": "amplifier-onboarding-api"
-        }
-    )
+# Include routers
+app.include_router(auth.router, prefix="/api/auth", tags=["auth"])
+app.include_router(pool.router, prefix="/api/pool", tags=["pool"])
 
-# Root endpoint
-@app.get("/", tags=["root"])
+
+@app.get("/")
 async def root():
-    """
-    API root endpoint with basic information.
-    """
+    """Root endpoint"""
     return {
-        "message": "Amplifier Onboarding API",
+        "message": "Amplifier API",
         "version": "0.1.0",
-        "docs": "/api/docs",
-        "health": "/health"
+        "status": "Phase 0: Foundation",
+        "phase": "0",
     }
 
-# Startup event
+
+@app.get("/health")
+async def health_check():
+    """Health check endpoint"""
+    pool_stats = session_pool.get_stats()
+
+    return {
+        "status": "healthy",
+        "environment": settings.ENVIRONMENT,
+        "session_pool": {
+            "available": pool_stats["available"],
+            "in_use": pool_stats["in_use"],
+            "is_running": pool_stats["is_running"],
+        },
+    }
+
+
+# Lifecycle events
 @app.on_event("startup")
 async def startup_event():
-    logger.info("Starting Amplifier Onboarding API v0.1.0")
-    logger.info(f"Environment: {settings.ENVIRONMENT}")
-    logger.info(f"CORS origins: {settings.ALLOWED_ORIGINS}")
+    """Initialize services on startup"""
+    logger.info("Starting Amplifier API...")
 
-# Shutdown event
+    try:
+        # Initialize database
+        await init_db()
+        logger.info("Database initialized")
+
+        # Start session pool
+        await session_pool.start()
+        logger.info("Session pool started")
+
+        logger.info("Amplifier API started successfully")
+    except Exception as e:
+        logger.error(f"Failed to start Amplifier API: {e}")
+        raise
+
+
 @app.on_event("shutdown")
 async def shutdown_event():
-    logger.info("Shutting down Amplifier Onboarding API")
+    """Cleanup on shutdown"""
+    logger.info("Shutting down Amplifier API...")
 
-# Future route imports (Phase 1)
-# from app.api.routes import recipes, execution, auth
-# app.include_router(recipes.router, prefix="/api", tags=["recipes"])
+    try:
+        # Stop session pool
+        await session_pool.stop()
+        logger.info("Session pool stopped")
+
+        # Close database connections
+        await close_db()
+        logger.info("Database connections closed")
+
+        logger.info("Amplifier API stopped successfully")
+    except Exception as e:
+        logger.error(f"Error during shutdown: {e}")

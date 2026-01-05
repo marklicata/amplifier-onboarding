@@ -2,7 +2,9 @@
   "permissions": {
     "allow": [
       "Bash(gh pr view:*)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "WebFetch(domain:github.com)",
+      "Bash(cat:*)"
     ]
   }
 }
