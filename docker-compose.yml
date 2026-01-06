@@ -1,61 +1,62 @@
 version: '3.8'
 
 services:
-  postgres:
-    image: postgres:15-alpine
-    container_name: amplifier-postgres
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: amplifier
-    ports:
-      - "5432:5432"
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-
-  backend:
+  amplifier-onboarding:
     build:
-      context: ./backend
+      context: .
       dockerfile: Dockerfile
-    container_name: amplifier-backend
-    environment:
-      DATABASE_URL: postgresql+asyncpg://postgres:postgres@postgres:5432/amplifier
-      ENVIRONMENT: development
-      DEBUG: "true"
+    container_name: amplifier-onboarding
     ports:
-      - "8000:8000"
-    volumes:
-      - ./backend/app:/app/app
-    depends_on:
-      postgres:
-        condition: service_healthy
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8000  /health"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
-
-  frontend:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
-    container_name: amplifier-frontend
+      - "3001:3001"
+    environment:
+      - NODE_ENV=production
+      - PORT=3001
+      # Anthropic API Key - set this in your .env file
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+      - ANTHROPIC_BASE_URL=${ANTHROPIC_BASE_URL}
+      # Alternative providers (uncomment to use)
+      # - OPENAI_API_KEY=${OPENAI_API_KEY}
+      # - AZURE_OPENAI_API_KEY=${AZURE_OPENAI_API_KEY}
+      # - AZURE_OPENAI_ENDPOINT=${AZURE_OPENAI_ENDPOINT}
     env_file:
-      - ./frontend/.env.local
-    ports:
-      - "3000:3000"
+      - .env
     volumes:
-      - ./frontend:/app
-      - /app/node_modules
-      - /app/.next
-    depends_on:
-      - backend
-    command: npm run dev
-volumes:
-  postgres_data:
+      # Mount lib directory for Python scripts (useful for development)
+      - ./lib:/app/lib
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "node", "-e", "require('http').get('http://localhost:3001/api/chat', (r) => process.exit(r.statusCode === 200 ? 0 : 1))"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Development service (optional) - uncomment to use
+  # amplifier-onboarding-dev:
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile
+  #     target: deps
+  #   container_name: amplifier-onboarding-dev
+  #   ports:
+  #     - "3001:3001"
+  #   environment:
+  #     - NODE_ENV=development
+  #     - PORT=3001
+  #     - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+  #   env_file:
+  #     - .env
+  #   volumes:
+  #     # Mount source code for hot reload
+  #     - ./app:/app/app
+  #     - ./components:/app/components
+  #     - ./lib:/app/lib
+  #     - ./styles:/app/styles
+  #     - ./public:/app/public
+  #     - ./.env:/app/.env
+  #   command: npm run dev
+  #   restart: unless-stopped
+
+networks:
+  default:
+    name: amplifier-network
