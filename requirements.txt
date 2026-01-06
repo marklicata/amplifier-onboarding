@@ -3,11 +3,11 @@
 
 # Required
 python-dotenv>=1.0.0
-
-# For real Amplifier AI responses (uncomment to enable):
-amplifier-core>=0.1.0
-amplifier-foundation>=0.1.0
 anthropic>=0.7.0
+
+# Amplifier packages from GitHub
+git+https://github.com/microsoft/amplifier-core@main
+git+https://github.com/microsoft/amplifier-foundation@main
 
 # Alternative providers (comment out anthropic above, uncomment one below):
 # openai>=1.0.0     # For OpenAI
