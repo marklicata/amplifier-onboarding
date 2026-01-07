@@ -146,6 +146,15 @@ export default function SystemOverview() {
               />
             </div>
           </div>
+          <div className="text-center">
+          <button
+                onClick={() => window.location.href = "/playground"}
+                className="inline-block items-center justify-center px-8 py-4 bg-blue-600 text-white text-lg font-medium rounded-lg hover:bg-blue-700 transition-all shadow-lg hover:shadow-xl hover:scale-105"
+                style={{ marginTop: '2rem' }}
+              > 
+                Developer Guide →
+          </button>
+          </div>
         </div>
       </main>
 

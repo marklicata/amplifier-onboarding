@@ -1,0 +1,87 @@
+{
+  "id": "04_load_and_inspect",
+  "title": "Load a bundle and inspect what's inside.",
+  "tier": 2,
+  "category": "Foundation Concepts",
+  "description": "Load a bundle and inspect what's inside.",
+  "estimatedTimeMinutes": 5,
+  "minAudience": "everyone",
+  "isFeatured": false,
+  "difficulty": "intermediate",
+  "tags": [
+    "tools",
+    "composition",
+    "hooks",
+    "internals"
+  ],
+  "githubUrl": "https://github.com/microsoft/amplifier-foundation/blob/main/examples/04_load_and_inspect.py",
+  "content": {
+    "everyone": {
+      "title": "Load a bundle and inspect what's inside.",
+      "valueProposition": "Learn to work with AI agents",
+      "howItWorks": [
+        "Set up your AI environment",
+        "Configure the agent with the right capabilities",
+        "Run the example and see results",
+        "Understand what happened"
+      ],
+      "whatYouGet": [
+        "Working example you can run",
+        "Clear understanding of the concept",
+        "Foundation for building more"
+      ]
+    },
+    "developers": {
+      "title": "04_load_and_inspect.py - Load a bundle and inspect what's inside.",
+      "valueProposition": "",
+      "howItWorks": "load_bundle() + to_mount_plan()\n- load_bundle() reads a bundle from any source (local path, git URL)\n- to_mount_plan() converts it to the dict format AmplifierSession needs",
+      "keyConcepts": [
+        "Amplifier bundle system",
+        "Module composition",
+        "Session execution"
+      ],
+      "codeOverview": {
+        "structure": [
+          "Load foundation and provider bundles"
+        ],
+        "keyFunctions": [
+          {
+            "name": "load_bundle",
+            "description": "Loads a bundle from path or URL",
+            "usage": "load_bundle()"
+          },
+          {
+            "name": "mount",
+            "description": "Registers a custom tool or component",
+            "usage": "mount(...)"
+          }
+        ]
+      },
+      "codeSnippet": "async def main() -> None:\n    \"\"\"Load the foundation bundle and display its mount plan.\"\"\"\n\n    # Load from local path (the foundation bundle in this repo)\n    foundation_path = Path(__file__).parent.parent\n    bundle = await load_bundle(str(foundation_path))\n\n    # Basic info\n    print(f\"Bundle: {bundle.name} v{bundle.version}\")\n    print(f\"Description: {bundle.description}\")\n\n    # Get mount plan - this is what AmplifierSession.create() uses\n    mount_plan = bundle.to_mount_plan()\n\n    # Show what's configured"
+    },
+    "experts": {
+      "title": "04_load_and_inspect.py - Load a bundle and inspect what's inside.",
+      "complexity": "Tier 2 - Foundation Concepts",
+      "sourceUrl": "https://github.com/microsoft/amplifier-foundation/blob/main/examples/04_load_and_inspect.py",
+      "architecture": "load_bundle() + to_mount_plan()\n- load_bundle() reads a bundle from any source (local path, git URL)\n- to_mount_plan() converts it to the dict format AmplifierSession needs",
+      "fullCode": "#!/usr/bin/env python3\n\"\"\"Example 1: Load a bundle and inspect what's inside.\n\nTEACHABLE MOMENT: load_bundle() + to_mount_plan()\n- load_bundle() reads a bundle from any source (local path, git URL)\n- to_mount_plan() converts it to the dict format AmplifierSession needs\n\nThis is the simplest possible amplifier-foundation usage.\n\"\"\"\n\nimport asyncio\nfrom pathlib import Path\n\nfrom amplifier_foundation import load_bundle\n\n\nasync def main() -> None:\n    \"\"\"Load the foundation bundle and display its mount plan.\"\"\"\n\n    # Load from local path (the foundation bundle in this repo)\n    foundation_path = Path(__file__).parent.parent\n    bundle = await load_bundle(str(foundation_path))\n\n    # Basic info\n    print(f\"Bundle: {bundle.name} v{bundle.version}\")\n    print(f\"Description: {bundle.description}\")\n\n    # Get mount plan - this is what AmplifierSession.create() uses\n    mount_plan = bundle.to_mount_plan()\n\n    # Show what's configured\n    print(\"\\nMount Plan Contents:\")\n    print(f\"  Providers: {len(mount_plan.get('providers', []))}\")\n    print(f\"  Tools: {len(mount_plan.get('tools', []))}\")\n    print(f\"  Hooks: {len(mount_plan.get('hooks', []))}\")\n    print(f\"  Agents: {len(mount_plan.get('agents', {}))}\")\n\n    # Show system instruction preview\n    if instruction := bundle.get_system_instruction():\n        preview = instruction[:100] + \"...\" if len(instruction) > 100 else instruction\n        print(f\"\\nInstruction: {preview}\")\n\n\nif __name__ == \"__main__\":\n    asyncio.run(main())\n",
+      "advancedOptions": {
+        "provider": [
+          "anthropic-sonnet",
+          "anthropic-opus",
+          "openai-gpt4"
+        ],
+        "streaming": false,
+        "hooks": []
+      }
+    }
+  },
+  "execution": {
+    "requiresInput": false,
+    "defaultPrompt": null,
+    "estimatedDuration": "2-5 seconds",
+    "prerequisites": [
+      "ANTHROPIC_API_KEY environment variable"
+    ]
+  }
+}

@@ -308,6 +308,147 @@ def format_action_items(data: dict) -> str:
     return "\n".join(output)
 
 
+async def run_custom_tool(inputs: dict, mode: str) -> dict:
+    """
+    Execute the Custom Tool example.
+    
+    Demonstrates building custom tools by using existing tools.
+    """
+    try:
+        session = await get_amplifier_session()
+        
+        # For demo, show the agent using available tools
+        prompt = "What tools do you have available? Please list them and explain what each one does."
+        
+        response = await send_amplifier_message(session, prompt)
+        
+        return {
+            "output": f"**Custom Tool Example**\n\n{response}\n\n---\n\n*This example demonstrates the tool protocol. In the full version, you would see custom WeatherTool and DatabaseTool in action.*",
+            "metadata": {
+                "example_id": "03_custom_tool",
+                "mode": mode
+            }
+        }
+    except Exception as e:
+        return {
+            "error": f"Execution failed: {str(e)}",
+            "traceback": traceback.format_exc()
+        }
+
+
+async def run_load_and_inspect(inputs: dict, mode: str) -> dict:
+    """
+    Execute the Load and Inspect example.
+    
+    Shows how to load and inspect bundle structure.
+    """
+    try:
+        session = await get_amplifier_session()
+        
+        # Educational output showing bundle concepts
+        prompt = "Explain what an Amplifier bundle is and what components it contains (providers, tools, hooks, orchestrators). Keep it concise."
+        
+        response = await send_amplifier_message(session, prompt)
+        
+        return {
+            "output": f"**Bundle Structure Overview**\n\n{response}\n\n---\n\n*In the full example, you would see the actual bundle.yaml structure and mount plan.*",
+            "metadata": {
+                "example_id": "04_load_and_inspect",
+                "mode": mode
+            }
+        }
+    except Exception as e:
+        return {
+            "error": f"Execution failed: {str(e)}",
+            "traceback": traceback.format_exc()
+        }
+
+
+async def run_composition(inputs: dict, mode: str) -> dict:
+    """
+    Execute the Composition example.
+    
+    Demonstrates bundle composition and merge rules.
+    """
+    try:
+        session = await get_amplifier_session()
+        
+        # Educational output about composition
+        prompt = "Explain how Amplifier bundles compose together. What happens when you compose two bundles - which settings override which? Keep it brief and clear."
+        
+        response = await send_amplifier_message(session, prompt)
+        
+        return {
+            "output": f"**Bundle Composition Rules**\n\n{response}\n\n---\n\n*The full example shows concrete merge scenarios: session (deep merge), providers/tools (merge by module ID), instruction (replace).*",
+            "metadata": {
+                "example_id": "05_composition",
+                "mode": mode
+            }
+        }
+    except Exception as e:
+        return {
+            "error": f"Execution failed: {str(e)}",
+            "traceback": traceback.format_exc()
+        }
+
+
+async def run_sources_and_registry(inputs: dict, mode: str) -> dict:
+    """
+    Execute the Sources and Registry example.
+    
+    Shows loading from different source formats.
+    """
+    try:
+        session = await get_amplifier_session()
+        
+        # Educational output about sources
+        prompt = "Explain the different ways you can load Amplifier bundles: from local paths, git URLs, and package names. What's the BundleRegistry for?"
+        
+        response = await send_amplifier_message(session, prompt)
+        
+        return {
+            "output": f"**Module Sources and Registry**\n\n{response}\n\n---\n\n*The full example demonstrates loading from git URLs and using BundleRegistry for named bundle management.*",
+            "metadata": {
+                "example_id": "06_sources_and_registry",
+                "mode": mode
+            }
+        }
+    except Exception as e:
+        return {
+            "error": f"Execution failed: {str(e)}",
+            "traceback": traceback.format_exc()
+        }
+
+
+async def run_full_workflow(inputs: dict, mode: str) -> dict:
+    """
+    Execute the Full Workflow example.
+    
+    Demonstrates the complete prepare() → create_session() → execute() flow.
+    """
+    try:
+        session = await get_amplifier_session()
+        
+        # Show the workflow in action
+        prompt = inputs.get("prompt", "Write a haiku about modular software architecture")
+        
+        response = await send_amplifier_message(session, prompt)
+        
+        return {
+            "output": f"**Complete Amplifier Workflow**\n\n*You just saw the full workflow in action:*\n\n1. ✅ **Load** - Foundation bundle loaded\n2. ✅ **Compose** - Provider composed with foundation\n3. ✅ **Prepare** - Modules downloaded and activated\n4. ✅ **Create Session** - AI session created\n5. ✅ **Execute** - Your prompt processed\n\n---\n\n**Your Result:**\n\n{response}",
+            "metadata": {
+                "example_id": "07_full_workflow",
+                "mode": mode,
+                "prompt": prompt
+            }
+        }
+    except Exception as e:
+        return {
+            "error": f"Execution failed: {str(e)}",
+            "traceback": traceback.format_exc()
+        }
+
+
 async def run_example(example_id: str, inputs: dict, mode: str) -> dict:
     """
     Route to the appropriate example executor.
@@ -315,7 +456,7 @@ async def run_example(example_id: str, inputs: dict, mode: str) -> dict:
     Args:
         example_id: Example identifier (e.g., "01_hello_world")
         inputs: User-provided inputs
-        mode: View mode (normie, explorer, developer, expert)
+        mode: View mode (everyone, developers, experts)
     
     Returns:
         Dict with output and metadata, or error
@@ -325,11 +466,21 @@ async def run_example(example_id: str, inputs: dict, mode: str) -> dict:
         return await run_hello_world(inputs, mode)
     elif example_id == "02_custom_configuration":
         return await run_custom_configuration(inputs, mode)
+    elif example_id == "03_custom_tool":
+        return await run_custom_tool(inputs, mode)
+    elif example_id == "04_load_and_inspect":
+        return await run_load_and_inspect(inputs, mode)
+    elif example_id == "05_composition":
+        return await run_composition(inputs, mode)
+    elif example_id == "06_sources_and_registry":
+        return await run_sources_and_registry(inputs, mode)
+    elif example_id == "07_full_workflow":
+        return await run_full_workflow(inputs, mode)
     elif example_id == "10_meeting_notes":
         return await run_meeting_notes(inputs, mode)
     else:
         return {
-            "error": f"Example '{example_id}' is not implemented yet. Available: 01_hello_world, 02_custom_configuration, 10_meeting_notes"
+            "error": f"Example '{example_id}' is not implemented yet. Available: 01_hello_world, 02_custom_configuration, 03_custom_tool, 04_load_and_inspect, 05_composition, 06_sources_and_registry, 07_full_workflow, 10_meeting_notes"
         }
 
 
