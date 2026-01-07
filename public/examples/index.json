@@ -10,7 +10,11 @@
       "minAudience": "everyone",
       "isFeatured": true,
       "difficulty": "beginner",
-      "tags": ["basics", "getting-started", "foundation"]
+      "tags": [
+        "basics",
+        "getting-started",
+        "foundation"
+      ]
     },
     {
       "id": "02_custom_configuration",
@@ -22,11 +26,97 @@
       "minAudience": "everyone",
       "isFeatured": true,
       "difficulty": "beginner",
-      "tags": ["configuration", "composition", "tools"]
+      "tags": [
+        "configuration",
+        "composition",
+        "tools"
+      ]
+    },
+    {
+      "id": "03_custom_tool",
+      "title": "Building a Custom Tool - Extending Your Agent",
+      "tier": 1,
+      "category": "Quick Start",
+      "description": "Need a capability that doesn't exist? Build it in 20 lines.\nAmplifier's protocol-based design means ",
+      "estimatedTimeMinutes": 10,
+      "minAudience": "everyone",
+      "isFeatured": true,
+      "difficulty": "beginner",
+      "tags": [
+        "tools",
+        "composition",
+        "basics"
+      ]
+    },
+    {
+      "id": "04_load_and_inspect",
+      "title": "Load a bundle and inspect what's inside.",
+      "tier": 2,
+      "category": "Foundation Concepts",
+      "description": "Load a bundle and inspect what's inside.",
+      "estimatedTimeMinutes": 5,
+      "minAudience": "everyone",
+      "isFeatured": false,
+      "difficulty": "intermediate",
+      "tags": [
+        "tools",
+        "composition",
+        "hooks",
+        "internals"
+      ]
+    },
+    {
+      "id": "05_composition",
+      "title": "Bundle composition and merge rules.",
+      "tier": 2,
+      "category": "Foundation Concepts",
+      "description": "Bundle composition and merge rules.",
+      "estimatedTimeMinutes": 5,
+      "minAudience": "everyone",
+      "isFeatured": false,
+      "difficulty": "intermediate",
+      "tags": [
+        "tools",
+        "composition",
+        "hooks",
+        "internals"
+      ]
+    },
+    {
+      "id": "06_sources_and_registry",
+      "title": "Loading from remote sources and using BundleRegistry.",
+      "tier": 2,
+      "category": "Foundation Concepts",
+      "description": "Loading from remote sources and using BundleRegistry.",
+      "estimatedTimeMinutes": 5,
+      "minAudience": "everyone",
+      "isFeatured": false,
+      "difficulty": "intermediate",
+      "tags": [
+        "composition",
+        "internals"
+      ]
+    },
+    {
+      "id": "07_full_workflow",
+      "title": "Complete workflow - load, compose, prepare, execute.",
+      "tier": 2,
+      "category": "Foundation Concepts",
+      "description": "Complete workflow - load, compose, prepare, execute.",
+      "estimatedTimeMinutes": 5,
+      "minAudience": "everyone",
+      "isFeatured": false,
+      "difficulty": "intermediate",
+      "tags": [
+        "tools",
+        "composition",
+        "hooks",
+        "internals"
+      ]
     },
     {
       "id": "10_meeting_notes",
-      "title": "Meeting Notes → Action Items",
+      "title": "Meeting Notes \u2192 Action Items",
       "tier": 4,
       "category": "Real-World",
       "description": "Transform messy meeting notes into organized task lists",
@@ -34,11 +124,15 @@
       "minAudience": "everyone",
       "isFeatured": true,
       "difficulty": "intermediate",
-      "tags": ["text-processing", "productivity", "structured-data"]
+      "tags": [
+        "text-processing",
+        "productivity",
+        "structured-data"
+      ]
     }
   ],
   "metadata": {
-    "totalExamples": 3,
+    "totalExamples": 8,
     "lastUpdated": "2026-01-07T00:00:00Z",
     "version": "1.0.0"
   }

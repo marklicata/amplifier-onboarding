@@ -23,13 +23,6 @@ export default function Header({ onOpenChat }: HeaderProps) {
             >
               Elevator Pitch
             </Link>
-            <button
-              onClick={onOpenChat}
-              className="text-gray-600 hover:text-gray-900 transition-colors"
-              title="Ask Amplifier anything!"
-            >
-              Got Questions?
-            </button>
             <Link
               href="/playground"
               className="text-gray-600 hover:text-gray-900 transition-colors"
@@ -40,8 +33,21 @@ export default function Header({ onOpenChat }: HeaderProps) {
               href="/system-overview"
               className="text-gray-600 hover:text-gray-900 transition-colors"
             >
-              System Overview
+              How it Works
             </Link>
+            <Link
+              href="https://michaeljabbour.github.io/amplifier-dx/"
+              className="text-gray-600 hover:text-gray-900 transition-colors"
+            >
+              Developer Guide
+            </Link>
+            <button
+              onClick={onOpenChat}
+              className="text-gray-600 hover:text-gray-900 transition-colors"
+              title="Ask Amplifier anything!"
+            >
+              Got Questions?
+            </button>
           </nav>
           <button className="md:hidden text-blue-600 hover:text-blue-700 font-medium">
             Menu

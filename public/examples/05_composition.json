@@ -1,0 +1,82 @@
+{
+  "id": "05_composition",
+  "title": "Bundle composition and merge rules.",
+  "tier": 2,
+  "category": "Foundation Concepts",
+  "description": "Bundle composition and merge rules.",
+  "estimatedTimeMinutes": 5,
+  "minAudience": "everyone",
+  "isFeatured": false,
+  "difficulty": "intermediate",
+  "tags": [
+    "tools",
+    "composition",
+    "hooks",
+    "internals"
+  ],
+  "githubUrl": "https://github.com/microsoft/amplifier-foundation/blob/main/examples/05_composition.py",
+  "content": {
+    "everyone": {
+      "title": "Bundle composition and merge rules.",
+      "valueProposition": "Learn to work with AI agents",
+      "howItWorks": [
+        "Set up your AI environment",
+        "Configure the agent with the right capabilities",
+        "Run the example and see results",
+        "Understand what happened"
+      ],
+      "whatYouGet": [
+        "Working example you can run",
+        "Clear understanding of the concept",
+        "Foundation for building more"
+      ]
+    },
+    "developers": {
+      "title": "05_composition.py - Bundle composition and merge rules.",
+      "valueProposition": "",
+      "howItWorks": "How bundle.compose(overlay) merges configuration",
+      "keyConcepts": [
+        "Amplifier bundle system",
+        "Module composition",
+        "Session execution"
+      ],
+      "codeOverview": {
+        "structure": [
+          "Compose bundles together"
+        ],
+        "keyFunctions": [
+          {
+            "name": "compose",
+            "description": "Combines multiple bundles",
+            "usage": "compose(overlay)"
+          }
+        ]
+      },
+      "codeSnippet": "async def main() -> None:\n    \"\"\"Demonstrate composition merge rules with concrete examples.\"\"\"\n\n    # BASE BUNDLE: Starting configuration\n    base = Bundle(\n        name=\"base\",\n        version=\"1.0.0\",\n        session={\n            \"orchestrator\": {\"module\": \"loop-basic\"},\n            \"context\": {\"module\": \"context-simple\", \"config\": {\"max_tokens\": 100000}},\n        },\n        providers=[\n            {\"module\": \"provider-mock\", \"config\": {\"debug\": False}},\n        ],\n        tools=["
+    },
+    "experts": {
+      "title": "05_composition.py - Bundle composition and merge rules.",
+      "complexity": "Tier 2 - Foundation Concepts",
+      "sourceUrl": "https://github.com/microsoft/amplifier-foundation/blob/main/examples/05_composition.py",
+      "architecture": "How bundle.compose(overlay) merges configuration",
+      "fullCode": "#!/usr/bin/env python3\n\"\"\"Example 2: Bundle composition and merge rules.\n\nTEACHABLE MOMENT: How bundle.compose(overlay) merges configuration\n\nComposition Rules:\n- session: DEEP MERGE - nested dicts are merged recursively\n- providers/tools/hooks: MERGE BY MODULE ID - same module updates, new modules added\n- instruction: REPLACE - overlay completely replaces base\n- includes: NOT MERGED - resolved before composition\n\nThis is the SINGLE SOURCE for understanding composition.\n\"\"\"\n\nimport asyncio\n\nfrom amplifier_foundation import Bundle\n\n\nasync def main() -> None:\n    \"\"\"Demonstrate composition merge rules with concrete examples.\"\"\"\n\n    # BASE BUNDLE: Starting configuration\n    base = Bundle(\n        name=\"base\",\n        version=\"1.0.0\",\n        session={\n            \"orchestrator\": {\"module\": \"loop-basic\"},\n            \"context\": {\"module\": \"context-simple\", \"config\": {\"max_tokens\": 100000}},\n        },\n        providers=[\n            {\"module\": \"provider-mock\", \"config\": {\"debug\": False}},\n        ],\n        tools=[\n            {\"module\": \"tool-filesystem\"},\n            {\"module\": \"tool-bash\"},\n        ],\n        instruction=\"Base instructions.\",\n    )\n\n    # OVERLAY BUNDLE: Changes to apply\n    overlay = Bundle(\n        name=\"overlay\",\n        version=\"1.0.0\",\n        session={\n            # Rule: DEEP MERGE - only updates context.config, preserves orchestrator\n            \"context\": {\"config\": {\"max_tokens\": 200000, \"auto_compact\": True}},\n        },\n        providers=[\n            # Rule: MERGE BY MODULE - updates provider-mock's debug setting\n            {\"module\": \"provider-mock\", \"config\": {\"debug\": True}},\n            # Rule: MERGE BY MODULE - adds new provider (doesn't exist in base)\n            {\"module\": \"provider-anthropic\", \"config\": {\"default_model\": \"claude-sonnet-4-5\"}},\n        ],\n        tools=[\n            # Rule: MERGE BY MODULE - adds tool-web (filesystem and bash preserved)\n            {\"module\": \"tool-web\"},\n        ],\n        instruction=\"Overlay instructions.\",  # Rule: REPLACE - completely replaces base\n    )\n\n    # COMPOSE: base + overlay\n    result = base.compose(overlay)\n\n    # Show results\n    print(\"=\" * 60)\n    print(\"COMPOSITION RESULT\")\n    print(\"=\" * 60)\n\n    print(\"\\n1. SESSION (deep merge):\")\n    print(f\"   orchestrator: {result.session.get('orchestrator')}\")  # From base\n    print(f\"   context: {result.session.get('context')}\")  # Merged\n\n    print(\"\\n2. PROVIDERS (merge by module ID):\")\n    for p in result.providers:\n        print(f\"   - {p.get('module')}: {p.get('config', {})}\")\n\n    print(\"\\n3. TOOLS (merge by module ID):\")\n    for t in result.tools:\n        print(f\"   - {t.get('module')}\")\n\n    print(\"\\n4. INSTRUCTION (replace):\")\n    print(f\"   '{result.instruction}'\")  # From overlay, not base\n\n    # Summary of rules\n    print(\"\\n\" + \"=\" * 60)\n    print(\"MERGE RULES SUMMARY\")\n    print(\"=\" * 60)\n    print(\"  session:     DEEP MERGE (nested dicts merged)\")\n    print(\"  providers:   MERGE BY MODULE (same ID = update, new ID = add)\")\n    print(\"  tools:       MERGE BY MODULE (same ID = update, new ID = add)\")\n    print(\"  hooks:       MERGE BY MODULE (same ID = update, new ID = add)\")\n    print(\"  instruction: REPLACE (overlay wins)\")\n    print(\"  includes:    RESOLVED FIRST (not merged)\")\n\n\nif __name__ == \"__main__\":\n    asyncio.run(main())\n",
+      "advancedOptions": {
+        "provider": [
+          "anthropic-sonnet",
+          "anthropic-opus",
+          "openai-gpt4"
+        ],
+        "streaming": false,
+        "hooks": []
+      }
+    }
+  },
+  "execution": {
+    "requiresInput": false,
+    "defaultPrompt": null,
+    "estimatedDuration": "2-5 seconds",
+    "prerequisites": [
+      "ANTHROPIC_API_KEY environment variable"
+    ]
+  }
+}

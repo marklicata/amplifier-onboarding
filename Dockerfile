@@ -1,12 +1,14 @@
 # Simple Next.js + Python Docker image
 FROM node:20-bookworm-slim
 
-# Install Python, git, and curl (needed for pip install from GitHub and uv)
+# Install Python, git, curl, and build tools (needed for pip install from GitHub and uv)
 RUN apt-get update && apt-get install -y \
     python3 \
     python3-pip \
+    python3-dev \
     git \
     curl \
+    build-essential \
     && ln -sf /usr/bin/python3 /usr/bin/python \
     && ln -sf /usr/bin/pip3 /usr/bin/pip \
     && rm -rf /var/lib/apt/lists/*

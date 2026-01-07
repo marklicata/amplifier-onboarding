@@ -1,0 +1,80 @@
+{
+  "id": "06_sources_and_registry",
+  "title": "Loading from remote sources and using BundleRegistry.",
+  "tier": 2,
+  "category": "Foundation Concepts",
+  "description": "Loading from remote sources and using BundleRegistry.",
+  "estimatedTimeMinutes": 5,
+  "minAudience": "everyone",
+  "isFeatured": false,
+  "difficulty": "intermediate",
+  "tags": [
+    "composition",
+    "internals"
+  ],
+  "githubUrl": "https://github.com/microsoft/amplifier-foundation/blob/main/examples/06_sources_and_registry.py",
+  "content": {
+    "everyone": {
+      "title": "Loading from remote sources and using BundleRegistry.",
+      "valueProposition": "Learn to work with AI agents",
+      "howItWorks": [
+        "Set up your AI environment",
+        "Configure the agent with the right capabilities",
+        "Run the example and see results",
+        "Understand what happened"
+      ],
+      "whatYouGet": [
+        "Working example you can run",
+        "Clear understanding of the concept",
+        "Foundation for building more"
+      ]
+    },
+    "developers": {
+      "title": "06_sources_and_registry.py - Loading from remote sources and using BundleRegistry.",
+      "valueProposition": "",
+      "howItWorks": "load_bundle() supports multiple source formats",
+      "keyConcepts": [
+        "Amplifier bundle system",
+        "Module composition",
+        "Session execution"
+      ],
+      "codeOverview": {
+        "structure": [
+          "Load foundation and provider bundles"
+        ],
+        "keyFunctions": [
+          {
+            "name": "load_bundle",
+            "description": "Loads a bundle from path or URL",
+            "usage": "load_bundle()"
+          }
+        ]
+      },
+      "codeSnippet": "async def main() -> None:\n    \"\"\"Demonstrate source formats and registry usage.\"\"\"\n\n    # =========================================================================\n    # PART 1: Direct loading from git\n    # =========================================================================\n    print(\"=\" * 60)\n    print(\"PART 1: Loading from Git URL\")\n    print(\"=\" * 60)\n\n    git_uri = \"git+https://github.com/microsoft/amplifier-foundation@main\"\n    print(f\"\\nURI: {git_uri}\")\n    print(\"(Clones repo to cache, loads bundle.md)\")\n\n    try:"
+    },
+    "experts": {
+      "title": "06_sources_and_registry.py - Loading from remote sources and using BundleRegistry.",
+      "complexity": "Tier 2 - Foundation Concepts",
+      "sourceUrl": "https://github.com/microsoft/amplifier-foundation/blob/main/examples/06_sources_and_registry.py",
+      "architecture": "load_bundle() supports multiple source formats",
+      "fullCode": "#!/usr/bin/env python3\n\"\"\"Example 3: Loading from remote sources and using BundleRegistry.\n\nTEACHABLE MOMENT: load_bundle() supports multiple source formats\n\nSource Formats:\n- Local path: \"/path/to/bundle\" or \"file:///path/to/bundle\"\n- Git URL: \"git+https://github.com/org/repo@branch\"\n- Git subdirectory: \"git+https://...@branch#subdirectory=path/in/repo\"\n\nBundleRegistry provides named bundle management:\n- register() maps names to source URIs\n- load() resolves names to bundles with caching\n\"\"\"\n\nimport asyncio\nfrom pathlib import Path\n\nfrom amplifier_foundation import Bundle\nfrom amplifier_foundation import BundleRegistry\nfrom amplifier_foundation import BundleState\nfrom amplifier_foundation import load_bundle\n\n\nasync def main() -> None:\n    \"\"\"Demonstrate source formats and registry usage.\"\"\"\n\n    # =========================================================================\n    # PART 1: Direct loading from git\n    # =========================================================================\n    print(\"=\" * 60)\n    print(\"PART 1: Loading from Git URL\")\n    print(\"=\" * 60)\n\n    git_uri = \"git+https://github.com/microsoft/amplifier-foundation@main\"\n    print(f\"\\nURI: {git_uri}\")\n    print(\"(Clones repo to cache, loads bundle.md)\")\n\n    try:\n        bundle = await load_bundle(git_uri)\n        print(f\"Loaded: {bundle.name} v{bundle.version}\")\n    except Exception as e:\n        print(f\"Skipped (no network): {type(e).__name__}\")\n\n    # =========================================================================\n    # PART 2: BundleRegistry for named bundles\n    # =========================================================================\n    print(\"\\n\" + \"=\" * 60)\n    print(\"PART 2: Using BundleRegistry\")\n    print(\"=\" * 60)\n\n    # Create registry with custom home\n    registry = BundleRegistry(home=Path.home() / \".cache\" / \"amplifier-example\")\n\n    # Register well-known bundles (APP-LAYER POLICY)\n    # Your app decides which bundles are \"well-known\"\n    registry.register(\n        {\n            \"foundation\": \"git+https://github.com/microsoft/amplifier-foundation@main\",\n            \"local-dev\": f\"file://{Path(__file__).parent.parent.resolve()}\",\n        }\n    )\n\n    print(f\"\\nRegistered: {registry.list_registered()}\")\n\n    # Load by name (resolves URI, caches, returns Bundle)\n    try:\n        bundle = await registry.load(\"local-dev\")\n        if isinstance(bundle, Bundle):\n            print(f\"Loaded 'local-dev': {bundle.name} v{bundle.version}\")\n\n            # Check state\n            state = registry.get_state(\"local-dev\")\n            if isinstance(state, BundleState):\n                print(f\"Local path: {state.local_path}\")\n    except Exception as e:\n        print(f\"Error: {e}\")\n\n    # =========================================================================\n    # SUMMARY\n    # =========================================================================\n    print(\"\\n\" + \"=\" * 60)\n    print(\"SOURCE FORMAT REFERENCE\")\n    print(\"=\" * 60)\n    print(\"  Local:         /path/to/bundle\")\n    print(\"  File URI:      file:///path/to/bundle\")\n    print(\"  Git:           git+https://github.com/org/repo@branch\")\n    print(\"  Git subdir:    git+...@branch#subdirectory=path\")\n\n\nif __name__ == \"__main__\":\n    asyncio.run(main())\n",
+      "advancedOptions": {
+        "provider": [
+          "anthropic-sonnet",
+          "anthropic-opus",
+          "openai-gpt4"
+        ],
+        "streaming": false,
+        "hooks": []
+      }
+    }
+  },
+  "execution": {
+    "requiresInput": false,
+    "defaultPrompt": null,
+    "estimatedDuration": "2-5 seconds",
+    "prerequisites": [
+      "ANTHROPIC_API_KEY environment variable"
+    ]
+  }
+}

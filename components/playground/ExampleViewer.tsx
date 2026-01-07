@@ -45,7 +45,7 @@ export default function ExampleViewer({ exampleId, onExecute, executing }: Examp
   const [example, setExample] = useState<ExampleDetails | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [viewMode, setViewMode] = useState<ViewMode>('everyone');
+  const [viewMode, setViewMode] = useState<ViewMode>('developers');
   const [customInput, setCustomInput] = useState('');
   const [showCustomInput, setShowCustomInput] = useState(false);
 
@@ -130,6 +130,58 @@ export default function ExampleViewer({ exampleId, onExecute, executing }: Examp
           <span className="capitalize">{example.difficulty}</span>
         </div>
       </div>
+
+      {/* Execute Button - Moved to top */}
+      <div className="flex gap-3 bg-gray-50 p-4 rounded-lg border border-gray-200">
+        <button
+          onClick={handleExecute}
+          disabled={executing}
+          className={`flex-1 px-6 py-3 rounded-lg font-semibold transition-colors ${
+            executing
+              ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+              : 'bg-blue-600 text-white hover:bg-blue-700'
+          }`}
+        >
+          {executing ? (
+            <>
+              <span className="inline-block animate-spin mr-2">⏳</span>
+              Executing...
+            </>
+          ) : (
+            <>▶️ Run Example</>
+          )}
+        </button>
+        
+        {example.execution.requiresInput && !showCustomInput && (
+          <button
+            onClick={() => setShowCustomInput(true)}
+            className="px-6 py-3 rounded-lg font-semibold border border-gray-300 text-gray-700 hover:bg-gray-50 transition-colors"
+          >
+            ⚙️ Configure Input
+          </button>
+        )}
+      </div>
+
+      {/* Input Section (if required) - Moved to top */}
+      {example.execution.requiresInput && showCustomInput && (
+        <div className="space-y-2 bg-blue-50 p-4 rounded-lg border border-blue-200">
+          <div className="flex justify-between items-center">
+            <label className="font-medium text-gray-900">Custom Input</label>
+            <button
+              onClick={() => setShowCustomInput(false)}
+              className="text-sm text-blue-600 hover:text-blue-800"
+            >
+              ✕ Hide
+            </button>
+          </div>
+          <textarea
+            value={customInput}
+            onChange={(e) => setCustomInput(e.target.value)}
+            placeholder={example.id === '10_meeting_notes' ? 'Paste your meeting notes here...' : 'Enter your custom prompt...'}
+            className="w-full h-40 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 font-mono text-sm"
+          />
+        </div>
+      )}
 
       {/* Mode Selector */}
       <div className="border-b border-gray-200">
@@ -273,57 +325,7 @@ export default function ExampleViewer({ exampleId, onExecute, executing }: Examp
         )}
       </div>
 
-      {/* Input Section (if required) */}
-      {example.execution.requiresInput && (
-        <div className="space-y-2">
-          <button
-            onClick={() => setShowCustomInput(!showCustomInput)}
-            className="text-sm text-blue-600 hover:text-blue-800 font-medium"
-          >
-            {showCustomInput ? '▼' : '▶'} {showCustomInput ? 'Hide' : 'Show'} Custom Input
-          </button>
-          
-          {showCustomInput && (
-            <textarea
-              value={customInput}
-              onChange={(e) => setCustomInput(e.target.value)}
-              placeholder={example.id === '10_meeting_notes' ? 'Paste your meeting notes here...' : 'Enter your custom prompt...'}
-              className="w-full h-40 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 font-mono text-sm"
-            />
-          )}
-        </div>
-      )}
 
-      {/* Execute Button */}
-      <div className="flex gap-3">
-        <button
-          onClick={handleExecute}
-          disabled={executing}
-          className={`flex-1 px-6 py-3 rounded-lg font-semibold transition-colors ${
-            executing
-              ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-              : 'bg-blue-600 text-white hover:bg-blue-700'
-          }`}
-        >
-          {executing ? (
-            <>
-              <span className="inline-block animate-spin mr-2">⏳</span>
-              Executing...
-            </>
-          ) : (
-            <>▶️ Run Example</>
-          )}
-        </button>
-        
-        {example.execution.requiresInput && !showCustomInput && (
-          <button
-            onClick={() => setShowCustomInput(true)}
-            className="px-6 py-3 rounded-lg font-semibold border border-gray-300 text-gray-700 hover:bg-gray-50 transition-colors"
-          >
-            ⚙️ Configure
-          </button>
-        )}
-      </div>
 
       {/* Prerequisites */}
       {example.execution.prerequisites.length > 0 && (
