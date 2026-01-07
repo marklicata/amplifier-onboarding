@@ -11,6 +11,11 @@ import asyncio
 from pathlib import Path
 from datetime import datetime, timezone
 from typing import Optional
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+env_path = Path(__file__).parent.parent / ".env"
+load_dotenv(env_path)
 
 # Try to import Amplifier Core and Foundation at module level
 try:
@@ -40,7 +45,7 @@ class AmplifierChat:
 
     async def get_amplifier_session(self):
 
-        bundle_path = Path(__file__).parent / "amplifier_config_files/base_bundle.yaml"
+        bundle_path = Path(__file__).parent / "chat_files/base_bundle.yaml"
         foundation = await load_bundle(f"file://{bundle_path.resolve()}")
 
         # Prepare: resolves module sources, downloads if needed
@@ -91,14 +96,34 @@ class AmplifierChat:
             })
         
         return result
+
+
+def main():
+    """Main entry point for command-line execution"""
+    if len(sys.argv) < 2:
+        print(json.dumps({
+            "error": "No message provided",
+            "timestamp": datetime.now(timezone.utc).isoformat()
+        }))
+        sys.exit(1)
     
+    user_message = sys.argv[1]
+    session_id = sys.argv[2] if len(sys.argv) > 2 else None
+    
+    # Create chat instance and process message
+    chat = AmplifierChat()
+    
+    # Run async chat method
+    try:
+        result = asyncio.run(chat.chat(user_message))
+        print(result)  # Print JSON result to stdout
+    except Exception as e:
+        print(json.dumps({
+            "error": f"Chat execution failed: {str(e)}",
+            "timestamp": datetime.now(timezone.utc).isoformat()
+        }))
+        sys.exit(1)
+
 
 if __name__ == "__main__":
-
-    chat_instance = AmplifierChat()
-
-    async def run_chat():
-        response = await chat_instance.chat("what is amplifier foundation?")
-        print(response)
-
-    asyncio.run(run_chat())
+    main()

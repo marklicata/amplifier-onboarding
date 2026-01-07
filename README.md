@@ -7,9 +7,9 @@ A modern web application for onboarding new users to Amplifier - an AI-powered d
 Amplifier Onboarding is a Next.js-based web application that introduces users to the Amplifier ecosystem through:
 
 - **Marketing Landing Pages**: Comprehensive elevator pitch and value proposition
+- **Interactive Playground**: Browse and execute real amplifier-foundation examples in your browser
 - **Interactive Chat**: Real-time AI-powered chat using Amplifier Core and Foundation
 - **System Architecture Visualization**: Clear overview of how Amplifier components work together
-- **Future Features**: Recipe gallery, interactive playground, and execution viewer (planned)
 
 ## Tech Stack
 
@@ -38,15 +38,23 @@ Amplifier Onboarding is a Next.js-based web application that introduces users to
 amplifier-onboarding/
 ├── app/                          # Next.js App Router
 │   ├── api/                      # API routes
-│   │   └── chat/                 # Chat endpoints
-│   │       ├── route.ts          # Main chat API
-│   │       └── warmup/route.ts   # Session warmup
+│   │   ├── chat/                 # Chat endpoints
+│   │   │   ├── route.ts          # Main chat API
+│   │   │   └── warmup/route.ts   # Session warmup
+│   │   └── playground/           # Playground endpoints
+│   │       ├── examples/         # Example metadata
+│   │       └── execute/          # Example execution
 │   ├── elevator-pitch/           # Landing page
+│   ├── playground/               # Playground page
 │   ├── system-overview/          # Architecture page
 │   ├── layout.tsx                # Root layout
 │   └── page.tsx                  # Home page
 │
 ├── components/                   # React components
+│   ├── playground/              # Playground components
+│   │   ├── ExampleBrowser.tsx   # Example list/filter
+│   │   ├── ExampleViewer.tsx    # Example details
+│   │   └── ExecutionPanel.tsx   # Execution results
 │   ├── Header.tsx               # Navigation header
 │   ├── Footer.tsx               # Site footer
 │   ├── Layout.tsx               # Layout wrapper
@@ -55,7 +63,9 @@ amplifier-onboarding/
 ├── lib/                          # Backend Python scripts
 │   ├── amplifier-chat.py        # Chat execution
 │   ├── amplifier-warmup.py      # Session warmup
-│   └── amplifier_config_files/  # Configuration files
+│   ├── run-example.py           # Playground execution
+│   └── playground_files/        # Playground bundles
+│       └── bundle.yaml          # Foundation bundle
 │
 ├── styles/                       # Global styles
 │   └── globals.css              # Tailwind + CSS variables
@@ -70,22 +80,28 @@ amplifier-onboarding/
 
 ## Key Features
 
-### Current Implementation (Phase 0)
+### Current Implementation
 
 - **Landing Page**: Comprehensive value proposition and product overview
-- **System Overview**: Visual architecture documentation
+- **Interactive Playground**: Browse and execute real amplifier-foundation examples
+  - Example browser with filtering by tier and category
+  - Multiple view modes: Simple, Explorer, Developer, and Expert
+  - Live execution of examples using Amplifier Foundation
+  - Real-time results with markdown formatting
+  - Examples include: Hello World, Custom Configuration, Meeting Notes extraction
 - **Interactive Chat**: AI-powered chat using Amplifier Foundation bundles
 - **Session Warmup**: Pre-initialized sessions for reduced latency
+- **System Overview**: Visual architecture documentation
 - **Responsive Design**: Mobile-first design with Tailwind CSS
-- **Markdown Support**: Rich formatting for chat responses
+- **Markdown Support**: Rich formatting for chat and playground responses
 
-### Planned Features (Phase 1+)
+### Planned Features
 
-- **Recipe Gallery**: Browse and explore pre-built Amplifier recipes
-- **Interactive Playground**: Execute and modify recipes in real-time
-- **Execution Viewer**: Real-time WebSocket streaming of execution logs
+- **Additional Playground Examples**: Expand from 3 to 20+ examples
+- **WebSocket Streaming**: Real-time execution logs and progress updates
 - **User Authentication**: GitHub OAuth integration
-- **Mode Selector**: Normie, Explorer, Developer, and Expert modes
+- **Code Customization**: Edit and modify example code in the browser
+- **Execution History**: Save and review past executions
 - **Rate Limiting**: Fair usage policies for shared resources
 
 ## Architecture
@@ -230,6 +246,89 @@ The chat system uses a hybrid approach:
 
 If Python dependencies are not installed, the chat operates in fallback mode with pre-programmed responses. This ensures the application remains functional during setup or if API keys are unavailable.
 
+## Playground Implementation Details
+
+The playground allows users to explore and execute amplifier-foundation examples:
+
+1. **Frontend** (`app/playground/page.tsx`):
+   - Example browser with filtering and search
+   - Multi-mode viewer (Simple, Explorer, Developer, Expert)
+   - Execution panel for results
+   - Real-time execution status
+
+2. **Components** (`components/playground/`):
+   - `ExampleBrowser.tsx`: Browse, filter, and search examples
+   - `ExampleViewer.tsx`: Display example details with mode switching
+   - `ExecutionPanel.tsx`: Show execution results and status
+
+3. **API Routes**:
+   - `app/api/playground/examples/route.ts`: Returns all example metadata
+   - `app/api/playground/examples/[id]/route.ts`: Returns specific example details
+   - `app/api/playground/execute/route.ts`: Executes examples with inputs
+
+4. **Python Backend** (`lib/run-example.py`):
+   - Loads and executes amplifier-foundation examples
+   - Manages session pooling for performance
+   - Supports custom inputs per example
+   - Returns structured output with metadata and error handling
+   - Currently supports: Hello World, Custom Configuration, Meeting Notes
+
+### Using run-example.py
+
+The `run-example.py` script can be used directly for testing or integration:
+
+```bash
+# Execute an example with JSON input via stdin
+cd lib
+echo '{"exampleId":"01_hello_world","inputs":{},"mode":"normie"}' | python run-example.py
+
+# Or pass JSON as command-line argument for manual testing
+python run-example.py '{"exampleId":"01_hello_world","inputs":{"prompt":"Write a function to calculate fibonacci"},"mode":"developer"}'
+```
+
+**Input format:**
+```json
+{
+  "exampleId": "01_hello_world",
+  "inputs": {
+    "prompt": "Custom prompt here (optional)"
+  },
+  "mode": "normie|explorer|developer|expert"
+}
+```
+
+**Output format:**
+```json
+{
+  "output": "AI-generated response text",
+  "metadata": {
+    "example_id": "01_hello_world",
+    "mode": "normie",
+    "...": "additional metadata"
+  }
+}
+```
+
+**Error format:**
+```json
+{
+  "error": "Error description",
+  "details": "Detailed error message",
+  "traceback": "Python traceback (if applicable)"
+}
+```
+
+**Supported examples:**
+- `01_hello_world` - Basic Amplifier execution with customizable prompts
+- `02_custom_configuration` - Demonstrates tool composition and configuration
+- `10_meeting_notes` - Extracts structured action items from meeting notes
+
+**View modes:**
+- `normie` - Simple, high-level view for beginners
+- `explorer` - More detailed explanations for learning
+- `developer` - Code-level details for implementation
+- `expert` - Full technical details and internals
+
 ## Deployment
 
 ### Current Deployment Target
@@ -283,27 +382,25 @@ We welcome contributions! Please:
 
 ## Roadmap
 
-See [.planning/PHASE_1_MVP.md](./.planning/PHASE_1_MVP.md) for detailed roadmap.
+### Current Focus
+- Expand playground examples (currently 3, target 20+)
+- Add WebSocket streaming for real-time execution logs
+- Improve example viewer with code editing capabilities
+- Add user authentication for saved sessions
+- Expand mobile responsive design
 
-### Phase 1 (Current)
-- Gallery API and UI
-- WebSocket streaming
-- Execution viewer
-- 5+ showcase bundles
-- Mobile responsive design
-- Beta testing program
-
-### Phase 2 (Planned)
-- User authentication
-- Recipe builder
-- Saved sessions
-- Analytics dashboard
+### Future Plans
+- Recipe builder for custom workflows
+- Execution history and analytics
+- Community-contributed examples
+- Advanced debugging tools
+- Performance optimizations
 
 ## Documentation
 
-- [Setup Guide](./SETUP.md) - Chat-specific setup instructions
-- [Phase 1 Plan](./.planning/PHASE_1_MVP.md) - Detailed implementation plan
-- [Technical Architecture](./.docs/TECHNICAL_ARCHITECTURE.md) - System design (if exists)
+- [Quick Start Guide](./QUICKSTART.md) - Get started in 5 minutes
+- [Setup Guide](./SETUP.md) - Chat-specific setup instructions (if exists)
+- [Playground Documentation](./app/playground/PLAYGROUND_PLAN.md) - Playground architecture and design
 
 ## License
 
@@ -325,6 +422,6 @@ Built with:
 
 ---
 
-**Status**: Phase 1 Development (Active)
-**Version**: 0.1.0
-**Last Updated**: 2026-01-06
+**Status**: Active Development
+**Version**: 0.2.0
+**Last Updated**: 2026-01-07

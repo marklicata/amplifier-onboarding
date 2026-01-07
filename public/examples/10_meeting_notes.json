@@ -1,0 +1,85 @@
+{
+  "id": "10_meeting_notes",
+  "title": "Meeting Notes → Action Items",
+  "tier": 4,
+  "category": "Real-World",
+  "description": "Transform messy meeting notes into organized task lists",
+  "estimatedTimeMinutes": 3,
+  "minAudience": "everyone",
+  "isFeatured": true,
+  "difficulty": "intermediate",
+  "tags": ["text-processing", "productivity", "structured-data"],
+  "githubUrl": "https://github.com/microsoft/amplifier-foundation/blob/main/examples/10_meeting_notes_to_actions.py",
+  "content": {
+    "everyone": {
+      "title": "Turn Meeting Notes Into To-Do Lists",
+      "valueProposition": "Stop manually sorting through meeting notes! Paste your notes and instantly get an organized checklist with owners, deadlines, and priorities.",
+      "howItWorks": [
+        "You paste your meeting notes (or use our sample)",
+        "AI reads through and identifies all the action items",
+        "AI figures out who owns each task and when it's due",
+        "AI assigns priority levels based on urgency words",
+        "You get a clean, organized checklist"
+      ],
+      "whatYouGet": [
+        "Organized action items with checkboxes",
+        "Tasks grouped by priority (High/Medium/Low)",
+        "Owner assignments for each task",
+        "Deadlines extracted automatically"
+      ]
+    },
+    "developers": {
+      "title": "10_meeting_notes_to_actions.py",
+      "valueProposition": "Structured extraction from unstructured text. Learn how AI can parse messy meeting notes and identify actionable tasks with context.",
+      "howItWorks": "This example demonstrates text processing and structured data extraction. The AI analyzes meeting notes, identifies action-oriented language, extracts key information (owner, deadline, priority), and returns structured JSON data that gets formatted into a readable checklist.",
+      "keyConcepts": [
+        "Text Processing: Analyzing unstructured natural language",
+        "Structured Extraction: Converting text to structured data",
+        "Entity Recognition: Finding owners, deadlines, and priorities",
+        "JSON Output: Returning data in a machine-readable format",
+        "Priority Inference: Detecting urgency from language cues"
+      ],
+      "codeOverview": {
+        "structure": [
+          "Load foundation and provider",
+          "Prepare extraction prompt with schema",
+          "Execute and get JSON response",
+          "Parse JSON from response (handle markdown wrapping)",
+          "Format as markdown checklist",
+          "Group by priority levels"
+        ],
+        "keyFunctions": [
+          {
+            "name": "extract_action_items",
+            "description": "Main extraction function",
+            "usage": "data = await extract_action_items(meeting_notes)"
+          },
+          {
+            "name": "format_as_markdown",
+            "description": "Formats JSON into checklist",
+            "usage": "markdown = format_action_items(data)"
+          }
+        ]
+      },
+      "codeSnippet": "# Craft extraction prompt with schema\nprompt = f\"\"\"Analyze these meeting notes and extract all action items.\n\nFor each action item, identify:\n- task: Clear description\n- owner: Person responsible\n- deadline: When it's due\n- priority: high/medium/low\n\nMeeting Notes:\n{meeting_notes}\n\nReturn ONLY valid JSON in this format:\n{{\n  \"action_items\": [\n    {{\"task\": \"...\", \"owner\": \"...\", \"deadline\": \"...\", \"priority\": \"high\"}}\n  ]\n}}\n\"\"\"\n\nresponse = await session.execute(prompt)\ndata = json.loads(extract_json(response))"
+    },
+    "experts": {
+      "title": "10_meeting_notes_to_actions.py - Structured Extraction",
+      "complexity": "Tier 4 - Real-World Application",
+      "sourceUrl": "https://github.com/microsoft/amplifier-foundation/blob/main/examples/10_meeting_notes_to_actions.py",
+      "architecture": "Demonstrates structured extraction from unstructured text. Uses schema-guided prompting to get JSON output, then formats for display. Shows error handling for JSON parsing and fallback strategies.",
+      "fullCode": "#!/usr/bin/env python3\nimport asyncio\nimport json\nfrom pathlib import Path\nfrom amplifier_foundation import load_bundle\n\nSAMPLE_NOTES = \"\"\"\nProduct Planning Meeting - Q1 2024 Launch\nAttendees: Sarah (PM), John (Eng), Maria (Design)\n\nAction Items:\n1. John will update the landing page by Friday\n2. Sarah needs to review the API docs ASAP\n3. Maria to create social media assets by Monday\n\"\"\"\n\nasync def extract_action_items(meeting_notes: str) -> dict:\n    foundation_path = Path(__file__).parent.parent\n    foundation = await load_bundle(str(foundation_path))\n    provider = await load_bundle(str(foundation_path / 'providers' / 'anthropic-sonnet.yaml'))\n    \n    composed = foundation.compose(provider)\n    prepared = await composed.prepare()\n    session = await prepared.create_session()\n    \n    prompt = f\"\"\"Extract action items from these notes as JSON:\n    {meeting_notes}\n    \n    Format: {{\"action_items\": [{{\"task\": \"...\", \"owner\": \"...\", \"deadline\": \"...\", \"priority\": \"high|medium|low\"}}]}}\n    \"\"\"\n    \n    async with session:\n        response = await session.execute(prompt)\n    \n    # Parse JSON from response\n    start = response.find('{')\n    end = response.rfind('}')\n    json_text = response[start:end+1]\n    return json.loads(json_text)\n\nif __name__ == '__main__':\n    result = asyncio.run(extract_action_items(SAMPLE_NOTES))\n    print(json.dumps(result, indent=2))",
+      "advancedOptions": {
+        "provider": ["anthropic-sonnet", "openai-gpt4"],
+        "streaming": false,
+        "hooks": ["logging"]
+      }
+    }
+  },
+  "execution": {
+    "requiresInput": true,
+    "defaultPrompt": null,
+    "estimatedDuration": "3-5 seconds",
+    "prerequisites": ["ANTHROPIC_API_KEY environment variable"]
+  }
+}
