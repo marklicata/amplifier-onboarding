@@ -96,3 +96,34 @@ class AmplifierChat:
             })
         
         return result
+
+
+def main():
+    """Main entry point for command-line execution"""
+    if len(sys.argv) < 2:
+        print(json.dumps({
+            "error": "No message provided",
+            "timestamp": datetime.now(timezone.utc).isoformat()
+        }))
+        sys.exit(1)
+    
+    user_message = sys.argv[1]
+    session_id = sys.argv[2] if len(sys.argv) > 2 else None
+    
+    # Create chat instance and process message
+    chat = AmplifierChat()
+    
+    # Run async chat method
+    try:
+        result = asyncio.run(chat.chat(user_message))
+        print(result)  # Print JSON result to stdout
+    except Exception as e:
+        print(json.dumps({
+            "error": f"Chat execution failed: {str(e)}",
+            "timestamp": datetime.now(timezone.utc).isoformat()
+        }))
+        sys.exit(1)
+
+
+if __name__ == "__main__":
+    main()

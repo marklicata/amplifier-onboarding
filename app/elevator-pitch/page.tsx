@@ -56,12 +56,13 @@ export default function ElevatorPitch() {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <button
+                onClick={() => window.location.href = "/playground"}
                 className="inline-flex items-center justify-center px-8 py-4 bg-blue-600 text-white text-lg font-medium rounded-lg hover:bg-blue-700 transition-all shadow-lg hover:shadow-xl hover:scale-105"
               >
                 Try It Now →
               </button>
               <a
-                href="#vision"
+                href="/system-overview"
                 className="inline-flex items-center justify-center px-8 py-4 bg-white text-blue-600 text-lg font-medium rounded-lg hover:bg-gray-50 transition-all border-2 border-blue-600"
               >
                 Learn More
@@ -357,6 +358,7 @@ export default function ElevatorPitch() {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <button
+                onClick={() => window.location.href = "/playground"}
                 className="inline-flex items-center justify-center px-8 py-4 bg-white text-blue-600 text-lg font-medium rounded-lg hover:bg-gray-100 transition-all shadow-lg hover:shadow-xl hover:scale-105"
               >
                 Try the Playground →

@@ -152,6 +152,6 @@ jobs:
           azcliversion: latest
           inlineScript: |
             az containerapp update \
-              --name ${{ secrets.FRONTEND_CONTAINER_APP_NAME }} \
+              --name ${{ secrets.CONTAINER_APP_NAME }} \
               --resource-group ${{ secrets.RESOURCE_GROUP }} \
               --image ${{ secrets.ACR_REGISTRY }}/amplifier-onboarding:${{ github.sha }}

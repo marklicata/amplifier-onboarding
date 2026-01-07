@@ -41,8 +41,9 @@ export async function POST(request: Request) {
     const escapedMessage = message.replace(/"/g, '\\"');
     const escapedSessionId = sessionId ? sessionId.replace(/"/g, '\\"') : '';
 
-    // Execute Python script with environment variables
-    const command = `python "${scriptPath}" "${escapedMessage}" "${escapedSessionId}"`;
+    // Use correct Python command based on platform
+    const pythonCmd = process.platform === 'win32' ? 'python' : 'python3';
+    const command = `${pythonCmd} "${scriptPath}" "${escapedMessage}" "${escapedSessionId}"`;
 
     console.log('Executing chat command...');
     const { stdout, stderr } = await execAsync(command, {
@@ -54,6 +55,8 @@ export async function POST(request: Request) {
     if (stderr) {
       console.error('Python stderr:', stderr);
     }
+
+    console.log('Python stdout:', stdout); // Debug: see what Python returned
 
     // Parse JSON response from Python
     const result: ChatResponse = JSON.parse(stdout);
