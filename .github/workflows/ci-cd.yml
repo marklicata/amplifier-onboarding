@@ -16,8 +16,6 @@ env:
   PYTHON_VERSION: '3.11'
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
-  ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-  ANTHROPIC_BASE_URL: ${{ secrets.ANTHROPIC_BASE_URL }}
 
 jobs:
   # Job 1: Lint and Type Check

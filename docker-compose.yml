@@ -11,13 +11,6 @@ services:
     environment:
       - NODE_ENV=production
       - PORT=3000
-      # Anthropic API Key - set this in your .env file
-      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
-      - ANTHROPIC_BASE_URL=${ANTHROPIC_BASE_URL}
-      # Alternative providers (uncomment to use)
-      # - OPENAI_API_KEY=${OPENAI_API_KEY}
-      # - AZURE_OPENAI_API_KEY=${AZURE_OPENAI_API_KEY}
-      # - AZURE_OPENAI_ENDPOINT=${AZURE_OPENAI_ENDPOINT}
     env_file:
       - .env
     volumes:
@@ -30,32 +23,6 @@ services:
       timeout: 10s
       retries: 3
       start_period: 40s
-
-  # Development service (optional) - uncomment to use
-  # amplifier-onboarding-dev:
-  #   build:
-  #     context: .
-  #     dockerfile: Dockerfile
-  #     target: deps
-  #   container_name: amplifier-onboarding-dev
-  #   ports:
-  #     - "3000:3000"
-  #   environment:
-  #     - NODE_ENV=development
-  #     - PORT=3000
-  #     - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
-  #   env_file:
-  #     - .env
-  #   volumes:
-  #     # Mount source code for hot reload
-  #     - ./app:/app/app
-  #     - ./components:/app/components
-  #     - ./lib:/app/lib
-  #     - ./styles:/app/styles
-  #     - ./public:/app/public
-  #     - ./.env:/app/.env
-  #   command: npm run dev
-  #   restart: unless-stopped
 
 networks:
   default:
