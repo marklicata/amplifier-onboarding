@@ -3,8 +3,8 @@ FROM node:20-bookworm-slim
 
 # Install Python and git (needed for pip install from GitHub)
 RUN apt-get update && apt-get install -y \
-    python3 \
-    python3-pip \
+    python \
+    python-pip \
     git \
     && rm -rf /var/lib/apt/lists/*
 
