@@ -103,8 +103,9 @@ export default function ExecutionPanel({ isOpen, onClose, result, executing }: E
                     <div className="prose prose-sm max-w-none">
                       <ReactMarkdown
                         components={{
-                          code: ({ node, inline, className, children, ...props }) => {
-                            if (inline) {
+                          code: ({ node, className, children, ...props }: any) => {
+                            const isInline = !className?.includes('language-');
+                            if (isInline) {
                               return (
                                 <code className="bg-gray-800 text-gray-100 px-1.5 py-0.5 rounded text-sm font-mono" {...props}>
                                   {children}

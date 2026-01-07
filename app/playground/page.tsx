@@ -9,7 +9,7 @@ import ExampleViewer from '@/components/playground/ExampleViewer';
 import ExecutionPanel from '@/components/playground/ExecutionPanel';
 
 export default function PlaygroundPage() {
-  const [selectedExampleId, setSelectedExampleId] = useState<string | null>(null);
+  const [selectedExampleId, setSelectedExampleId] = useState<string | undefined>(undefined);
   const [executing, setExecuting] = useState(false);
   const [executionResult, setExecutionResult] = useState<any>(null);
   const [showExecutionPanel, setShowExecutionPanel] = useState(false);
@@ -98,7 +98,7 @@ export default function PlaygroundPage() {
                   <div className="flex items-center justify-between mb-4">
                     <h2 className="text-lg font-semibold text-gray-900">Examples</h2>
                     <button
-                      onClick={() => setSelectedExampleId(null)}
+                      onClick={() => setSelectedExampleId(undefined)}
                       className="text-sm text-blue-600 hover:text-blue-800"
                     >
                       ← Back to all
