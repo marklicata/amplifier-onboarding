@@ -1,0 +1,80 @@
+{
+  "id": "02_custom_configuration",
+  "title": "Custom Configuration",
+  "tier": 1,
+  "category": "Quick Start",
+  "description": "Tailor agents via composition - swap capabilities, not flags",
+  "estimatedTimeMinutes": 5,
+  "minAudience": "everyone",
+  "isFeatured": true,
+  "difficulty": "beginner",
+  "tags": ["configuration", "composition", "tools"],
+  "githubUrl": "https://github.com/microsoft/amplifier-foundation/blob/main/examples/02_custom_configuration.py",
+  "content": {
+    "everyone": {
+      "title": "Customize Your AI Agent",
+      "valueProposition": "Learn how to give your AI agent different abilities. Want it to read files? Add that capability. Want it to run commands? Add that too. It's like building with LEGO blocks!",
+      "howItWorks": [
+        "Start with a basic AI agent",
+        "Add the abilities you want (like file reading or web browsing)",
+        "The AI automatically knows how to use these new abilities",
+        "Each configuration is a different combination of abilities"
+      ],
+      "whatYouGet": [
+        "Understanding of how to customize AI agents",
+        "See how different capabilities change what the AI can do",
+        "Learn the power of composition over configuration"
+      ]
+    },
+    "developers": {
+      "title": "02_custom_configuration.py - Composition Pattern",
+      "valueProposition": "Amplifier uses composition, not configuration. Want different behavior? Swap modules. No flags to toggle, no YAML hell - just compose different capabilities.",
+      "howItWorks": "This example shows three configurations: basic (no tools), with tools (filesystem + bash), and streaming (real-time responses). Each is created by composing different bundles together. The foundation stays the same, only the added capabilities change.",
+      "keyConcepts": [
+        "Composition over Configuration: Swap modules instead of toggling flags",
+        "Tools: Add capabilities like filesystem access or bash commands",
+        "Orchestrators: Change how execution happens (basic vs streaming)",
+        "Bundles: Package multiple configurations together"
+      ],
+      "codeOverview": {
+        "structure": [
+          "Load foundation and provider (same for all)",
+          "Create configuration Bundle with desired modules",
+          "Compose foundation + provider + configuration",
+          "Prepare and execute"
+        ],
+        "keyFunctions": [
+          {
+            "name": "Bundle()",
+            "description": "Creates a configuration bundle",
+            "usage": "tools_config = Bundle(name='tools-config', tools=[...])"
+          },
+          {
+            "name": "compose()",
+            "description": "Combines multiple bundles",
+            "usage": "composed = foundation.compose(provider).compose(tools)"
+          }
+        ]
+      },
+      "codeSnippet": "# Add tools via composition\ntools_config = Bundle(\n    name='tools-config',\n    tools=[\n        {\n            'module': 'tool-filesystem',\n            'source': 'git+https://github.com/...'\n        },\n        {\n            'module': 'tool-bash',\n            'source': 'git+https://github.com/...'\n        }\n    ]\n)\n\ncomposed = foundation.compose(provider).compose(tools_config)"
+    },
+    "experts": {
+      "title": "02_custom_configuration.py - Composition Patterns",
+      "complexity": "Tier 1 - Quick Start",
+      "sourceUrl": "https://github.com/microsoft/amplifier-foundation/blob/main/examples/02_custom_configuration.py",
+      "architecture": "Demonstrates the Bundle composition pattern. Shows how to overlay configurations without modifying base bundles. Tools and orchestrators are swapped by composing different Bundle objects.",
+      "fullCode": "#!/usr/bin/env python3\nimport asyncio\nfrom pathlib import Path\nfrom amplifier_foundation import Bundle, load_bundle\n\nasync def agent_with_tools():\n    foundation_path = Path(__file__).parent.parent\n    foundation = await load_bundle(str(foundation_path))\n    provider = await load_bundle(str(foundation_path / 'providers' / 'anthropic-sonnet.yaml'))\n    \n    # Add tools via composition\n    tools_config = Bundle(\n        name='tools-config',\n        version='1.0.0',\n        tools=[\n            {\n                'module': 'tool-filesystem',\n                'source': 'git+https://github.com/microsoft/amplifier-module-tool-filesystem@main'\n            },\n            {\n                'module': 'tool-bash',\n                'source': 'git+https://github.com/microsoft/amplifier-module-tool-bash@main'\n            }\n        ]\n    )\n    \n    composed = foundation.compose(provider).compose(tools_config)\n    prepared = await composed.prepare()\n    session = await prepared.create_session()\n    \n    async with session:\n        response = await session.execute('List files in current directory')\n        print(response)\n\nif __name__ == '__main__':\n    asyncio.run(agent_with_tools())",
+      "advancedOptions": {
+        "provider": ["anthropic-sonnet", "anthropic-opus", "openai-gpt4"],
+        "streaming": true,
+        "hooks": ["logging", "debugging"]
+      }
+    }
+  },
+  "execution": {
+    "requiresInput": false,
+    "defaultPrompt": "What tools do you have available?",
+    "estimatedDuration": "3-5 seconds",
+    "prerequisites": ["ANTHROPIC_API_KEY environment variable"]
+  }
+}

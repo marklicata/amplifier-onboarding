@@ -1,0 +1,98 @@
+{
+  "id": "01_hello_world",
+  "title": "Hello World",
+  "tier": 1,
+  "category": "Quick Start",
+  "description": "Your first AI agent - get running in 15 lines of code",
+  "estimatedTimeMinutes": 2,
+  "minAudience": "everyone",
+  "isFeatured": true,
+  "difficulty": "beginner",
+  "tags": ["basics", "getting-started", "foundation"],
+  "githubUrl": "https://github.com/microsoft/amplifier-foundation/blob/main/examples/01_hello_world.py",
+  "content": {
+    "everyone": {
+      "title": "Your First AI Agent",
+      "valueProposition": "Get an AI agent running with just a few clicks. See how Amplifier makes it easy to work with AI - no coding required!",
+      "howItWorks": [
+        "Load the pre-built AI foundation",
+        "Connect to an AI service (like Claude)",
+        "Ask it to do something",
+        "Get your result!"
+      ],
+      "whatYouGet": [
+        "A working AI agent",
+        "Understanding of the basic flow",
+        "Confidence to try more examples"
+      ]
+    },
+    "developers": {
+      "title": "01_hello_world.py - Your First Agent",
+      "valueProposition": "Get an AI agent running in ~15 lines of code. No boilerplate, no configuration hell. Just load, compose, and execute.",
+      "howItWorks": "This example demonstrates the core Amplifier workflow: load a foundation bundle (pre-configured with sensible defaults), compose it with a provider (like Anthropic's Claude), prepare the modules, and execute a prompt.",
+      "keyConcepts": [
+        "Bundles: Pre-configured packages of AI capabilities",
+        "Composition: Combining bundles to create custom agents",
+        "Providers: AI backends (Anthropic, OpenAI, etc.)",
+        "Session: A conversation with the AI agent"
+      ],
+      "codeOverview": {
+        "structure": [
+          "Import amplifier_foundation",
+          "Load foundation bundle",
+          "Load provider bundle (Anthropic)",
+          "Compose bundles together",
+          "Prepare (download modules)",
+          "Create session",
+          "Execute prompt"
+        ],
+        "keyFunctions": [
+          {
+            "name": "load_bundle",
+            "description": "Loads a bundle from a path or URL",
+            "usage": "foundation = await load_bundle('package:amplifier-foundation')"
+          },
+          {
+            "name": "compose",
+            "description": "Combines bundles together",
+            "usage": "composed = foundation.compose(provider)"
+          },
+          {
+            "name": "prepare",
+            "description": "Downloads and activates modules",
+            "usage": "prepared = await composed.prepare()"
+          },
+          {
+            "name": "create_session",
+            "description": "Creates an AI session",
+            "usage": "session = await prepared.create_session()"
+          },
+          {
+            "name": "execute",
+            "description": "Sends a prompt to the AI",
+            "usage": "response = await session.execute(prompt)"
+          }
+        ]
+      },
+      "codeSnippet": "# Load foundation from package\nfoundation = await load_bundle('package:amplifier-foundation')\n\n# Load provider\nprovider = await load_bundle(f'file:{provider_path}')\n\n# Compose and prepare\ncomposed = foundation.compose(provider)\nprepared = await composed.prepare()\n\n# Create session and execute\nsession = await prepared.create_session()\nasync with session:\n    response = await session.execute(prompt)"
+    },
+    "experts": {
+      "title": "01_hello_world.py - Foundation Flow",
+      "complexity": "Tier 1 - Quick Start",
+      "sourceUrl": "https://github.com/microsoft/amplifier-foundation/blob/main/examples/01_hello_world.py",
+      "architecture": "Demonstrates the core Amplifier pattern: bundle composition → preparation → session creation → execution",
+      "fullCode": "#!/usr/bin/env python3\n\"\"\"\nExample 1: Hello World - Your First Amplifier Agent\n\nVALUE PROPOSITION:\nGet an AI agent running in ~15 lines of code. No boilerplate, no configuration hell.\nJust load, compose, and execute.\n\"\"\"\n\nimport asyncio\nimport os\nfrom pathlib import Path\n\nfrom amplifier_foundation import load_bundle\n\nasync def main():\n    # Load foundation bundle\n    foundation_path = Path(__file__).parent.parent\n    foundation = await load_bundle(str(foundation_path))\n    \n    # Load provider bundle\n    provider_path = foundation_path / \"providers\" / \"anthropic-sonnet.yaml\"\n    provider = await load_bundle(str(provider_path))\n    \n    # Compose and prepare\n    composed = foundation.compose(provider)\n    prepared = await composed.prepare()\n    \n    # Create session and execute\n    session = await prepared.create_session()\n    async with session:\n        response = await session.execute(\n            \"Write a Python function to check if a number is prime.\"\n        )\n        print(response)\n\nif __name__ == \"__main__\":\n    asyncio.run(main())",
+      "advancedOptions": {
+        "provider": ["anthropic-sonnet", "anthropic-opus", "openai-gpt4", "azure-gpt4"],
+        "streaming": false,
+        "hooks": []
+      }
+    }
+  },
+  "execution": {
+    "requiresInput": false,
+    "defaultPrompt": "Write a Python function to check if a number is prime. Include docstring and type hints.",
+    "estimatedDuration": "2-5 seconds",
+    "prerequisites": ["ANTHROPIC_API_KEY environment variable"]
+  }
+}

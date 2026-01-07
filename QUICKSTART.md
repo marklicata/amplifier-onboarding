@@ -169,6 +169,38 @@ If you see a simple, pre-programmed response instead of a detailed AI response, 
 
 Check the terminal logs for error messages.
 
+## Step 8: Try the Playground
+
+1. Navigate to **http://localhost:3000/playground** or click the "Playground" link in the header
+2. Browse the available examples:
+   - **Tier 1**: Foundation examples (Hello World, Custom Configuration)
+   - **Tier 2**: Intermediate examples (Meeting Notes extraction)
+3. Click on an example to view its details
+4. Switch between view modes to see different levels of detail:
+   - **Simple**: High-level overview for beginners
+   - **Explorer**: More details with explanations
+   - **Developer**: Code-level details
+   - **Expert**: Full technical details
+5. Click "Run Example" to execute it
+6. Optionally provide custom inputs (varies by example)
+7. View the execution results in the modal panel
+
+### Example: Hello World
+
+The simplest example to try:
+1. Click on "Hello World" example
+2. Click "Run Example"
+3. See the AI generate code based on the default prompt
+4. Try changing the prompt input to generate different code
+
+### Example: Meeting Notes
+
+A more practical example:
+1. Click on "Meeting Notes to Action Items"
+2. You can use the default meeting notes or paste your own
+3. Click "Run Example"
+4. See the AI extract structured action items from the unstructured notes
+
 ## Verification Checklist
 
 - [ ] Node.js and npm are installed
@@ -180,6 +212,8 @@ Check the terminal logs for error messages.
 - [ ] http://localhost:3000 loads the landing page
 - [ ] Chat button appears in the header
 - [ ] Chat responds to messages (fallback or AI mode)
+- [ ] Playground page loads at `/playground`
+- [ ] Playground examples can be browsed and executed
 
 ## Common Issues & Solutions
 
@@ -267,13 +301,49 @@ Invoke-WebRequest -Uri "https://api.anthropic.com/v1/messages" -Method POST -Hea
 
 If this fails, your API key is invalid.
 
+### Issue: Playground Examples Fail to Execute
+
+Check for these common issues:
+
+1. **Missing Python Dependencies**:
+   ```bash
+   # Verify amplifier-foundation is installed
+   pip list | grep amplifier-foundation
+
+   # Reinstall if needed
+   pip install -r requirements.txt
+   ```
+
+2. **Bundle File Missing**:
+   - Verify `lib/playground_files/bundle.yaml` exists
+   - This file should be in the repository
+
+3. **Python Script Errors**:
+   - Check terminal logs for detailed error messages
+   - The script is at `lib/run-example.py`
+   - Test manually:
+     ```bash
+     cd lib
+     echo '{"exampleId":"01_hello_world","inputs":{},"mode":"normie"}' | python run-example.py
+     ```
+
+4. **Timeout Issues**:
+   - First-time execution may take 30-60 seconds as modules are downloaded
+   - Subsequent executions should be faster (2-5 seconds)
+   - If consistently timing out, check your network connection
+
 ## Next Steps
 
 ### Explore the Application
 
 1. **Landing Page** (`/elevator-pitch`): Learn about Amplifier's value proposition
-2. **System Overview** (`/system-overview`): Understand the architecture
+2. **Playground** (`/playground`): Explore and execute real amplifier-foundation examples
+   - Browse examples by tier and category
+   - Switch between Simple, Explorer, Developer, and Expert views
+   - Run examples with custom inputs
+   - See real AI execution results
 3. **Chat**: Ask questions about Amplifier and see it in action
+4. **System Overview** (`/system-overview`): Understand the architecture
 
 ### Development
 
@@ -328,6 +398,12 @@ cd lib
 python amplifier-chat.py "What is Amplifier?" "test-session-123"
 
 # Expected output: JSON response with AI message
+
+# Test playground script
+cd lib
+echo '{"exampleId":"01_hello_world","inputs":{},"mode":"normie"}' | python run-example.py
+
+# Expected output: JSON response with example execution result
 ```
 
 ### Viewing Logs
@@ -349,10 +425,17 @@ You now have:
 - A running Next.js development server on port 3000
 - Python backend integration with Amplifier
 - AI-powered chat using Claude
+- Interactive playground with real amplifier-foundation examples
 - A complete local development environment
 
 **Total setup time**: ~5 minutes
-**You're ready to start developing!**
+**You're ready to start developing and exploring!**
+
+**Key features to try:**
+- `/elevator-pitch` - Learn about Amplifier
+- `/playground` - Execute real AI examples
+- Chat button - Ask questions about Amplifier
+- `/system-overview` - Understand the architecture
 
 ---
 

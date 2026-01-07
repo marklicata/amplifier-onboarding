@@ -1,0 +1,45 @@
+{
+  "examples": [
+    {
+      "id": "01_hello_world",
+      "title": "Hello World",
+      "tier": 1,
+      "category": "Quick Start",
+      "description": "Your first AI agent - get running in 15 lines of code",
+      "estimatedTimeMinutes": 2,
+      "minAudience": "everyone",
+      "isFeatured": true,
+      "difficulty": "beginner",
+      "tags": ["basics", "getting-started", "foundation"]
+    },
+    {
+      "id": "02_custom_configuration",
+      "title": "Custom Configuration",
+      "tier": 1,
+      "category": "Quick Start",
+      "description": "Tailor agents via composition - swap capabilities, not flags",
+      "estimatedTimeMinutes": 5,
+      "minAudience": "everyone",
+      "isFeatured": true,
+      "difficulty": "beginner",
+      "tags": ["configuration", "composition", "tools"]
+    },
+    {
+      "id": "10_meeting_notes",
+      "title": "Meeting Notes → Action Items",
+      "tier": 4,
+      "category": "Real-World",
+      "description": "Transform messy meeting notes into organized task lists",
+      "estimatedTimeMinutes": 3,
+      "minAudience": "everyone",
+      "isFeatured": true,
+      "difficulty": "intermediate",
+      "tags": ["text-processing", "productivity", "structured-data"]
+    }
+  ],
+  "metadata": {
+    "totalExamples": 3,
+    "lastUpdated": "2026-01-07T00:00:00Z",
+    "version": "1.0.0"
+  }
+}

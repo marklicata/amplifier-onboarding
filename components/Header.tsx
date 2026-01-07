@@ -30,13 +30,12 @@ export default function Header({ onOpenChat }: HeaderProps) {
             >
               Got Questions?
             </button>
-            <button
-              disabled
-              className="text-gray-400 cursor-not-allowed transition-colors"
-              title="Coming soon"
+            <Link
+              href="/playground"
+              className="text-gray-600 hover:text-gray-900 transition-colors"
             >
               Playground
-            </button>
+            </Link>
             <Link
               href="/system-overview"
               className="text-gray-600 hover:text-gray-900 transition-colors"

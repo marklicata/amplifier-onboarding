@@ -11,6 +11,11 @@ import asyncio
 from pathlib import Path
 from datetime import datetime, timezone
 from typing import Optional
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+env_path = Path(__file__).parent.parent / ".env"
+load_dotenv(env_path)
 
 # Try to import Amplifier Core and Foundation at module level
 try:
@@ -40,7 +45,7 @@ class AmplifierChat:
 
     async def get_amplifier_session(self):
 
-        bundle_path = Path(__file__).parent / "amplifier_config_files/base_bundle.yaml"
+        bundle_path = Path(__file__).parent / "chat_files/base_bundle.yaml"
         foundation = await load_bundle(f"file://{bundle_path.resolve()}")
 
         # Prepare: resolves module sources, downloads if needed
@@ -91,14 +96,3 @@ class AmplifierChat:
             })
         
         return result
-    
-
-if __name__ == "__main__":
-
-    chat_instance = AmplifierChat()
-
-    async def run_chat():
-        response = await chat_instance.chat("what is amplifier foundation?")
-        print(response)
-
-    asyncio.run(run_chat())
