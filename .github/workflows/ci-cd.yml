@@ -70,7 +70,7 @@ jobs:
       - name: Test Docker image
         run: |
           # Start container with a test environment
-          docker run -d --name test-container -p 3001:3001 \
+          docker run -d --name test-container -p 3000:3000 \
             -e ANTHROPIC_API_KEY=test-key \
             amplifier-onboarding:test
           
@@ -82,7 +82,7 @@ jobs:
           docker ps | grep test-container
           
           # Basic health check (adjust endpoint as needed)
-          curl -f http://localhost:3001 || echo "Health check failed but continuing..."
+          curl -f http://localhost:3000 || echo "Health check failed but continuing..."
           
           # Show logs for debugging
           docker logs test-container

@@ -99,7 +99,7 @@ amplifier-onboarding/
        │ HTTP
        ▼
 ┌─────────────────────────┐
-│  Next.js (Port 3001)    │
+│  Next.js (Port 3000)    │
 │  ┌──────────────────┐   │
 │  │  React Frontend  │   │
 │  └──────────────────┘   │
@@ -172,13 +172,13 @@ cp .env.example .env
 npm run dev
 ```
 
-Visit http://localhost:3001
+Visit http://localhost:3000
 
 ## Available Scripts
 
 | Script | Description |
 |--------|-------------|
-| `npm run dev` | Start development server on port 3001 |
+| `npm run dev` | Start development server on port 3000 |
 | `npm run build` | Build production bundle |
 | `npm run start` | Start production server |
 | `npm run lint` | Run ESLint |

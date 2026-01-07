@@ -136,7 +136,7 @@ You should see output like:
 
 ```
    ▲ Next.js 14.2.0
-   - Local:        http://localhost:3001
+   - Local:        http://localhost:3000
    - Environments: .env
 
  ✓ Ready in 2.3s
@@ -144,7 +144,7 @@ You should see output like:
 
 ## Step 6: Open in Your Browser
 
-Visit: **http://localhost:3001**
+Visit: **http://localhost:3000**
 
 You should see the Amplifier Onboarding landing page.
 
@@ -177,22 +177,22 @@ Check the terminal logs for error messages.
 - [ ] `pip install -r requirements.txt` completed without errors
 - [ ] `.env` file exists with valid `ANTHROPIC_API_KEY`
 - [ ] `npm run dev` starts without errors
-- [ ] http://localhost:3001 loads the landing page
+- [ ] http://localhost:3000 loads the landing page
 - [ ] Chat button appears in the header
 - [ ] Chat responds to messages (fallback or AI mode)
 
 ## Common Issues & Solutions
 
-### Issue: Port 3001 Already in Use
+### Issue: Port 3000 Already in Use
 
 ```bash
-# Find and kill the process using port 3001
+# Find and kill the process using port 3000
 # On Windows:
-netstat -ano | findstr :3001
+netstat -ano | findstr :3000
 taskkill /PID <PID> /F
 
 # On macOS/Linux:
-lsof -ti:3001 | xargs kill -9
+lsof -ti:3000 | xargs kill -9
 
 # Or use a different port:
 npm run dev -- -p 3002
@@ -291,7 +291,7 @@ npm run build
 # Test production build locally
 npm run start
 
-# Visit http://localhost:3001
+# Visit http://localhost:3000
 ```
 
 ### Learn More
@@ -346,7 +346,7 @@ python amplifier-chat.py "What is Amplifier?" "test-session-123"
 ## Summary
 
 You now have:
-- A running Next.js development server on port 3001
+- A running Next.js development server on port 3000
 - Python backend integration with Amplifier
 - AI-powered chat using Claude
 - A complete local development environment
