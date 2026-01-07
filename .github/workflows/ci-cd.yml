@@ -156,5 +156,4 @@ jobs:
             az containerapp update \
               --name ${{ secrets.FRONTEND_CONTAINER_APP_NAME }} \
               --resource-group ${{ secrets.RESOURCE_GROUP }} \
-              --image ${{ secrets.ACR_REGISTRY }}/amplifier-onboarding:${{ github.sha }} \
-              --set-env-vars ANTHROPIC_API_KEY=secretref:${{ secrets.ANTHROPIC_API_KEY }} ANTHROPIC_BASE_URL=${{ secrets.ANTHROPIC_BASE_URL }}
+              --image ${{ secrets.ACR_REGISTRY }}/amplifier-onboarding:${{ github.sha }}
