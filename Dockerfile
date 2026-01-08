@@ -6,7 +6,6 @@ RUN apt-get update && apt-get install -y \
     python3 \
     python3-pip \
     python3-dev \
-    python3-venv \
     git \
     curl \
     build-essential \
@@ -35,4 +34,19 @@ RUN npm ci
 # Install Python dependencies from GitHub
 # Use UV_CACHE_DIR to ensure uv has a writable cache directory
 ENV UV_CACHE_DIR=/tmp/uv-cache
-RUN pip3 install --no-cache-dir --break-system-packages -r requirements.txt
+RUN uv pip install --system -r requirements.txt
+
+# Copy application code
+COPY . .
+
+# Validate all dependencies are installed correctly
+RUN python3 lib/validate-deps.py
+
+# Build Next.js app
+ENV NEXT_TELEMETRY_DISABLED=1
+RUN npm run build
+
+# Set production environment
+ENV NODE_ENV=production
+
+CMD ["npm", "start"]
