@@ -15,11 +15,6 @@
         "getting-started",
         "foundation"
       ]
-      "tags": [
-        "basics",
-        "getting-started",
-        "foundation"
-      ]
     },
     {
       "id": "02_custom_configuration",
@@ -152,7 +147,6 @@
     },
     {
       "id": "10_meeting_notes",
-      "title": "Meeting Notes \u2192 Action Items",
       "title": "Meeting Notes \u2192 Action Items",
       "tier": 4,
       "category": "Real-World",
