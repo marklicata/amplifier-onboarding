@@ -385,29 +385,18 @@ async def main():
     examples_dir = Path("/tmp/amplifier-foundation/examples")
     output_dir = Path(__file__).parent.parent / "public" / "examples"
     
-    # Examples to process
-    # Tier 3: Building Applications (08-09)
-    # Tier 4: Real-World Applications (11-22) - 10 already done
-    examples_to_process = [
-        # Tier 3
-        "08_cli_application",
-        "09_multi_agent_system",
-        # Tier 4
-        "11_provider_comparison",
-        "12_approval_gates",
-        "13_event_debugging",
-        "14_session_persistence",
-        "17_multi_model_ensemble",
-        "18_custom_hooks",
-        "19_github_actions_ci",
-        "20_calendar_assistant",
-        "21_bundle_updates",
-        "22_custom_orchestrator_routing"
+    # Phase 2 examples to process (Tier 1 remaining + Tier 2)
+    phase2_examples = [
+        "03_custom_tool",
+        "04_load_and_inspect",
+        "05_composition",
+        "06_sources_and_registry",
+        "07_full_workflow"
     ]
     
     # Process each example
     processed_examples = []
-    for example_id in examples_to_process:
+    for example_id in phase2_examples:
         example_file = examples_dir / f"{example_id}.py"
         if not example_file.exists():
             print(f"⚠ Warning: {example_file} not found, skipping")

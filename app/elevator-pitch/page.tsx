@@ -66,6 +66,7 @@ export default function ElevatorPitch() {
                 className="inline-flex items-center justify-center px-8 py-4 bg-white text-blue-600 text-lg font-medium rounded-lg hover:bg-gray-50 transition-all border-2 border-blue-600"
               >
                 How it works
+                How it works
               </a>
             </div>
           </div>
@@ -426,7 +427,10 @@ export default function ElevatorPitch() {
                 className="inline-flex items-center justify-center px-8 py-4 bg-blue-700 text-white text-lg font-medium rounded-lg hover:bg-blue-800 transition-all border-2 border-white/20"
               >
                 Explore how it works
+                Explore how it works
               </a>
+            </div>
+          </div>
             </div>
           </div>
           </div>
