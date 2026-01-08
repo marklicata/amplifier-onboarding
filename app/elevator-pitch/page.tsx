@@ -66,7 +66,6 @@ export default function ElevatorPitch() {
                 className="inline-flex items-center justify-center px-8 py-4 bg-white text-blue-600 text-lg font-medium rounded-lg hover:bg-gray-50 transition-all border-2 border-blue-600"
               >
                 How it works
-                How it works
               </a>
             </div>
           </div>
@@ -411,28 +410,25 @@ export default function ElevatorPitch() {
         <section className="bg-gradient-to-b from-gray-50 to-white py-12 md:py-20">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl p-8 md:p-12 text-center text-white">
-            <h3 className="text-3xl md:text-4xl font-bold mb-4">Ready to Get Started?</h3>
-            <p className="text-lg md:text-xl mb-8 max-w-2xl mx-auto opacity-90">
-              See how Amplifier can change the way you build intelligent applications.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <button
-                onClick={() => window.location.href = "/playground"}
-                className="inline-flex items-center justify-center px-8 py-4 bg-white text-blue-600 text-lg font-medium rounded-lg hover:bg-gray-100 transition-all shadow-lg hover:shadow-xl hover:scale-105"
-              >
-                Try the Playground →
-              </button>
-              <a
-                href="/system-overview"
-                className="inline-flex items-center justify-center px-8 py-4 bg-blue-700 text-white text-lg font-medium rounded-lg hover:bg-blue-800 transition-all border-2 border-white/20"
-              >
-                Explore how it works
-                Explore how it works
-              </a>
+              <h3 className="text-3xl md:text-4xl font-bold mb-4">Ready to Get Started?</h3>
+              <p className="text-lg md:text-xl mb-8 max-w-2xl mx-auto opacity-90">
+                See how Amplifier can change the way you build intelligent applications.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <button
+                  onClick={() => window.location.href = "/playground"}
+                  className="inline-flex items-center justify-center px-8 py-4 bg-white text-blue-600 text-lg font-medium rounded-lg hover:bg-gray-100 transition-all shadow-lg hover:shadow-xl hover:scale-105"
+                >
+                  Try the Playground →
+                </button>
+                <a
+                  href="/system-overview"
+                  className="inline-flex items-center justify-center px-8 py-4 bg-blue-700 text-white text-lg font-medium rounded-lg hover:bg-blue-800 transition-all border-2 border-white/20"
+                >
+                  Explore how it works
+                </a>
+              </div>
             </div>
-          </div>
-            </div>
-          </div>
           </div>
         </section>
       </main>

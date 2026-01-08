@@ -48,7 +48,6 @@ export default function ExampleViewer({ exampleId, onExecute, executing }: Examp
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [viewMode, setViewMode] = useState<ViewMode>('developers');
-  const [viewMode, setViewMode] = useState<ViewMode>('developers');
   const [customInput, setCustomInput] = useState('');
   const [showCustomInput, setShowCustomInput] = useState(false);
 
