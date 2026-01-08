@@ -20,6 +20,20 @@ load_dotenv(env_path)
 
 amplifier_session = None  # Global session placeholder
 
+# Helper for streaming output
+def stream_event(event_type: str, data: dict):
+    """Send a streaming event to Node.js via stdout."""
+    event_json = json.dumps({"type": event_type, **data})
+    print(f"STREAM:{event_json}", flush=True)
+
+def stream_chunk(content: str):
+    """Stream a content chunk."""
+    stream_event("chunk", {"content": content})
+
+def stream_step(step: str, status: str, message: str = ""):
+    """Stream a step progress update."""
+    stream_event("step", {"step": step, "status": status, "message": message})
+
 async def get_amplifier_session() -> object:
     """Get or create a global amplifier session."""
     
@@ -38,8 +52,14 @@ async def get_amplifier_session() -> object:
         amplifier_session = await prepared.create_session()
     return amplifier_session
 
-async def send_amplifier_message(session: object, message: str) -> str:
-    """Send a message to the amplifier session and get the response."""
+async def send_amplifier_message(session: object, message: str, streaming: bool = False) -> str:
+    """Send a message to the amplifier session and get the response.
+    
+    Args:
+        session: Amplifier session
+        message: User message
+        streaming: If True, stream chunks as they arrive
+    """
 
     if session is None:
             print("Amplifier session not initialized. Creating new amplifier session...", file=sys.stderr)
@@ -50,8 +70,34 @@ async def send_amplifier_message(session: object, message: str) -> str:
 
     try:
         print(f"Sending amplifier message...", file=sys.stderr)
-        response = await session.execute(message)
-        return response
+        
+        if streaming:
+            # Try to use streaming API if available
+            stream_step("execute", "in_progress", "Executing with AI...")
+            
+            # Check if session has a streaming method
+            if hasattr(session, 'execute_stream'):
+                full_response = ""
+                async for chunk in session.execute_stream(message):
+                    if chunk:
+                        stream_chunk(chunk)
+                        full_response += chunk
+                return full_response
+            else:
+                # Fallback: get full response and stream it character by character
+                response = await session.execute(message)
+                
+                # Stream in small chunks for better UX
+                chunk_size = 5  # characters at a time
+                for i in range(0, len(response), chunk_size):
+                    chunk = response[i:i+chunk_size]
+                    stream_chunk(chunk)
+                    await asyncio.sleep(0.01)  # Small delay for smoother streaming
+                
+                return response
+        else:
+            response = await session.execute(message)
+            return response
     except Exception as e:
         print(f"Amplifier execution error: {e}", file=sys.stderr)
         return f"Amplifier execution error: {e}"
@@ -71,8 +117,8 @@ async def run_hello_world(inputs: dict, mode: str) -> dict:
         # Get prompt from inputs or use default
         prompt = inputs.get("prompt", "Write a Python function to check if a number is prime. Include docstring and type hints.")
         
-        # Execute
-        response = await send_amplifier_message(session, prompt)
+        # Execute with streaming if enabled
+        response = await send_amplifier_message(session, prompt, streaming=True)
         
         return {
             "output": response,
@@ -115,7 +161,7 @@ async def run_custom_configuration(inputs: dict, mode: str) -> dict:
         else:
             prompt = "Write a short poem about software modularity."
         
-        response = await send_amplifier_message(session, prompt)
+        response = await send_amplifier_message(session, prompt, streaming=True)
         
         return {
             "output": response,
@@ -196,7 +242,7 @@ Return ONLY valid JSON in this exact format:
   }}
 }}"""
         
-        response = await send_amplifier_message(session, prompt)
+        response = await send_amplifier_message(session, prompt, streaming=True)
         
         # Try to parse the JSON response
         try:
@@ -320,7 +366,7 @@ async def run_custom_tool(inputs: dict, mode: str) -> dict:
         # For demo, show the agent using available tools
         prompt = "What tools do you have available? Please list them and explain what each one does."
         
-        response = await send_amplifier_message(session, prompt)
+        response = await send_amplifier_message(session, prompt, streaming=True)
         
         return {
             "output": f"**Custom Tool Example**\n\n{response}\n\n---\n\n*This example demonstrates the tool protocol. In the full version, you would see custom WeatherTool and DatabaseTool in action.*",
@@ -348,7 +394,7 @@ async def run_load_and_inspect(inputs: dict, mode: str) -> dict:
         # Educational output showing bundle concepts
         prompt = "Explain what an Amplifier bundle is and what components it contains (providers, tools, hooks, orchestrators). Keep it concise."
         
-        response = await send_amplifier_message(session, prompt)
+        response = await send_amplifier_message(session, prompt, streaming=True)
         
         return {
             "output": f"**Bundle Structure Overview**\n\n{response}\n\n---\n\n*In the full example, you would see the actual bundle.yaml structure and mount plan.*",
@@ -376,7 +422,7 @@ async def run_composition(inputs: dict, mode: str) -> dict:
         # Educational output about composition
         prompt = "Explain how Amplifier bundles compose together. What happens when you compose two bundles - which settings override which? Keep it brief and clear."
         
-        response = await send_amplifier_message(session, prompt)
+        response = await send_amplifier_message(session, prompt, streaming=True)
         
         return {
             "output": f"**Bundle Composition Rules**\n\n{response}\n\n---\n\n*The full example shows concrete merge scenarios: session (deep merge), providers/tools (merge by module ID), instruction (replace).*",
@@ -404,7 +450,7 @@ async def run_sources_and_registry(inputs: dict, mode: str) -> dict:
         # Educational output about sources
         prompt = "Explain the different ways you can load Amplifier bundles: from local paths, git URLs, and package names. What's the BundleRegistry for?"
         
-        response = await send_amplifier_message(session, prompt)
+        response = await send_amplifier_message(session, prompt, streaming=True)
         
         return {
             "output": f"**Module Sources and Registry**\n\n{response}\n\n---\n\n*The full example demonstrates loading from git URLs and using BundleRegistry for named bundle management.*",
@@ -432,7 +478,7 @@ async def run_full_workflow(inputs: dict, mode: str) -> dict:
         # Show the workflow in action
         prompt = inputs.get("prompt", "Write a haiku about modular software architecture")
         
-        response = await send_amplifier_message(session, prompt)
+        response = await send_amplifier_message(session, prompt, streaming=True)
         
         return {
             "output": f"**Complete Amplifier Workflow**\n\n*You just saw the full workflow in action:*\n\n1. ✅ **Load** - Foundation bundle loaded\n2. ✅ **Compose** - Provider composed with foundation\n3. ✅ **Prepare** - Modules downloaded and activated\n4. ✅ **Create Session** - AI session created\n5. ✅ **Execute** - Your prompt processed\n\n---\n\n**Your Result:**\n\n{response}",
@@ -449,38 +495,233 @@ async def run_full_workflow(inputs: dict, mode: str) -> dict:
         }
 
 
+async def run_cli_application(inputs: dict, mode: str) -> dict:
+    """Execute the CLI Application example."""
+    try:
+        session = await get_amplifier_session()
+        prompt = "Explain best practices for building CLI applications with AI agents. What patterns should developers follow?"
+        response = await send_amplifier_message(session, prompt, streaming=True)
+        
+        return {
+            "output": f"**CLI Application Patterns**\n\n{response}\n\n---\n\n*The full example shows application architecture, configuration management, and lifecycle patterns.*",
+            "metadata": {"example_id": "08_cli_application", "mode": mode}
+        }
+    except Exception as e:
+        return {"error": f"Execution failed: {str(e)}", "traceback": traceback.format_exc()}
+
+
+async def run_multi_agent_system(inputs: dict, mode: str) -> dict:
+    """Execute the Multi-Agent System example."""
+    try:
+        session = await get_amplifier_session()
+        prompt = "Describe how to coordinate multiple specialized AI agents working together. What are the key patterns?"
+        response = await send_amplifier_message(session, prompt, streaming=True)
+        
+        return {
+            "output": f"**Multi-Agent Coordination**\n\n{response}\n\n---\n\n*The full example demonstrates Architect, Implementer, and Reviewer agents working in sequence.*",
+            "metadata": {"example_id": "09_multi_agent_system", "mode": mode}
+        }
+    except Exception as e:
+        return {"error": f"Execution failed: {str(e)}", "traceback": traceback.format_exc()}
+
+
+async def run_provider_comparison(inputs: dict, mode: str) -> dict:
+    """Execute the Provider Comparison example."""
+    try:
+        session = await get_amplifier_session()
+        prompt = "Compare different LLM providers (Anthropic, OpenAI, Azure). What are the trade-offs?"
+        response = await send_amplifier_message(session, prompt, streaming=True)
+        
+        return {
+            "output": f"**Provider Comparison**\n\n{response}\n\n---\n\n*The full example runs the same prompt across multiple providers for side-by-side comparison.*",
+            "metadata": {"example_id": "11_provider_comparison", "mode": mode}
+        }
+    except Exception as e:
+        return {"error": f"Execution failed: {str(e)}", "traceback": traceback.format_exc()}
+
+
+async def run_approval_gates(inputs: dict, mode: str) -> dict:
+    """Execute the Approval Gates example."""
+    try:
+        session = await get_amplifier_session()
+        prompt = "Explain human-in-the-loop patterns for AI systems. When should you require human approval?"
+        response = await send_amplifier_message(session, prompt, streaming=True)
+        
+        return {
+            "output": f"**Human-in-the-Loop Approval Gates**\n\n{response}\n\n---\n\n*The full example shows how to pause execution and require human approval for sensitive operations.*",
+            "metadata": {"example_id": "12_approval_gates", "mode": mode}
+        }
+    except Exception as e:
+        return {"error": f"Execution failed: {str(e)}", "traceback": traceback.format_exc()}
+
+
+async def run_event_debugging(inputs: dict, mode: str) -> dict:
+    """Execute the Event Debugging example."""
+    try:
+        session = await get_amplifier_session()
+        prompt = "Explain how to debug AI agent sessions using event logs. What observability patterns are useful?"
+        response = await send_amplifier_message(session, prompt, streaming=True)
+        
+        return {
+            "output": f"**Session Event Debugging**\n\n{response}\n\n---\n\n*The full example shows how to inspect events.jsonl for debugging and monitoring sessions.*",
+            "metadata": {"example_id": "13_event_debugging", "mode": mode}
+        }
+    except Exception as e:
+        return {"error": f"Execution failed: {str(e)}", "traceback": traceback.format_exc()}
+
+
+async def run_session_persistence(inputs: dict, mode: str) -> dict:
+    """Execute the Session Persistence example."""
+    try:
+        session = await get_amplifier_session()
+        prompt = "Explain how to save and restore AI agent sessions. Why is state persistence important?"
+        response = await send_amplifier_message(session, prompt, streaming=True)
+        
+        return {
+            "output": f"**Session State Persistence**\n\n{response}\n\n---\n\n*The full example demonstrates saving session state and resuming conversations later.*",
+            "metadata": {"example_id": "14_session_persistence", "mode": mode}
+        }
+    except Exception as e:
+        return {"error": f"Execution failed: {str(e)}", "traceback": traceback.format_exc()}
+
+
+async def run_multi_model_ensemble(inputs: dict, mode: str) -> dict:
+    """Execute the Multi-Model Ensemble example."""
+    try:
+        session = await get_amplifier_session()
+        prompt = "Explain ensemble patterns for AI systems. How can multiple models improve results?"
+        response = await send_amplifier_message(session, prompt, streaming=True)
+        
+        return {
+            "output": f"**Multi-Model Ensemble**\n\n{response}\n\n---\n\n*The full example combines responses from multiple models for improved accuracy and robustness.*",
+            "metadata": {"example_id": "17_multi_model_ensemble", "mode": mode}
+        }
+    except Exception as e:
+        return {"error": f"Execution failed: {str(e)}", "traceback": traceback.format_exc()}
+
+
+async def run_custom_hooks(inputs: dict, mode: str) -> dict:
+    """Execute the Custom Hooks example."""
+    try:
+        session = await get_amplifier_session()
+        prompt = "Explain how to build custom hooks for observability. What can hooks do in Amplifier?"
+        response = await send_amplifier_message(session, prompt, streaming=True)
+        
+        return {
+            "output": f"**Building Custom Hooks**\n\n{response}\n\n---\n\n*The full example shows how to create hooks for logging, redaction, and custom observability.*",
+            "metadata": {"example_id": "18_custom_hooks", "mode": mode}
+        }
+    except Exception as e:
+        return {"error": f"Execution failed: {str(e)}", "traceback": traceback.format_exc()}
+
+
+async def run_github_actions_ci(inputs: dict, mode: str) -> dict:
+    """Execute the GitHub Actions CI example."""
+    try:
+        session = await get_amplifier_session()
+        prompt = "Explain how to run Amplifier in CI/CD pipelines. What patterns work well for automation?"
+        response = await send_amplifier_message(session, prompt, streaming=True)
+        
+        return {
+            "output": f"**CI/CD Integration**\n\n{response}\n\n---\n\n*The full example shows GitHub Actions workflows for automated testing and deployment.*",
+            "metadata": {"example_id": "19_github_actions_ci", "mode": mode}
+        }
+    except Exception as e:
+        return {"error": f"Execution failed: {str(e)}", "traceback": traceback.format_exc()}
+
+
+async def run_calendar_assistant(inputs: dict, mode: str) -> dict:
+    """Execute the Calendar Assistant example."""
+    try:
+        session = await get_amplifier_session()
+        prompt = "How would you build a calendar assistant that integrates with external APIs? What are the key components?"
+        response = await send_amplifier_message(session, prompt, streaming=True)
+        
+        return {
+            "output": f"**Calendar Assistant with External APIs**\n\n{response}\n\n---\n\n*The full example integrates with calendar APIs for natural language scheduling.*",
+            "metadata": {"example_id": "20_calendar_assistant", "mode": mode}
+        }
+    except Exception as e:
+        return {"error": f"Execution failed: {str(e)}", "traceback": traceback.format_exc()}
+
+
+async def run_bundle_updates(inputs: dict, mode: str) -> dict:
+    """Execute the Bundle Updates example."""
+    try:
+        session = await get_amplifier_session()
+        prompt = "Explain how to detect and apply bundle updates in Amplifier. What's the two-phase pattern?"
+        response = await send_amplifier_message(session, prompt, streaming=True)
+        
+        return {
+            "output": f"**Bundle Update Detection**\n\n{response}\n\n---\n\n*The full example shows the two-phase pattern: check status (no side effects) → refresh (side effects).*",
+            "metadata": {"example_id": "21_bundle_updates", "mode": mode}
+        }
+    except Exception as e:
+        return {"error": f"Execution failed: {str(e)}", "traceback": traceback.format_exc()}
+
+
+async def run_custom_orchestrator(inputs: dict, mode: str) -> dict:
+    """Execute the Custom Orchestrator example."""
+    try:
+        session = await get_amplifier_session()
+        prompt = "Explain custom orchestrators in Amplifier. How do they control execution flow?"
+        response = await send_amplifier_message(session, prompt, streaming=True)
+        
+        return {
+            "output": f"**Custom Orchestrator Routing**\n\n{response}\n\n---\n\n*The full example demonstrates building custom orchestrators for specialized execution patterns.*",
+            "metadata": {"example_id": "22_custom_orchestrator_routing", "mode": mode}
+        }
+    except Exception as e:
+        return {"error": f"Execution failed: {str(e)}", "traceback": traceback.format_exc()}
+
+
 async def run_example(example_id: str, inputs: dict, mode: str) -> dict:
     """
     Route to the appropriate example executor.
-    
+
     Args:
         example_id: Example identifier (e.g., "01_hello_world")
         inputs: User-provided inputs
         mode: View mode (everyone, developers, experts)
-    
+
     Returns:
         Dict with output and metadata, or error
     """
+    # Send step updates (streaming is always enabled)
+    stream_step("initialize", "in_progress", "Loading foundation...")
+    
     # Route to example-specific handlers
-    if example_id == "01_hello_world":
-        return await run_hello_world(inputs, mode)
-    elif example_id == "02_custom_configuration":
-        return await run_custom_configuration(inputs, mode)
-    elif example_id == "03_custom_tool":
-        return await run_custom_tool(inputs, mode)
-    elif example_id == "04_load_and_inspect":
-        return await run_load_and_inspect(inputs, mode)
-    elif example_id == "05_composition":
-        return await run_composition(inputs, mode)
-    elif example_id == "06_sources_and_registry":
-        return await run_sources_and_registry(inputs, mode)
-    elif example_id == "07_full_workflow":
-        return await run_full_workflow(inputs, mode)
-    elif example_id == "10_meeting_notes":
-        return await run_meeting_notes(inputs, mode)
+    handlers = {
+        "01_hello_world": run_hello_world,
+        "02_custom_configuration": run_custom_configuration,
+        "03_custom_tool": run_custom_tool,
+        "04_load_and_inspect": run_load_and_inspect,
+        "05_composition": run_composition,
+        "06_sources_and_registry": run_sources_and_registry,
+        "07_full_workflow": run_full_workflow,
+        "08_cli_application": run_cli_application,
+        "09_multi_agent_system": run_multi_agent_system,
+        "10_meeting_notes": run_meeting_notes,
+        "11_provider_comparison": run_provider_comparison,
+        "12_approval_gates": run_approval_gates,
+        "13_event_debugging": run_event_debugging,
+        "14_session_persistence": run_session_persistence,
+        "17_multi_model_ensemble": run_multi_model_ensemble,
+        "18_custom_hooks": run_custom_hooks,
+        "19_github_actions_ci": run_github_actions_ci,
+        "20_calendar_assistant": run_calendar_assistant,
+        "21_bundle_updates": run_bundle_updates,
+        "22_custom_orchestrator_routing": run_custom_orchestrator,
+    }
+    
+    handler = handlers.get(example_id)
+    if handler:
+        # All handlers now have the same signature (streaming is always enabled)
+        return await handler(inputs, mode)
     else:
+        available = ", ".join(sorted(handlers.keys()))
         return {
-            "error": f"Example '{example_id}' is not implemented yet. Available: 01_hello_world, 02_custom_configuration, 03_custom_tool, 04_load_and_inspect, 05_composition, 06_sources_and_registry, 07_full_workflow, 10_meeting_notes"
+            "error": f"Example '{example_id}' is not implemented yet. Available: {available}"
         }
 
 
@@ -502,13 +743,13 @@ def main():
         args = json.loads(input_data)
         example_id = args.get("exampleId")
         inputs = args.get("inputs", {})
-        mode = args.get("mode", "normie")
-        
+        mode = args.get("mode", "developers")
+
         if not example_id:
             print(json.dumps({"error": "exampleId is required"}))
             sys.exit(1)
-        
-        # Run example
+
+        # Run example (streaming is always enabled)
         result = asyncio.run(run_example(example_id, inputs, mode))
         
         # Print result as JSON

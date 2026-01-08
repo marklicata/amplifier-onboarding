@@ -6,54 +6,37 @@ import Footer from '@/components/Footer';
 import ChatWindow from '@/components/ChatWindow';
 import ExampleBrowser from '@/components/playground/ExampleBrowser';
 import ExampleViewer from '@/components/playground/ExampleViewer';
-import ExecutionPanel from '@/components/playground/ExecutionPanel';
+import StreamingExecutionPanel from '@/components/playground/StreamingExecutionPanel';
 
 export default function PlaygroundPage() {
   const [selectedExampleId, setSelectedExampleId] = useState<string | undefined>(undefined);
   const [executing, setExecuting] = useState(false);
-  const [executionResult, setExecutionResult] = useState<any>(null);
+  const [executionInputs, setExecutionInputs] = useState<any>({});
+  const [executionMode, setExecutionMode] = useState<string>('developers');
   const [showExecutionPanel, setShowExecutionPanel] = useState(false);
   const [isChatOpen, setIsChatOpen] = useState(false);
+  const [showHowToUse, setShowHowToUse] = useState(false);
 
   const handleSelectExample = (exampleId: string) => {
     setSelectedExampleId(exampleId);
-    setExecutionResult(null);
   };
 
-  const handleExecute = async (exampleId: string, inputs?: any) => {
+  const handleExecute = (exampleId: string, inputs?: any) => {
     setExecuting(true);
     setShowExecutionPanel(true);
-    setExecutionResult(null);
+    setExecutionInputs(inputs || {});
+    setExecutionMode('developers');
+  };
 
-    try {
-      const response = await fetch('/api/playground/execute', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          exampleId,
-          inputs: inputs || {},
-          mode: 'normie', // Could be made dynamic based on viewer mode
-        }),
-      });
-
-      const data = await response.json();
-      setExecutionResult(data);
-    } catch (error: any) {
-      setExecutionResult({
-        success: false,
-        error: 'Failed to execute example',
-        details: error.message,
-      });
-    } finally {
-      setExecuting(false);
-    }
+  const handleExecutionComplete = (result: any) => {
+    setExecuting(false);
+    // Result is already displayed in the StreamingExecutionPanel
   };
 
   const handleCloseExecutionPanel = () => {
     if (!executing) {
       setShowExecutionPanel(false);
+      setExecuting(false);
     }
   };
 
@@ -90,6 +73,39 @@ export default function PlaygroundPage() {
 
         {/* Main Content */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          {/* How to Use Section - Collapsible */}
+          <div className="mb-8 bg-blue-50 border border-blue-200 rounded-lg overflow-hidden">
+            <button
+              onClick={() => setShowHowToUse(!showHowToUse)}
+              className="w-full px-6 py-4 flex items-center justify-between text-left hover:bg-blue-100 transition-colors"
+            >
+              <h3 className="text-lg font-semibold text-blue-900 flex items-center gap-2">
+                <span>💡</span>
+                <span>How to Use the Playground</span>
+              </h3>
+              <span className="text-blue-600 text-xl">
+                {showHowToUse ? '−' : '+'}
+              </span>
+            </button>
+            {showHowToUse && (
+              <div className="px-6 pb-6">
+                <ol className="list-decimal list-inside space-y-2 text-blue-800 mb-4">
+                  <li><strong>Browse Examples:</strong> Filter by tier, category, or search by keyword</li>
+                  <li><strong>Choose Your View:</strong> Switch between Everyone, Developers, or Experts views to match your technical level</li>
+                  <li><strong>Run Examples:</strong> Click "Run Example" to execute the code with Amplifier</li>
+                  <li><strong>Customize (Optional):</strong> Some examples let you provide custom inputs</li>
+                  <li><strong>Learn:</strong> See real AI agents in action and learn from the results</li>
+                </ol>
+                <div className="p-4 bg-yellow-50 border border-yellow-200 rounded">
+                  <p className="text-sm text-yellow-800">
+                    <strong>Note:</strong> Examples run on the server using your Amplifier Foundation installation. 
+                    First-time execution may take 10-30 seconds as modules are downloaded and cached.
+                  </p>
+                </div>
+              </div>
+            )}
+          </div>
+
           {selectedExampleId ? (
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
               {/* Left Sidebar - Example Browser (collapsed on desktop) */}
@@ -142,28 +158,6 @@ export default function PlaygroundPage() {
           )}
         </div>
 
-        {/* Info Section */}
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
-            <h3 className="text-lg font-semibold text-blue-900 mb-3">
-              💡 How to Use the Playground
-            </h3>
-            <ol className="list-decimal list-inside space-y-2 text-blue-800">
-              <li><strong>Browse Examples:</strong> Filter by tier, category, or search by keyword</li>
-              <li><strong>Choose Your View:</strong> Switch between Everyone, Developers, or Experts views to match your technical level</li>
-              <li><strong>Run Examples:</strong> Click "Run Example" to execute the code with Amplifier</li>
-              <li><strong>Customize (Optional):</strong> Some examples let you provide custom inputs</li>
-              <li><strong>Learn:</strong> See real AI agents in action and learn from the results</li>
-            </ol>
-            <div className="mt-4 p-4 bg-yellow-50 border border-yellow-200 rounded">
-              <p className="text-sm text-yellow-800">
-                <strong>Note:</strong> Examples run on the server using your Amplifier Foundation installation. 
-                First-time execution may take 10-30 seconds as modules are downloaded and cached.
-              </p>
-            </div>
-          </div>
-        </div>
-
         {/* Features Grid */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -197,11 +191,13 @@ export default function PlaygroundPage() {
         </div>
 
         {/* Execution Panel Modal */}
-        <ExecutionPanel
+        <StreamingExecutionPanel
           isOpen={showExecutionPanel}
           onClose={handleCloseExecutionPanel}
-          result={executionResult}
-          executing={executing}
+          exampleId={selectedExampleId || ''}
+          inputs={executionInputs}
+          mode={executionMode}
+          onComplete={handleExecutionComplete}
         />
       </div>
 

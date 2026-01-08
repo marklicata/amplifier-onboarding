@@ -1,0 +1,99 @@
+{
+  "id": "17_multi_model_ensemble",
+  "title": "Multi-Model Ensemble",
+  "tier": 4,
+  "category": "Real-World",
+  "description": "Multi-Model Ensemble",
+  "estimatedTimeMinutes": 5,
+  "minAudience": "developers",
+  "isFeatured": false,
+  "difficulty": "advanced",
+  "tags": [
+    "tools",
+    "composition",
+    "multi-agent",
+    "hooks"
+  ],
+  "githubUrl": "https://github.com/microsoft/amplifier-foundation/blob/main/examples/17_multi_model_ensemble.py",
+  "content": {
+    "everyone": {
+      "title": "Multi-Model Ensemble",
+      "valueProposition": "Learn to work with AI agents",
+      "howItWorks": [
+        "Set up your AI environment",
+        "Configure the agent with the right capabilities",
+        "Run the example and see results",
+        "Understand what happened"
+      ],
+      "whatYouGet": [
+        "Working example you can run",
+        "Clear understanding of the concept",
+        "Foundation for building more"
+      ]
+    },
+    "developers": {
+      "title": "17_multi_model_ensemble.py - Multi-Model Ensemble",
+      "valueProposition": "",
+      "howItWorks": "",
+      "keyConcepts": [
+        "Amplifier bundle system",
+        "Module composition",
+        "Session execution"
+      ],
+      "codeOverview": {
+        "structure": [
+          "Load foundation and provider bundles",
+          "Compose bundles together",
+          "Execute prompts and get responses"
+        ],
+        "keyFunctions": [
+          {
+            "name": "load_bundle",
+            "description": "Loads a bundle from path or URL",
+            "usage": "load_bundle(str(foundation_path)"
+          },
+          {
+            "name": "compose",
+            "description": "Combines multiple bundles",
+            "usage": "compose(provider)"
+          },
+          {
+            "name": "execute",
+            "description": "Executes a prompt",
+            "usage": "execute(prompt)"
+          },
+          {
+            "name": "mount",
+            "description": "Registers a custom tool or component",
+            "usage": "mount(...)"
+          }
+        ]
+      },
+      "codeSnippet": "async def main():\n    \"\"\"Run interactive demo menu.\"\"\"\n    print(\"\\n\" + \"=\" * 80)\n    print(\"\ud83c\udfad Multi-Model Ensemble Patterns\")\n    print(\"=\" * 80)\n    print(\"\\nVALUE: Advanced patterns for combining multiple models\")\n    print(\"AUDIENCE: Teams optimizing quality, cost, and reliability\")\n    print(\"\\nWhat this demonstrates:\")\n    print(\"  - Consensus voting across models\")\n    print(\"  - Cost optimization with cascading\")\n    print(\"  - Intelligent task routing\")\n    print(\"  - Model comparison and selection\")\n\n    scenarios = [\n        (\"Consensus Voting (multiple perspectives)\", scenario_consensus_voting),"
+    },
+    "experts": {
+      "title": "17_multi_model_ensemble.py - Multi-Model Ensemble",
+      "complexity": "Tier 4 - Real-World Applications",
+      "sourceUrl": "https://github.com/microsoft/amplifier-foundation/blob/main/examples/17_multi_model_ensemble.py",
+      "architecture": "",
+      "fullCode": "#!/usr/bin/env python3\n\"\"\"\nExample 17: Multi-Model Ensemble\n=================================\n\nAUDIENCE: Advanced developers, researchers, teams optimizing quality/cost\nVALUE: Shows advanced pattern of combining multiple models for better results\nPATTERN: Ensemble methods, model routing, consensus building\n\nWhat this demonstrates:\n  - Using multiple LLM providers/models in a single workflow\n  - Model routing based on task type\n  - Consensus and voting across models\n  - Quality vs. cost optimization\n  - Fallback strategies\n\nWhen you'd use this:\n  - Critical decisions requiring multiple perspectives\n  - Quality optimization (use multiple models, pick best)\n  - Cost optimization (try cheap model first, fallback to expensive)\n  - Research and model comparison\n  - Avoiding vendor lock-in\n\"\"\"\n\nimport asyncio\nfrom pathlib import Path\nfrom typing import Any\n\nfrom amplifier_core import AmplifierSession\nfrom amplifier_foundation import load_bundle\n\n# ============================================================================\n# Ensemble Strategies\n# ============================================================================\n\n\nasync def ensemble_consensus(\n    prompts: list[tuple[str, str]],  # (provider_path, prompt)\n    foundation_path: Path,\n) -> list[str]:\n    \"\"\"\n    Run the same prompt across multiple models and collect responses.\n\n    Use case: Get multiple perspectives on the same problem.\n    \"\"\"\n    results = []\n\n    for provider_path, prompt in prompts:\n        print(f\"\\n{'=' * 80}\")\n        print(f\"\ud83e\udd16 Testing: {provider_path}\")\n        print(f\"{'=' * 80}\")\n\n        # Load foundation with specific provider\n        foundation = await load_bundle(str(foundation_path))\n        provider = await load_bundle(provider_path)\n\n        # Compose bundles (provider overrides foundation defaults)\n        composed = foundation.compose(provider)\n        mount_plan = composed.to_mount_plan()\n\n        # Create and run session\n        session = AmplifierSession(config=mount_plan)\n        await session.initialize()\n\n        try:\n            result = await session.execute(prompt)\n            results.append((provider_path, result))\n\n            # Show preview\n            preview = result[:200] + \"...\" if len(result) > 200 else result\n            print(f\"\\n\ud83d\udcdd Response preview:\\n{preview}\")\n\n        finally:\n            await session.cleanup()\n\n    return results\n\n\nasync def ensemble_cascade(\n    provider_configs: list[tuple[str, str]],  # (provider_path, label)\n    prompt: str,\n    foundation_path: Path,\n    quality_threshold: str = \"acceptable\",\n) -> tuple[str, str]:\n    \"\"\"\n    Try models in order (cheap to expensive) until quality threshold met.\n\n    Use case: Optimize cost by using cheaper models when they're good enough.\n    \"\"\"\n    print(f\"\\n{'=' * 80}\")\n    print(\"\ud83d\udd04 Cascade Strategy: Trying models from cheap to expensive\")\n    print(f\"{'=' * 80}\")\n    print(f\"\\nPrompt: {prompt}\")\n    print(f\"Quality threshold: {quality_threshold}\")\n\n    foundation = await load_bundle(str(foundation_path))\n\n    for i, (provider_path, label) in enumerate(provider_configs, 1):\n        print(f\"\\n{'\u2500' * 80}\")\n        print(f\"Attempt {i}/{len(provider_configs)}: {label}\")\n        print(f\"{'\u2500' * 80}\")\n\n        # Load and compose with provider\n        provider = await load_bundle(provider_path)\n        composed = foundation.compose(provider)\n        mount_plan = composed.to_mount_plan()\n\n        # Run session\n        session = AmplifierSession(config=mount_plan)\n        await session.initialize()\n\n        try:\n            result = await session.execute(prompt)\n\n            # Simple quality check (in practice, use more sophisticated validation)\n            word_count = len(result.split())\n            has_code = \"```\" in result or \"def \" in result or \"class \" in result\n\n            quality_met = word_count > 50  # Simple heuristic\n            if quality_threshold == \"high\" and has_code:\n                quality_met = word_count > 100\n\n            status = \"\u2705 Quality met\" if quality_met else \"\u26a0\ufe0f  Quality below threshold\"\n            print(f\"\\n{status} (words: {word_count}, has code: {has_code})\")\n\n            if quality_met:\n                print(f\"\\n\ud83c\udfaf Accepted result from {label}\")\n                return (label, result)\n            print(\"\\n\u23ed\ufe0f  Trying next model...\")\n\n        finally:\n            await session.cleanup()\n\n    raise RuntimeError(\"No model met quality threshold\")\n\n\nasync def ensemble_routing(\n    task: dict[str, Any],\n    foundation_path: Path,\n) -> str:\n    \"\"\"\n    Route tasks to appropriate models based on task characteristics.\n\n    Use case: Use the right tool for the job - fast models for simple tasks,\n    powerful models for complex reasoning.\n    \"\"\"\n    print(f\"\\n{'=' * 80}\")\n    print(\"\ud83c\udfaf Routing Strategy: Selecting model based on task type\")\n    print(f\"{'=' * 80}\")\n\n    task_type = task.get(\"type\", \"general\")\n    prompt = task.get(\"prompt\", \"\")\n\n    # Define routing rules\n    routing_map = {\n        \"simple\": (\"providers/anthropic-haiku.yaml\", \"Fast/Cheap (Haiku)\"),\n        \"balanced\": (\"providers/anthropic-sonnet.yaml\", \"Balanced (Sonnet)\"),\n        \"complex\": (\"providers/anthropic-opus.yaml\", \"Premium (Opus)\"),\n    }\n\n    provider_path, label = routing_map.get(task_type, routing_map[\"balanced\"])\n\n    print(f\"\\nTask type: {task_type}\")\n    print(f\"Selected model: {label}\")\n    print(f\"Prompt: {prompt[:100]}...\")\n\n    # Load and run\n    foundation = await load_bundle(str(foundation_path))\n    provider = await load_bundle(provider_path)\n    composed = foundation.compose(provider)\n    mount_plan = composed.to_mount_plan()\n\n    session = AmplifierSession(config=mount_plan)\n    await session.initialize()\n\n    try:\n        result = await session.execute(prompt)\n        return result\n    finally:\n        await session.cleanup()\n\n\n# ============================================================================\n# Demo Scenarios\n# ============================================================================\n\n\nasync def scenario_consensus_voting():\n    \"\"\"\n    Scenario: Get consensus across multiple models.\n\n    Run the same prompt on multiple models and compare results.\n    \"\"\"\n    print(\"\\n\" + \"=\" * 80)\n    print(\"SCENARIO 1: Consensus Voting\")\n    print(\"=\" * 80)\n    print(\"\\nRun the same prompt across multiple models to get diverse perspectives.\")\n    print(\"Useful for critical decisions or quality optimization.\")\n    print(\"-\" * 80)\n\n    foundation_path = Path(__file__).parent.parent\n\n    # Same prompt to multiple providers\n    prompt = \"List 3 creative uses for AI agents in software development. Be concise.\"\n\n    prompts = [\n        (\"providers/anthropic-haiku.yaml\", prompt),\n        (\"providers/anthropic-sonnet.yaml\", prompt),\n    ]\n\n    print(f\"\\n\ud83d\udcdd Prompt: {prompt}\")\n\n    results = await ensemble_consensus(prompts, foundation_path)\n\n    # Show comparison\n    print(\"\\n\" + \"=\" * 80)\n    print(\"\ud83d\udcca CONSENSUS COMPARISON\")\n    print(\"=\" * 80)\n\n    for provider_path, result in results:\n        model_name = provider_path.split(\"/\")[-1].replace(\".yaml\", \"\")\n        print(f\"\\n{model_name}:\")\n        print(f\"{'\u2500' * 80}\")\n        preview = result[:300] + \"...\" if len(result) > 300 else result\n        print(preview)\n\n    print(\"\\n\" + \"=\" * 80)\n    print(\"\ud83d\udca1 Analysis\")\n    print(\"=\" * 80)\n    print(\"\"\"\nWith consensus voting, you can:\n- Compare model outputs for quality assessment\n- Pick the best response (manual or automated)\n- Combine insights from multiple models\n- Reduce bias from a single model\n    \"\"\")\n\n\nasync def scenario_cost_optimization():\n    \"\"\"\n    Scenario: Cascade from cheap to expensive models.\n\n    Try cheaper models first, escalate to expensive only if needed.\n    \"\"\"\n    print(\"\\n\" + \"=\" * 80)\n    print(\"SCENARIO 2: Cost Optimization with Cascade\")\n    print(\"=\" * 80)\n    print(\"\\nTry models in order of cost, stopping when quality threshold met.\")\n    print(\"Maximizes cost efficiency while maintaining quality.\")\n    print(\"-\" * 80)\n\n    foundation_path = Path(__file__).parent.parent\n\n    # Define cascade order (cheap to expensive)\n    providers = [\n        (\"providers/anthropic-haiku.yaml\", \"Haiku (cheapest)\"),\n        (\"providers/anthropic-sonnet.yaml\", \"Sonnet (balanced)\"),\n        (\"providers/anthropic-opus.yaml\", \"Opus (premium)\"),\n    ]\n\n    prompt = \"Write a Python function to calculate fibonacci numbers with memoization.\"\n\n    try:\n        selected_model, result = await ensemble_cascade(\n            providers, prompt, foundation_path, quality_threshold=\"acceptable\"\n        )\n\n        print(\"\\n\" + \"=\" * 80)\n        print(\"\u2705 FINAL RESULT\")\n        print(\"=\" * 80)\n        print(f\"\\nSelected model: {selected_model}\")\n        print(\"\\nResponse:\")\n        print(\"\u2500\" * 80)\n        print(result)\n\n    except RuntimeError as e:\n        print(f\"\\n\u274c Error: {e}\")\n\n    print(\"\\n\" + \"=\" * 80)\n    print(\"\ud83d\udca1 Cost Savings\")\n    print(\"=\" * 80)\n    print(\"\"\"\nCascade strategy benefits:\n- Pay for expensive models only when necessary\n- Fast responses from cheaper models when they work\n- Quality guarantee through fallback chain\n- Typical cost savings: 40-60% compared to always using premium models\n    \"\"\")\n\n\nasync def scenario_task_routing():\n    \"\"\"\n    Scenario: Route different tasks to appropriate models.\n\n    Use the right model for each task type.\n    \"\"\"\n    print(\"\\n\" + \"=\" * 80)\n    print(\"SCENARIO 3: Intelligent Task Routing\")\n    print(\"=\" * 80)\n    print(\"\\nRoute tasks to the most appropriate model based on complexity.\")\n    print(\"Simple tasks \u2192 fast models, complex tasks \u2192 powerful models.\")\n    print(\"-\" * 80)\n\n    foundation_path = Path(__file__).parent.parent\n\n    # Define various tasks\n    tasks = [\n        {\n            \"type\": \"simple\",\n            \"prompt\": \"What is 2 + 2?\",\n            \"description\": \"Simple arithmetic\",\n        },\n        {\n            \"type\": \"balanced\",\n            \"prompt\": \"Explain the Observer pattern in software design.\",\n            \"description\": \"Moderate explanation\",\n        },\n        {\n            \"type\": \"complex\",\n            \"prompt\": \"Design a distributed consensus algorithm for a blockchain network.\",\n            \"description\": \"Complex system design\",\n        },\n    ]\n\n    for i, task in enumerate(tasks, 1):\n        print(f\"\\n{'=' * 80}\")\n        print(f\"Task {i}: {task['description']}\")\n        print(f\"{'=' * 80}\")\n\n        result = await ensemble_routing(task, foundation_path)\n\n        preview = result[:200] + \"...\" if len(result) > 200 else result\n        print(f\"\\n\ud83d\udcdd Response:\\n{preview}\")\n\n    print(\"\\n\" + \"=\" * 80)\n    print(\"\ud83d\udca1 Routing Benefits\")\n    print(\"=\" * 80)\n    print(\"\"\"\nTask routing advantages:\n- Match model capability to task complexity\n- Optimize for cost AND latency\n- Simple tasks get fast responses\n- Complex tasks get quality responses\n- Easy to adjust routing rules based on experience\n    \"\"\")\n\n\n# ============================================================================\n# Interactive Menu\n# ============================================================================\n\n\nasync def main():\n    \"\"\"Run interactive demo menu.\"\"\"\n    print(\"\\n\" + \"=\" * 80)\n    print(\"\ud83c\udfad Multi-Model Ensemble Patterns\")\n    print(\"=\" * 80)\n    print(\"\\nVALUE: Advanced patterns for combining multiple models\")\n    print(\"AUDIENCE: Teams optimizing quality, cost, and reliability\")\n    print(\"\\nWhat this demonstrates:\")\n    print(\"  - Consensus voting across models\")\n    print(\"  - Cost optimization with cascading\")\n    print(\"  - Intelligent task routing\")\n    print(\"  - Model comparison and selection\")\n\n    scenarios = [\n        (\"Consensus Voting (multiple perspectives)\", scenario_consensus_voting),\n        (\"Cost Optimization (cascade strategy)\", scenario_cost_optimization),\n        (\"Task Routing (right model for the job)\", scenario_task_routing),\n    ]\n\n    print(\"\\n\" + \"=\" * 80)\n    print(\"Choose a scenario:\")\n    print(\"=\" * 80)\n    for i, (name, _) in enumerate(scenarios, 1):\n        print(f\"  {i}. {name}\")\n    print(\"  q. Quit\")\n    print(\"-\" * 80)\n\n    choice = input(\"\\nYour choice: \").strip().lower()\n\n    if choice == \"q\":\n        print(\"\\n\ud83d\udc4b Goodbye!\")\n        return\n\n    try:\n        idx = int(choice) - 1\n        if 0 <= idx < len(scenarios):\n            _, scenario_func = scenarios[idx]\n            await scenario_func()\n        else:\n            print(\"\\n\u274c Invalid choice\")\n    except ValueError:\n        print(\"\\n\u274c Invalid choice\")\n\n    print(\"\\n\" + \"=\" * 80)\n    print(\"\ud83d\udca1 KEY TAKEAWAYS\")\n    print(\"=\" * 80)\n    print(\"\"\"\n1. **Consensus Voting**: Run same prompt on multiple models, compare results\n2. **Cost Cascade**: Try cheap models first, escalate only if needed\n3. **Task Routing**: Match model capability to task complexity\n4. **Flexibility**: Easy to swap models, test strategies, optimize\n\n**When to use ensemble patterns:**\n- Critical decisions requiring multiple perspectives\n- Cost optimization while maintaining quality\n- Avoiding vendor lock-in\n- Research and model comparison\n- Building resilient systems with fallbacks\n\n**Implementation patterns:**\n- Bundle composition makes it easy to swap providers\n- Same code works across all models (provider abstraction)\n- Add routing logic in your application layer\n- Use hooks to collect metrics for routing decisions\n\"\"\")\n\n\nif __name__ == \"__main__\":\n    asyncio.run(main())\n",
+      "advancedOptions": {
+        "provider": [
+          "anthropic-sonnet",
+          "anthropic-opus",
+          "openai-gpt4"
+        ],
+        "streaming": false,
+        "hooks": []
+      }
+    }
+  },
+  "execution": {
+    "requiresInput": true,
+    "defaultPrompt": null,
+    "estimatedDuration": "2-5 seconds",
+    "prerequisites": [
+      "ANTHROPIC_API_KEY environment variable"
+    ]
+  }
+}

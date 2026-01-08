@@ -43,7 +43,8 @@ amplifier-onboarding/
 │   │   │   └── warmup/route.ts   # Session warmup
 │   │   └── playground/           # Playground endpoints
 │   │       ├── examples/         # Example metadata
-│   │       └── execute/          # Example execution
+│   │       ├── execute/          # Basic execution
+│   │       └── execute-stream/   # Streaming execution (SSE)
 │   ├── elevator-pitch/           # Landing page
 │   ├── playground/               # Playground page
 │   ├── system-overview/          # Architecture page
@@ -54,7 +55,7 @@ amplifier-onboarding/
 │   ├── playground/              # Playground components
 │   │   ├── ExampleBrowser.tsx   # Example list/filter
 │   │   ├── ExampleViewer.tsx    # Example details
-│   │   └── ExecutionPanel.tsx   # Execution results
+│   │   └── StreamingExecutionPanel.tsx  # Streaming execution results
 │   ├── Header.tsx               # Navigation header
 │   ├── Footer.tsx               # Site footer
 │   ├── Layout.tsx               # Layout wrapper
@@ -83,12 +84,14 @@ amplifier-onboarding/
 ### Current Implementation
 
 - **Landing Page**: Comprehensive value proposition and product overview
-- **Interactive Playground**: Browse and execute real amplifier-foundation examples
-  - Example browser with filtering by tier and category
-  - Multiple view modes: Simple, Explorer, Developer, and Expert
+- **Interactive Playground**: Browse and execute 20+ real amplifier-foundation examples
+  - Example browser with filtering by tier, category, and difficulty
+  - Multiple view modes: Everyone, Developers, and Experts
+  - **Streaming execution** with real-time SSE (Server-Sent Events)
+  - Advanced options: temperature control, logging hooks, debugging hooks
   - Live execution of examples using Amplifier Foundation
-  - Real-time results with markdown formatting
-  - Examples include: Hello World, Custom Configuration, Meeting Notes extraction
+  - Real-time results with markdown formatting and syntax highlighting
+  - Examples across 4 tiers: Quick Start, Foundation Concepts, Building Applications, Real-World
 - **Interactive Chat**: AI-powered chat using Amplifier Foundation bundles
 - **Session Warmup**: Pre-initialized sessions for reduced latency
 - **System Overview**: Visual architecture documentation
@@ -97,12 +100,13 @@ amplifier-onboarding/
 
 ### Planned Features
 
-- **Additional Playground Examples**: Expand from 3 to 20+ examples
-- **WebSocket Streaming**: Real-time execution logs and progress updates
-- **User Authentication**: GitHub OAuth integration
-- **Code Customization**: Edit and modify example code in the browser
+- **Provider Selection**: Choose between Anthropic, OpenAI, and Azure providers
+- **GitHub Synchronization**: Automatic updates when amplifier-foundation examples change
+- **Code Customization**: Monaco editor integration for editing example code (Expert mode)
+- **Comparison Mode**: Run same example with different providers side-by-side
+- **User Authentication**: GitHub OAuth integration (optional)
 - **Execution History**: Save and review past executions
-- **Rate Limiting**: Fair usage policies for shared resources
+- **Export & Share**: Download examples as Python files, share execution results
 
 ## Architecture
 
@@ -145,13 +149,13 @@ amplifier-onboarding/
 └─────────────────────────┘
 ```
 
-### Planned Architecture (Phase 1+)
+### Future Architecture Considerations
 
-- Separate Python backend (FastAPI) in Azure Container App
-- WebSocket streaming for real-time updates
+- Separate Python backend (FastAPI) in Azure Container App for better scalability
 - PostgreSQL database for user sessions and execution history
 - Session pooling for pre-warmed sessions
-- Redis caching (optional)
+- Redis caching for frequently accessed examples
+- Load balancing for high-traffic scenarios
 
 ## Environment Variables
 

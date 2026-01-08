@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import ChatWindow from '@/components/ChatWindow';
+import { Url } from 'next/dist/shared/lib/router/router';
 
 export default function SystemOverview() {
   const [isChatOpen, setIsChatOpen] = useState(false);
@@ -26,6 +27,29 @@ export default function SystemOverview() {
             </p>
           </div>
 
+          {/* Onboarding Tools */}
+          <div className="mb-8">
+            <div className="text-center mb-4">
+              <span className="inline-block px-4 py-2 bg-gradient-to-r from-pink-500 to-yellow-500 text-white rounded-full text-sm font-semibold shadow-lg">
+                Onboarding Tools
+              </span>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+              <AppCard
+                name="Amplifier Onboarding"
+                link="https://github.com/marklicata/amplifier-onboarding"
+                description="Interactive onboarding experience to get started with Amplifier"
+                icon="🚀"
+              />
+              <AppCard
+                name="Developer Guide"
+                link="https://michaeljabbour.github.io/amplifier-dx/"
+                description="Desktop application providing a rich GUI experience for AI-powered development"
+                icon="📚"
+              />
+            </div>
+          </div>
+
           {/* User Applications Layer */}
           <div className="mb-8">
             <div className="text-center mb-4">
@@ -33,24 +57,18 @@ export default function SystemOverview() {
                 User Applications
               </span>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
               <AppCard
                 name="Amplifier Desktop"
-                repo="amplifier-desktop"
+                link="https://github.com/michaeljabbour/amplifier-desktop"
                 description="Desktop application providing a rich GUI experience for AI-powered development"
                 icon="🖥️"
               />
               <AppCard
                 name="Amplifier CLI"
-                repo="amplifier-app-cli"
+                link="https://github.com/microsoft/amplifier-app-cli"
                 description="Command-line interface for terminal-native AI assistance"
                 icon="⌨️"
-              />
-              <AppCard
-                name="Amplifier Onboarding"
-                repo="amplifier-onboarding"
-                description="Interactive onboarding experience to get started with Amplifier"
-                icon="🚀"
               />
             </div>
           </div>
@@ -70,7 +88,7 @@ export default function SystemOverview() {
             >
               <ArchCard
                 name="Amplifier"
-                repo="amplifier"
+                link="https://github.com/microsoft/amplifier"
                 description="Main hub repository containing agents, behaviors, context managers, documentation, and usage recipes"
                 lines="Multi-component"
                 highlight="Hub Repository"
@@ -79,7 +97,7 @@ export default function SystemOverview() {
               />
               <ArchCard
                 name="Amplifier Log Viewer"
-                repo="amplifier-app-log-viewer"
+                link="https://github.com/microsoft/amplifier-app-log-viewer"
                 description="Debugging and inspection tool for Amplifier sessions"
                 lines="~1,000 lines"
                 highlight="Debugging Tool"
@@ -96,7 +114,7 @@ export default function SystemOverview() {
             >
               <ArchCard
                 name="Amplifier Foundation"
-                repo="amplifier-foundation"
+                link="https://github.com/microsoft/amplifier-foundation"
                 description="Bundle composition library enabling modular configuration through YAML/Markdown. Provides @mention system, bundle validation, and default foundation bundle"
                 lines="~5,000 lines"
                 highlight="Composition Framework"
@@ -114,7 +132,7 @@ export default function SystemOverview() {
             >
               <ArchCard
                 name="Amplifier Core"
-                repo="amplifier-core"
+                link="https://github.com/microsoft/amplifier-core"
                 description="Ultra-thin kernel providing module discovery, lifecycle coordination, hook system, session management, and stable APIs. Uses Python Protocols for zero-dependency modularity"
                 lines="~2,600 lines"
                 highlight="Minimal Kernel"
@@ -149,9 +167,9 @@ export default function SystemOverview() {
           <div className="text-center">
           <button
                 onClick={() => window.location.href = "/playground"}
-                className="inline-block items-center justify-center px-8 py-4 bg-blue-600 text-white text-lg font-medium rounded-lg hover:bg-blue-700 transition-all shadow-lg hover:shadow-xl hover:scale-105"
+                className="inline-flex items-center justify-center px-8 py-4 bg-blue-600 text-white text-lg font-medium rounded-lg hover:bg-blue-700 transition-all shadow-lg hover:shadow-xl hover:scale-105"
                 style={{ marginTop: '2rem' }}
-              > 
+              >
                 Developer Guide →
           </button>
           </div>
@@ -165,19 +183,19 @@ export default function SystemOverview() {
 
 interface AppCardProps {
   name: string;
-  repo: string;
+  link: string;
   description: string;
   icon: string;
 }
 
-function AppCard({ name, repo, description, icon }: AppCardProps) {
+function AppCard({ name, link, description, icon }: AppCardProps) {
   return (
     <div className="bg-gradient-to-br from-white to-purple-50 rounded-xl shadow-lg p-6 border border-purple-200 hover:shadow-xl transition-all hover:scale-105">
       <div className="text-4xl mb-3">{icon}</div>
       <h3 className="text-xl font-bold text-gray-900 mb-2">{name}</h3>
       <p className="text-sm text-gray-600 mb-4 min-h-[3rem]">{description}</p>
       <a
-        href={`https://github.com/microsoft/${repo}`}
+        href={`${link}`}
         target="_blank"
         rel="noopener noreferrer"
         className="inline-flex items-center gap-2 px-3 py-2 bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium"
@@ -223,7 +241,7 @@ function LayerSection({ title, subtitle, color, children, delay }: LayerSectionP
 
 interface ArchCardProps {
   name: string;
-  repo: string;
+  link: string;
   description: string;
   lines: string;
   highlight: string;
@@ -231,7 +249,7 @@ interface ArchCardProps {
   uses?: string[];
 }
 
-function ArchCard({ name, repo, description, lines, highlight, usedBy, uses }: ArchCardProps) {
+function ArchCard({ name, link, description, lines, highlight, usedBy, uses }: ArchCardProps) {
   return (
     <div className="relative bg-white rounded-lg shadow-md p-6 max-w-3xl mx-auto border-l-4 border-blue-500 hover:shadow-xl transition-shadow">
       {/* Used By - Arrow pointing up */}
@@ -248,7 +266,7 @@ function ArchCard({ name, repo, description, lines, highlight, usedBy, uses }: A
         <div>
           <h3 className="text-xl font-bold text-gray-900">{name}</h3>
           <a
-            href={`https://github.com/microsoft/${repo}`}
+            href={`${link}`}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 px-3 py-2 mt-2 bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium"

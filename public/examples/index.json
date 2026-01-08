@@ -115,6 +115,37 @@
       ]
     },
     {
+      "id": "08_cli_application",
+      "title": "CLI Application - Building a Real Tool",
+      "tier": 3,
+      "category": "Building Applications",
+      "description": "Go beyond scripts - see how to build a proper CLI application with Amplifier.\nLearn application arch",
+      "estimatedTimeMinutes": 15,
+      "minAudience": "developers",
+      "isFeatured": false,
+      "difficulty": "intermediate",
+      "tags": [
+        "tools",
+        "composition"
+      ]
+    },
+    {
+      "id": "09_multi_agent_system",
+      "title": "Multi-Agent System - Coordinating Specialized Agents",
+      "tier": 3,
+      "category": "Building Applications",
+      "description": "Build sophisticated systems by composing specialized agents.\nEach agent has different tools, models,",
+      "estimatedTimeMinutes": 30,
+      "minAudience": "developers",
+      "isFeatured": false,
+      "difficulty": "intermediate",
+      "tags": [
+        "tools",
+        "composition",
+        "multi-agent"
+      ]
+    },
+    {
       "id": "10_meeting_notes",
       "title": "Meeting Notes \u2192 Action Items",
       "tier": 4,
@@ -129,10 +160,161 @@
         "productivity",
         "structured-data"
       ]
+    },
+    {
+      "id": "11_provider_comparison",
+      "title": "Provider Comparison Demo",
+      "tier": 4,
+      "category": "Real-World",
+      "description": "See Amplifier's key strength - trivially easy provider swapping. This example shows\nhow to compare d",
+      "estimatedTimeMinutes": 5,
+      "minAudience": "developers",
+      "isFeatured": false,
+      "difficulty": "advanced",
+      "tags": [
+        "composition"
+      ]
+    },
+    {
+      "id": "12_approval_gates",
+      "title": "Approval Gates in Action",
+      "tier": 4,
+      "category": "Real-World",
+      "description": "Approval Gates in Action",
+      "estimatedTimeMinutes": 5,
+      "minAudience": "developers",
+      "isFeatured": false,
+      "difficulty": "advanced",
+      "tags": [
+        "tools",
+        "composition"
+      ]
+    },
+    {
+      "id": "13_event_debugging",
+      "title": "Event-Driven Debugging",
+      "tier": 4,
+      "category": "Real-World",
+      "description": "Event-Driven Debugging",
+      "estimatedTimeMinutes": 5,
+      "minAudience": "developers",
+      "isFeatured": false,
+      "difficulty": "advanced",
+      "tags": [
+        "tools",
+        "composition",
+        "hooks"
+      ]
+    },
+    {
+      "id": "14_session_persistence",
+      "title": "Session Persistence & Resume",
+      "tier": 4,
+      "category": "Real-World",
+      "description": "Demonstrates how to persist conversation history across sessions. Long-running\ntasks or conversation",
+      "estimatedTimeMinutes": 5,
+      "minAudience": "developers",
+      "isFeatured": false,
+      "difficulty": "advanced",
+      "tags": [
+        "tools",
+        "composition"
+      ]
+    },
+    {
+      "id": "17_multi_model_ensemble",
+      "title": "Multi-Model Ensemble",
+      "tier": 4,
+      "category": "Real-World",
+      "description": "Multi-Model Ensemble",
+      "estimatedTimeMinutes": 5,
+      "minAudience": "developers",
+      "isFeatured": false,
+      "difficulty": "advanced",
+      "tags": [
+        "tools",
+        "composition",
+        "multi-agent",
+        "hooks"
+      ]
+    },
+    {
+      "id": "18_custom_hooks",
+      "title": "Custom Hook Library",
+      "tier": 4,
+      "category": "Real-World",
+      "description": "Custom Hook Library",
+      "estimatedTimeMinutes": 5,
+      "minAudience": "developers",
+      "isFeatured": false,
+      "difficulty": "advanced",
+      "tags": [
+        "tools",
+        "composition",
+        "hooks"
+      ]
+    },
+    {
+      "id": "19_github_actions_ci",
+      "title": "GitHub Actions Integration (CI/CD)",
+      "tier": 4,
+      "category": "Real-World",
+      "description": "GitHub Actions Integration (CI/CD)",
+      "estimatedTimeMinutes": 5,
+      "minAudience": "developers",
+      "isFeatured": false,
+      "difficulty": "advanced",
+      "tags": [
+        "composition"
+      ]
+    },
+    {
+      "id": "20_calendar_assistant",
+      "title": "Calendar Integration (Meeting Assistant)",
+      "tier": 4,
+      "category": "Real-World",
+      "description": "Calendar Integration (Meeting Assistant)",
+      "estimatedTimeMinutes": 5,
+      "minAudience": "developers",
+      "isFeatured": false,
+      "difficulty": "advanced",
+      "tags": [
+        "composition"
+      ]
+    },
+    {
+      "id": "21_bundle_updates",
+      "title": "Bundle Updates (Status Checking & Updating)",
+      "tier": 4,
+      "category": "Real-World",
+      "description": "Bundle Updates (Status Checking & Updating)",
+      "estimatedTimeMinutes": 5,
+      "minAudience": "developers",
+      "isFeatured": false,
+      "difficulty": "advanced",
+      "tags": [
+        "tools",
+        "composition"
+      ]
+    },
+    {
+      "id": "22_custom_orchestrator_routing",
+      "title": "Custom Orchestrator (Model Routing)",
+      "tier": 4,
+      "category": "Real-World",
+      "description": "Custom Orchestrator (Model Routing)",
+      "estimatedTimeMinutes": 5,
+      "minAudience": "developers",
+      "isFeatured": false,
+      "difficulty": "advanced",
+      "tags": [
+        "composition",
+        "hooks"
+      ]
     }
   ],
   "metadata": {
-    "totalExamples": 8,
+    "totalExamples": 20,
     "lastUpdated": "2026-01-07T00:00:00Z",
     "version": "1.0.0"
   }
