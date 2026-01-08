@@ -12,7 +12,8 @@ RUN apt-get update && apt-get install -y \
     build-essential \
     && ln -sf /usr/bin/python3 /usr/bin/python \
     && ln -sf /usr/bin/pip3 /usr/bin/pip \
-    && rm -rf /var/lib/apt/lists/*
+    && rm -rf /var/lib/apt/lists/* \
+    && rm -f /usr/lib/python3*/EXTERNALLY-MANAGED
 
 # Install uv (Python package manager required by amplifier-core)
 # Using the standalone installer and ensuring it's in PATH
@@ -49,5 +50,7 @@ RUN npm run build
 
 # Set production environment
 ENV NODE_ENV=production
+
+EXPOSE 3000
 
 CMD ["npm", "start"]
