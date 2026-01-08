@@ -6,6 +6,7 @@ RUN apt-get update && apt-get install -y \
     python3 \
     python3-pip \
     python3-dev \
+    python3-venv \
     git \
     curl \
     build-essential \
@@ -19,10 +20,9 @@ RUN curl -LsSf https://astral.sh/uv/install.sh | sh && \
     ln -sf /root/.local/bin/uv /usr/local/bin/uv && \
     ln -sf /root/.local/bin/uvx /usr/local/bin/uvx
 
-# uv env
-ENV UV_PROJECT_ENVIRONMENT=/opt/uv-env
-ENV PATH="/opt/uv-env/bin:$PATH"
-ENV UV_CACHE_DIR=/tmp/uv-cache
+# Configure uv to work with system Python and allow system package modifications
+ENV UV_SYSTEM_PYTHON=1
+ENV UV_PROJECT_ENVIRONMENT=/usr/local
 
 WORKDIR /app
 
@@ -34,7 +34,8 @@ RUN npm ci
 
 # Install Python dependencies from GitHub
 # Use UV_CACHE_DIR to ensure uv has a writable cache directory
-RUN uv pip install --system -r requirements.txt
+ENV UV_CACHE_DIR=/tmp/uv-cache
+RUN pip3 install --no-cache-dir --break-system-packages -r requirements.txt
 
 # Copy application code
 COPY . .
