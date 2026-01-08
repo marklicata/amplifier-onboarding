@@ -43,16 +43,16 @@ export default function ElevatorPitch() {
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-20">
           <div className="text-center">
             <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-              Program Intelligence,
+              Build Intelligent Applications,
               <br />
               Not Just Code
             </h2>
             <p className="text-xl md:text-2xl text-gray-700 mb-4 max-w-3xl mx-auto font-medium">
-              Transform AI from "better autocomplete" to composable middleware for building intelligent applications.
+              Use AI to build applications, not just to autocomplete code.
             </p>
             <p className="text-lg text-gray-600 mb-8 max-w-3xl mx-auto">
-              Amplifier enables developers to build through declarative, modular, and composable AI workflows.
-              Define what you want—not how to get it—and watch AI orchestrate the work.
+              Amplifier lets you define what you want to build—not how to build it—and lets AI handle the work.
+              Create reusable, modular workflows that you can share and extend.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <button
@@ -65,6 +65,7 @@ export default function ElevatorPitch() {
                 href="/system-overview"
                 className="inline-flex items-center justify-center px-8 py-4 bg-white text-blue-600 text-lg font-medium rounded-lg hover:bg-gray-50 transition-all border-2 border-blue-600"
               >
+                How it works
                 How it works
               </a>
             </div>
@@ -81,14 +82,14 @@ export default function ElevatorPitch() {
                   <div className="text-sm font-semibold text-gray-500 mb-3">TODAY</div>
                   <p className="text-gray-600 leading-relaxed">
                     Developers chat with AI, copy-paste code, and repeat themselves.
-                    AI is treated as "better autocomplete" instead of the transformative force it can be.
+                    AI is used mostly for autocomplete instead of what it's really capable of.
                   </p>
                 </div>
                 <div className="text-center p-6 bg-gradient-to-br from-blue-50 to-purple-50 rounded-xl">
                   <div className="text-sm font-semibold text-blue-600 mb-3">TOMORROW</div>
                   <p className="text-gray-800 leading-relaxed font-medium">
-                    Anyone declares what they want, AI orchestrates the work,
-                    and results are reproducible, shareable, and composable.
+                    Anyone describes what they want, AI handles the work,
+                    and the results can be saved, shared, and reused.
                   </p>
                 </div>
               </div>
@@ -109,9 +110,9 @@ export default function ElevatorPitch() {
                 <div className="bg-white rounded-xl shadow-lg p-6 md:p-8 border border-gray-200">
                   <h4 className="text-xl font-bold mb-3 text-gray-900">The Problem</h4>
                   <p className="text-gray-700 leading-relaxed">
-                    Current AI tools treat intelligence as a feature—autocomplete, chat, or inline suggestions.
-                    They optimize for quick edits, not architectural thinking. Developers are stuck copying, pasting,
-                    and manually orchestrating what AI should handle automatically.
+                    Current AI tools focus on quick edits—autocomplete, chat, or inline suggestions.
+                    They're great for small changes, but not for thinking through bigger problems. Developers
+                    end up copying, pasting, and manually coordinating what AI should be able to do on its own.
                   </p>
                 </div>
 
@@ -122,10 +123,10 @@ export default function ElevatorPitch() {
                     <div>
                       <p className="font-semibold text-blue-900 mb-1">Use Amplifier when you need:</p>
                       <ul className="text-gray-700 space-y-1 ml-4">
-                        <li>• Multi-step workflows that coordinate multiple agents</li>
-                        <li>• Reproducible, shareable AI processes</li>
-                        <li>• Custom tooling and extensibility for your domain</li>
-                        <li>• Architecture-level intelligence, not just code completion</li>
+                        <li>• Multi-step workflows that coordinate multiple AI agents</li>
+                        <li>• AI processes you can save and share with your team</li>
+                        <li>• Custom tools and extensions for your specific needs</li>
+                        <li>• Help with system design and architecture, not just code completion</li>
                       </ul>
                     </div>
                     <div>
@@ -140,14 +141,14 @@ export default function ElevatorPitch() {
 
                 {/* What Makes Amplifier Different */}
                 <div className="bg-white rounded-xl shadow-lg p-6 md:p-8 border border-gray-200">
-                  <h4 className="text-xl font-bold mb-3 text-gray-900">What Amplifier Solves Uniquely</h4>
+                  <h4 className="text-xl font-bold mb-3 text-gray-900">What Amplifier Solves Differently</h4>
                   <p className="text-gray-700 leading-relaxed mb-4">
-                    <strong className="text-blue-600">AI as composable middleware</strong>, not just a coding assistant.
-                    Amplifier treats intelligence as infrastructure—declarative, modular, and shareable.
+                    <strong className="text-blue-600">AI as building blocks</strong>, not just a coding assistant.
+                    Amplifier lets you build reusable AI workflows that work like software you can share and extend.
                   </p>
                   <div className="bg-gradient-to-br from-blue-50 to-purple-50 rounded-lg p-4">
                     <p className="text-gray-800 font-medium">
-                      Build workflows that are reproducible like software, not one-off conversations that disappear.
+                      Create workflows that work the same way every time, not one-off conversations that disappear.
                     </p>
                   </div>
                 </div>
@@ -161,7 +162,7 @@ export default function ElevatorPitch() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <h3 className="text-3xl md:text-4xl font-bold text-center mb-4 text-gray-900">Key Use Cases</h3>
             <p className="text-center text-gray-600 mb-12 max-w-3xl mx-auto">
-              Amplifier shines when you need coordinated intelligence across complex workflows
+              Amplifier works best when you need AI to handle complex, multi-step work
             </p>
 
             <div className="grid md:grid-cols-2 gap-6 max-w-5xl mx-auto mb-12">
@@ -170,15 +171,15 @@ export default function ElevatorPitch() {
                 <div className="text-3xl mb-3">🏗️</div>
                 <h4 className="text-lg font-bold mb-2 text-gray-900">Multi-Agent Workflows</h4>
                 <p className="text-gray-700 text-sm">
-                  Coordinate specialized agents for analysis, planning, implementation, and review—all in one declarative workflow.
+                  Coordinate different AI agents for analysis, planning, implementation, and review—all in one workflow.
                 </p>
               </div>
 
               <div className="bg-gradient-to-br from-purple-50 to-purple-100 p-6 rounded-xl border border-purple-200">
                 <div className="text-3xl mb-3">📦</div>
-                <h4 className="text-lg font-bold mb-2 text-gray-900">Reusable AI Patterns</h4>
+                <h4 className="text-lg font-bold mb-2 text-gray-900">Reusable AI Workflows</h4>
                 <p className="text-gray-700 text-sm">
-                  Package domain expertise into shareable bundles and recipes that teams can use consistently.
+                  Package your team's expertise into bundles and recipes that anyone can use consistently.
                 </p>
               </div>
 
@@ -192,9 +193,9 @@ export default function ElevatorPitch() {
 
               <div className="bg-gradient-to-br from-orange-50 to-orange-100 p-6 rounded-xl border border-orange-200">
                 <div className="text-3xl mb-3">🔄</div>
-                <h4 className="text-lg font-bold mb-2 text-gray-900">Reproducible Processes</h4>
+                <h4 className="text-lg font-bold mb-2 text-gray-900">Reliable Processes</h4>
                 <p className="text-gray-700 text-sm">
-                  Define workflows once, run them reliably, and share them across teams—no more manual orchestration.
+                  Define workflows once, run them reliably, and share them across teams—no more manual coordination.
                 </p>
               </div>
             </div>
@@ -208,7 +209,7 @@ export default function ElevatorPitch() {
                   <h5 className="text-lg font-bold mb-2 text-white">Developers</h5>
                   <p className="text-blue-50 text-sm mb-2 font-semibold">PRIMARY</p>
                   <p className="text-sm leading-relaxed">
-                    Full architectural control, extensibility, and composable workflows.
+                    Full control over architecture, extensibility, and reusable workflows.
                   </p>
                 </div>
 
@@ -237,42 +238,42 @@ export default function ElevatorPitch() {
         {/* Core Value Props */}
         <section id="features" className="bg-gradient-to-b from-blue-50 to-white py-12 md:py-20">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h3 className="text-3xl md:text-4xl font-bold text-center mb-4 text-gray-900">What We Solve Uniquely</h3>
+            <h3 className="text-3xl md:text-4xl font-bold text-center mb-4 text-gray-900">What Makes Amplifier Different</h3>
             <p className="text-center text-gray-600 mb-12 max-w-3xl mx-auto">
-              The only platform that treats AI as composable infrastructure, not just a coding assistant
+              A platform that treats AI as reusable building blocks, not just a coding assistant
             </p>
             <div className="grid md:grid-cols-3 gap-6 md:gap-8 max-w-6xl mx-auto">
               <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm hover:shadow-lg transition-all">
                 <div className="text-4xl mb-4">🎯</div>
-                <h4 className="text-xl font-semibold mb-3 text-gray-900">Declarative Intelligence</h4>
+                <h4 className="text-xl font-semibold mb-3 text-gray-900">Describe What You Want</h4>
                 <p className="text-gray-600 mb-3">
-                  Stop manually orchestrating AI. Define what you want—Amplifier coordinates multiple agents,
+                  Stop manually coordinating AI steps. Define what you want—Amplifier coordinates multiple agents,
                   tools, and workflows automatically.
                 </p>
                 <p className="text-sm text-blue-600 font-medium">
-                  10x faster than chaining prompts manually
+                  Much faster than chaining prompts manually
                 </p>
               </div>
               <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm hover:shadow-lg transition-all">
                 <div className="text-4xl mb-4">🔧</div>
-                <h4 className="text-xl font-semibold mb-3 text-gray-900">Reproducible Workflows</h4>
+                <h4 className="text-xl font-semibold mb-3 text-gray-900">Reliable, Reusable Workflows</h4>
                 <p className="text-gray-600 mb-3">
-                  Package AI processes into shareable bundles and recipes. No more one-off conversations—
-                  build workflows that run reliably every time.
+                  Package AI processes into bundles and recipes you can share. No more one-off conversations—
+                  build workflows that run the same way every time.
                 </p>
                 <p className="text-sm text-blue-600 font-medium">
-                  Only platform with composable AI primitives
+                  Build once, use everywhere
                 </p>
               </div>
               <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm hover:shadow-lg transition-all">
                 <div className="text-4xl mb-4">📐</div>
-                <h4 className="text-xl font-semibold mb-3 text-gray-900">Architecture-Level Control</h4>
+                <h4 className="text-xl font-semibold mb-3 text-gray-900">Full Control</h4>
                 <p className="text-gray-600 mb-3">
-                  Ultra-thin kernel, structural typing, and zero-dependency modules. Extend everything—
+                  Lightweight core with no unnecessary dependencies. Extend everything—
                   providers, orchestrators, tools, and agents.
                 </p>
                 <p className="text-sm text-blue-600 font-medium">
-                  Built for developers who care about architecture
+                  Built for developers who want flexibility
                 </p>
               </div>
             </div>
@@ -282,15 +283,15 @@ export default function ElevatorPitch() {
         {/* Core Primitives Section */}
         <section className="bg-white py-12 md:py-20 border-y border-gray-200">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h3 className="text-3xl md:text-4xl font-bold text-center mb-4 text-gray-900">Primitives</h3>
+            <h3 className="text-3xl md:text-4xl font-bold text-center mb-4 text-gray-900">Building Blocks</h3>
             <p className="text-center text-gray-600 mb-12 max-w-2xl mx-auto">
-              Amplifier is built on composable primitives that layer together to create powerful, reusable workflows
+              Amplifier is built on simple components that work together to create powerful, reusable workflows
             </p>
 
             <div className="max-w-5xl mx-auto space-y-8">
               {/* Building Blocks */}
               <div className="bg-gradient-to-br from-purple-50 to-blue-50 rounded-xl p-8 border border-purple-200">
-                <h4 className="text-2xl font-bold mb-6 text-gray-900">Building Blocks</h4>
+                <h4 className="text-2xl font-bold mb-6 text-gray-900">Core Components</h4>
                 <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
                   <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
                     <div className="text-2xl mb-2">🔌</div>
@@ -300,17 +301,17 @@ export default function ElevatorPitch() {
                   <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
                     <div className="text-2xl mb-2">🎯</div>
                     <h5 className="font-semibold text-gray-900 mb-1">Orchestrators</h5>
-                    <p className="text-sm text-gray-600">Coordinate and manage workflow execution</p>
+                    <p className="text-sm text-gray-600">Coordinate and manage how workflows run</p>
                   </div>
                   <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
                     <div className="text-2xl mb-2">⚡</div>
                     <h5 className="font-semibold text-gray-900 mb-1">Skills</h5>
-                    <p className="text-sm text-gray-600">Discrete capabilities that agents can use</p>
+                    <p className="text-sm text-gray-600">Individual capabilities that agents can use</p>
                   </div>
                   <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
                     <div className="text-2xl mb-2">🤖</div>
                     <h5 className="font-semibold text-gray-900 mb-1">Agents</h5>
-                    <p className="text-sm text-gray-600">Intelligent actors that perform tasks</p>
+                    <p className="text-sm text-gray-600">AI workers that perform tasks</p>
                   </div>
                 </div>
               </div>
@@ -322,8 +323,8 @@ export default function ElevatorPitch() {
                   <div className="flex-1">
                     <h4 className="text-2xl font-bold mb-2 text-gray-900">Bundles</h4>
                     <p className="text-gray-700 mb-4">
-                      Bundles are composable collections of providers, orchestrators, skills, and agents.
-                      They layer together to create increasingly sophisticated capabilities.
+                      Bundles are collections of providers, orchestrators, skills, and agents.
+                      Stack them together to build more advanced capabilities.
                     </p>
                   </div>
                 </div>
@@ -336,7 +337,7 @@ export default function ElevatorPitch() {
                     <span className="px-3 py-1 bg-green-100 text-green-700 rounded">Your Custom Bundle</span>
                   </div>
                   <p className="text-sm text-gray-600 mt-4">
-                    Bundles inherit and extend each other, enabling modular configuration and reuse
+                    Bundles can build on each other, making it easy to configure and reuse them
                   </p>
                 </div>
               </div>
@@ -348,8 +349,8 @@ export default function ElevatorPitch() {
                   <div className="flex-1">
                     <h4 className="text-2xl font-bold mb-2 text-gray-900">Recipes</h4>
                     <p className="text-gray-700 mb-4">
-                      Recipes are reusable, reliable processes composed of 1-n steps and Amplifier sessions.
-                      They define <strong>what</strong> you want to accomplish, not <strong>how</strong> to do it.
+                      Recipes are reusable processes made up of multiple steps.
+                      They describe <strong>what</strong> you want to accomplish, not <strong>how</strong> to do it.
                     </p>
                   </div>
                 </div>
@@ -379,7 +380,7 @@ export default function ElevatorPitch() {
               </div>
 
               {/* The Stack Visualization */}
-              <div className="bg-gradient-to-br from-gray-50 to-slate-100 rounded-xl p-8 border border-gray-300">
+              {/* <div className="bg-gradient-to-br from-gray-50 to-slate-100 rounded-xl p-8 border border-gray-300">
                 <h4 className="text-xl font-bold mb-6 text-center text-gray-900">The Complete Stack</h4>
                 <div className="flex flex-col gap-2 max-w-md mx-auto">
                   <div className="bg-green-500 text-white px-6 py-3 rounded-lg text-center font-semibold shadow">
@@ -401,7 +402,7 @@ export default function ElevatorPitch() {
                 <p className="text-center text-sm text-gray-600 mt-6">
                   Each layer builds on the one below, creating a coherent, extensible architecture
                 </p>
-              </div>
+              </div> */}
             </div>
           </div>
         </section>
@@ -410,10 +411,9 @@ export default function ElevatorPitch() {
         <section className="bg-gradient-to-b from-gray-50 to-white py-12 md:py-20">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl p-8 md:p-12 text-center text-white">
-            <h3 className="text-3xl md:text-4xl font-bold mb-4">Ready to Build the Future?</h3>
+            <h3 className="text-3xl md:text-4xl font-bold mb-4">Ready to Get Started?</h3>
             <p className="text-lg md:text-xl mb-8 max-w-2xl mx-auto opacity-90">
-              Join developers transforming how intelligent applications are built.
-              Experience the paradigm shift firsthand.
+              See how Amplifier can change the way you build intelligent applications.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <button
@@ -427,7 +427,10 @@ export default function ElevatorPitch() {
                 className="inline-flex items-center justify-center px-8 py-4 bg-blue-700 text-white text-lg font-medium rounded-lg hover:bg-blue-800 transition-all border-2 border-white/20"
               >
                 Explore how it works
+                Explore how it works
               </a>
+            </div>
+          </div>
             </div>
           </div>
           </div>

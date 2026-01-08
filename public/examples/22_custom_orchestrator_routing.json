@@ -1,0 +1,109 @@
+{
+  "id": "22_custom_orchestrator_routing",
+  "title": "Custom Orchestrator (Model Routing)",
+  "tier": 4,
+  "category": "Real-World",
+  "description": "Custom Orchestrator (Model Routing)",
+  "estimatedTimeMinutes": 5,
+  "minAudience": "developers",
+  "isFeatured": false,
+  "difficulty": "advanced",
+  "tags": [
+    "composition",
+    "hooks"
+  ],
+  "githubUrl": "https://github.com/microsoft/amplifier-foundation/blob/main/examples/22_custom_orchestrator_routing.py",
+  "content": {
+    "everyone": {
+      "title": "Custom Orchestrator (Model Routing)",
+      "valueProposition": "Learn to work with AI agents",
+      "howItWorks": [
+        "Set up your AI environment",
+        "Configure the agent with the right capabilities",
+        "Run the example and see results",
+        "Understand what happened"
+      ],
+      "whatYouGet": [
+        "Working example you can run",
+        "Clear understanding of the concept",
+        "Foundation for building more"
+      ]
+    },
+    "developers": {
+      "title": "22_custom_orchestrator_routing.py - Custom Orchestrator (Model Routing)",
+      "valueProposition": "",
+      "howItWorks": "",
+      "keyConcepts": [
+        "Amplifier bundle system",
+        "Module composition",
+        "Session execution"
+      ],
+      "codeOverview": {
+        "structure": [
+          "Load foundation and provider bundles",
+          "Compose bundles together",
+          "Prepare modules (download if needed)",
+          "Create AI session",
+          "Execute prompts and get responses"
+        ],
+        "keyFunctions": [
+          {
+            "name": "load_bundle",
+            "description": "Loads a bundle from path or URL",
+            "usage": "load_bundle(str(repo_root / \"bundles\" / \"minimal.yaml\")"
+          },
+          {
+            "name": "compose",
+            "description": "Combines multiple bundles",
+            "usage": "compose(openai_provider, router_overlay)"
+          },
+          {
+            "name": "prepare",
+            "description": "Downloads and activates modules",
+            "usage": "prepare()"
+          },
+          {
+            "name": "create_session",
+            "description": "Creates an AI session",
+            "usage": "create_session()"
+          },
+          {
+            "name": "execute",
+            "description": "Executes a prompt",
+            "usage": "execute(task.prompt)"
+          },
+          {
+            "name": "mount",
+            "description": "Registers a custom tool or component",
+            "usage": "mount()"
+          }
+        ]
+      },
+      "codeSnippet": "async def main():\n    \"\"\"Demonstrate routing via the custom orchestrator module.\"\"\"\n    parser = argparse.ArgumentParser(description=\"Custom orchestrator routing demo\")\n    parser.add_argument(\"--verbose\", action=\"store_true\", help=\"Show all router logs and enable raw_debug\")\n    args = parser.parse_args()\n\n    if not os.getenv(\"OPENAI_API_KEY\"):\n        print(\"\u274c Set OPENAI_API_KEY before running this example.\")\n        print(\"   export OPENAI_API_KEY='your-key'\")\n        return\n\n    # Logging: by default only show the router selection line.\n    # With --verbose, show all logs (including escalation) and enable raw_debug.\n    if not logging.getLogger().handlers:\n        if args.verbose:"
+    },
+    "experts": {
+      "title": "22_custom_orchestrator_routing.py - Custom Orchestrator (Model Routing)",
+      "complexity": "Tier 4 - Real-World Applications",
+      "sourceUrl": "https://github.com/microsoft/amplifier-foundation/blob/main/examples/22_custom_orchestrator_routing.py",
+      "architecture": "",
+      "fullCode": "#!/usr/bin/env python3\n\"\"\"\nExample 22: Custom Orchestrator (Model Routing)\n===============================================\n\nAUDIENCE: Teams wanting cost/latency control without changing core modules\nVALUE: Shows how to build and use a custom orchestrator module that routes\n       between GPT-5.2 and GPT-5.1-Codex based on the prompt.\n\nWhat this demonstrates:\n  - Packaging an orchestrator module (mount() + Orchestrator protocol)\n  - Swapping the session orchestrator via bundle composition\n  - Capturing routing decisions (model + latency) via hooks\n\nRun me:\n  export OPENAI_API_KEY=\"sk-...\"\n  uv run python examples/22_custom_orchestrator_routing.py [--verbose]\n\"\"\"\n\nfrom __future__ import annotations\n\nimport argparse\nimport asyncio\nimport logging\nimport os\nfrom dataclasses import dataclass\nfrom pathlib import Path\nfrom typing import Literal\n\nfrom amplifier_core import HookResult\nfrom amplifier_foundation import Bundle\nfrom amplifier_foundation import load_bundle\n\n\n@dataclass\nclass Task:\n    \"\"\"Simple task envelope for demonstration.\"\"\"\n\n    id: str\n    prompt: str\n    kind: Literal[\"code\", \"analysis\", \"general\"] = \"general\"\n    importance: Literal[\"low\", \"medium\", \"high\"] = \"medium\"\n    prefer_mini_first: bool = True\n\n\nclass RoutingObserver:\n    \"\"\"Hook to capture routing decisions emitted by the custom orchestrator.\"\"\"\n\n    def __init__(self):\n        self.decisions: list[dict[str, object]] = []\n\n    async def on_orchestrator_turn_complete(self, event: str, data: dict) -> HookResult:\n        # Keep a simple history of turn decisions\n        self.decisions.append(data or {})\n        return HookResult(action=\"continue\")\n\n\nasync def main():\n    \"\"\"Demonstrate routing via the custom orchestrator module.\"\"\"\n    parser = argparse.ArgumentParser(description=\"Custom orchestrator routing demo\")\n    parser.add_argument(\"--verbose\", action=\"store_true\", help=\"Show all router logs and enable raw_debug\")\n    args = parser.parse_args()\n\n    if not os.getenv(\"OPENAI_API_KEY\"):\n        print(\"\u274c Set OPENAI_API_KEY before running this example.\")\n        print(\"   export OPENAI_API_KEY='your-key'\")\n        return\n\n    # Logging: by default only show the router selection line.\n    # With --verbose, show all logs (including escalation) and enable raw_debug.\n    if not logging.getLogger().handlers:\n        if args.verbose:\n            logging.basicConfig(level=logging.INFO, format=\"%(levelname)s %(name)s: %(message)s\")\n        else:\n            logging.basicConfig(level=logging.WARNING, format=\"%(levelname)s %(name)s: %(message)s\")\n            router_logger = logging.getLogger(\"amplifier_module_router_orchestrator\")\n            router_logger.setLevel(logging.INFO)\n            router_logger.propagate = False\n            handler = logging.StreamHandler()\n            handler.setLevel(logging.INFO)\n            handler.setFormatter(logging.Formatter(\"%(levelname)s %(name)s: %(message)s\"))\n            router_logger.addHandler(handler)\n\n    repo_root = Path(__file__).parent.parent\n\n    # Base + provider bundles (all standard amplifier-foundation)\n    foundation = await load_bundle(str(repo_root / \"bundles\" / \"minimal.yaml\"))\n    openai_provider = await load_bundle(str(repo_root / \"providers\" / \"openai-gpt-5.yaml\"))\n\n    # Overlay: use our local orchestrator module for model routing\n    router_overlay = Bundle(\n        name=\"router-overlay\",\n        description=\"Example-only custom orchestrator module (routing mini vs codex)\",\n        session={\n            \"orchestrator\": {\n                \"module\": \"router-orchestrator\",\n                \"source\": str(repo_root / \"examples\" / \"modules\" / \"router-orchestrator\"),\n                \"config\": {\n                    \"mini_model\": \"gpt-5.2\",\n                    \"codex_model\": \"gpt-5.1-codex\",\n                    \"prefer_mini_first\": True,\n                    \"raw_debug\": args.verbose,  # set via --verbose to see all router logs\n                },\n            }\n        },\n    )\n\n    # Compose and prepare\n    composed = foundation.compose(openai_provider, router_overlay)\n    prepared = await composed.prepare()\n    print(\"\\n\ud83d\udd27 Mounted orchestrator:\", prepared.mount_plan[\"session\"][\"orchestrator\"])\n\n    # Demo tasks\n    tasks = [\n        Task(\n            id=\"summary\",\n            prompt=\"Give me a 3-bullet summary of the latest Python logging best practices.\",\n            kind=\"analysis\",\n            importance=\"low\",\n            prefer_mini_first=True,\n        ),\n        Task(\n            id=\"codegen\",\n            prompt=\"Write a Python function that parses a CSV of users into Pydantic models with validation.\",\n            kind=\"code\",\n            importance=\"high\",\n            prefer_mini_first=False,\n        ),\n        Task(\n            id=\"refactor\",\n            prompt=\"Refactor this snippet for clarity and add type hints:\\n```python\\n\"\n            \"def load_cfg(p):\\n    import json\\n    return json.loads(open(p).read())\\n```\",\n            kind=\"code\",\n            importance=\"medium\",\n            prefer_mini_first=True,\n        ),\n    ]\n\n    # Single session to accumulate context across tasks\n    session = await prepared.create_session()\n    observer = RoutingObserver()\n    session.coordinator.hooks.register(\n        \"orchestrator:turn_complete\", observer.on_orchestrator_turn_complete, name=\"routing-observer\"\n    )\n\n    async with session:\n        for idx, task in enumerate(tasks, 1):\n            print(f\"\\n\ud83e\udded Task {idx} '{task.id}'\")\n            response = await session.execute(task.prompt)\n\n            decision = observer.decisions[-1] if observer.decisions else {}\n            model = decision.get(\"model\", \"unknown\")\n            latency = decision.get(\"latency_s\", 0.0)\n\n            preview = response[:400].replace(\"\\n\\n\", \"\\n\")\n            print(f\"   Model: {model}\")\n            print(f\"   Latency: {latency:.2f}s\")\n            print(f\"   Preview:\\n{preview}\\n{'-' * 60}\")\n\n        # Ask the session to summarize what it just did\n        print(\"\\n\ud83e\udded Asking the session to summarize its work so far...\")\n        summary_prompt = \"Summarize the tasks you just completed in this session.\"\n        summary = await session.execute(summary_prompt)\n        print(f\"\\n\ud83d\udcdd Session summary:\\n{summary}\\n{'=' * 60}\")\n\n\nif __name__ == \"__main__\":\n    asyncio.run(main())\n",
+      "advancedOptions": {
+        "provider": [
+          "anthropic-sonnet",
+          "anthropic-opus",
+          "openai-gpt4"
+        ],
+        "streaming": false,
+        "hooks": []
+      }
+    }
+  },
+  "execution": {
+    "requiresInput": false,
+    "defaultPrompt": null,
+    "estimatedDuration": "2-5 seconds",
+    "prerequisites": [
+      "ANTHROPIC_API_KEY environment variable"
+    ]
+  }
+}

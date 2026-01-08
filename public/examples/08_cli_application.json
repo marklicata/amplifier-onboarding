@@ -1,0 +1,107 @@
+{
+  "id": "08_cli_application",
+  "title": "CLI Application - Building a Real Tool",
+  "tier": 3,
+  "category": "Building Applications",
+  "description": "Go beyond scripts - see how to build a proper CLI application with Amplifier.\nLearn application arch",
+  "estimatedTimeMinutes": 15,
+  "minAudience": "developers",
+  "isFeatured": false,
+  "difficulty": "intermediate",
+  "tags": [
+    "tools",
+    "composition"
+  ],
+  "githubUrl": "https://github.com/microsoft/amplifier-foundation/blob/main/examples/08_cli_application.py",
+  "content": {
+    "everyone": {
+      "title": "CLI Application - Building a Real Tool",
+      "valueProposition": "Go beyond scripts - see how to build a proper CLI application with Amplifier.\nLearn application architecture patterns, error handling, and lifecycle management.",
+      "howItWorks": [
+        "Set up your AI environment",
+        "Configure the agent with the right capabilities",
+        "Run the example and see results",
+        "Understand what happened"
+      ],
+      "whatYouGet": [
+        "Working example you can run",
+        "Clear understanding of the concept",
+        "Foundation for building more"
+      ]
+    },
+    "developers": {
+      "title": "08_cli_application.py - CLI Application - Building a Real Tool",
+      "valueProposition": "Go beyond scripts - see how to build a proper CLI application with Amplifier.\nLearn application architecture patterns, error handling, and lifecycle management.",
+      "howItWorks": "- Application architecture patterns with Amplifier\n- Proper session lifecycle management\n- Error handling and recovery\n- Logging and observability\n- Configuration management\n- Building reusable application classes",
+      "keyConcepts": [
+        "Application architecture patterns with Amplifier",
+        "Proper session lifecycle management",
+        "Error handling and recovery",
+        "Logging and observability",
+        "Configuration management",
+        "Building reusable application classes"
+      ],
+      "codeOverview": {
+        "structure": [
+          "Load foundation and provider bundles",
+          "Compose bundles together",
+          "Prepare modules (download if needed)",
+          "Create AI session",
+          "Execute prompts and get responses"
+        ],
+        "keyFunctions": [
+          {
+            "name": "load_bundle",
+            "description": "Loads a bundle from path or URL",
+            "usage": "load_bundle(str(foundation_path)"
+          },
+          {
+            "name": "compose",
+            "description": "Combines multiple bundles",
+            "usage": "compose(provider)"
+          },
+          {
+            "name": "prepare",
+            "description": "Downloads and activates modules",
+            "usage": "prepare()"
+          },
+          {
+            "name": "create_session",
+            "description": "Creates an AI session",
+            "usage": "create_session()"
+          },
+          {
+            "name": "execute",
+            "description": "Executes a prompt",
+            "usage": "execute(self, prompt: str)"
+          }
+        ]
+      },
+      "codeSnippet": "async def main():\n    \"\"\"Main application entry point.\"\"\"\n\n    print(\"\ud83d\ude80 Amplifier CLI Application Example\")\n    print(\"=\" * 60)\n\n    # Load and validate configuration\n    try:\n        config = AppConfig.from_env()\n        config.validate()\n        print(\"\u2713 Configuration loaded\")\n        print(f\"  Provider: {config.provider_bundle}\")\n        print(f\"  Log level: {config.log_level}\")\n    except Exception as e:\n        print(f\"\u274c Configuration error: {e}\")"
+    },
+    "experts": {
+      "title": "08_cli_application.py - CLI Application - Building a Real Tool",
+      "complexity": "Tier 3 - Building Applications",
+      "sourceUrl": "https://github.com/microsoft/amplifier-foundation/blob/main/examples/08_cli_application.py",
+      "architecture": "Go beyond scripts - see how to build a proper CLI application with Amplifier.\nLearn application architecture patterns, error handling, and lifecycle management.",
+      "fullCode": "#!/usr/bin/env python3\n\"\"\"\nExample 8: CLI Application - Building a Real Tool\n==================================================\n\nVALUE PROPOSITION:\nGo beyond scripts - see how to build a proper CLI application with Amplifier.\nLearn application architecture patterns, error handling, and lifecycle management.\n\nWHAT YOU'LL LEARN:\n- Application architecture patterns with Amplifier\n- Proper session lifecycle management\n- Error handling and recovery\n- Logging and observability\n- Configuration management\n- Building reusable application classes\n\nREAL-WORLD USE CASE:\nThis is the blueprint for building CLI tools:\n- Internal developer tools\n- Data analysis assistants\n- Code review helpers\n- Automation scripts\n\nTIME TO VALUE: 15 minutes\n\"\"\"\n\nimport asyncio\nimport logging\nimport os\nimport sys\nfrom dataclasses import dataclass\nfrom pathlib import Path\n\nfrom amplifier_foundation import Bundle\nfrom amplifier_foundation import load_bundle\n\n# =============================================================================\n# SECTION 1: Configuration Management\n# =============================================================================\n\n\n@dataclass\nclass AppConfig:\n    \"\"\"Application configuration.\n\n    In production, you'd load this from:\n    - Environment variables\n    - Config files (.amplifier/settings.yaml)\n    - Command-line arguments\n    - Secrets management (AWS Secrets Manager, etc.)\n    \"\"\"\n\n    # LLM Provider\n    provider_bundle: str = \"anthropic-sonnet.yaml\"\n    api_key: str | None = None\n\n    # Application Settings\n    log_level: str = \"INFO\"\n    storage_path: Path = Path.home() / \".amplifier\" / \"app_sessions\"\n\n    @classmethod\n    def from_env(cls) -> \"AppConfig\":\n        \"\"\"Load configuration from environment.\"\"\"\n        return cls(\n            provider_bundle=os.getenv(\"PROVIDER\", \"anthropic-sonnet.yaml\"),\n            api_key=os.getenv(\"ANTHROPIC_API_KEY\"),\n            log_level=os.getenv(\"LOG_LEVEL\", \"INFO\"),\n        )\n\n    def validate(self) -> None:\n        \"\"\"Validate configuration.\"\"\"\n        if not self.api_key:\n            raise ValueError(\"ANTHROPIC_API_KEY not set\")\n\n        if not self.storage_path.exists():\n            self.storage_path.mkdir(parents=True, exist_ok=True)\n\n\n# =============================================================================\n# SECTION 2: Application Class (Your Product)\n# =============================================================================\n\n\nclass AmplifierApp:\n    \"\"\"Amplifier application class showing best practices.\n\n    This class encapsulates:\n    - Bundle management\n    - Session lifecycle\n    - Error handling\n    - Logging and observability\n    - Graceful shutdown\n\n    Adapt this pattern for your CLI tools or applications.\n    \"\"\"\n\n    def __init__(self, config: AppConfig):\n        self.config = config\n        self.session = None\n        self.logger = self._setup_logging()\n\n    def _setup_logging(self) -> logging.Logger:\n        \"\"\"Configure logging for the application.\"\"\"\n        logging.basicConfig(\n            level=getattr(logging, self.config.log_level),\n            format=\"%(asctime)s [%(levelname)s] %(name)s: %(message)s\",\n            handlers=[\n                logging.StreamHandler(sys.stdout),\n            ],\n        )\n        return logging.getLogger(\"amplifier_app\")\n\n    async def initialize(self) -> None:\n        \"\"\"Initialize the application and create session.\"\"\"\n        self.logger.info(\"Initializing Amplifier application...\")\n\n        try:\n            # Load foundation\n            foundation_path = Path(__file__).parent.parent  # examples/ -> amplifier-foundation/\n            foundation = await load_bundle(str(foundation_path))\n            self.logger.info(f\"Loaded foundation: {foundation.name} v{foundation.version}\")\n\n            # Load provider\n            provider_path = foundation_path / \"providers\" / self.config.provider_bundle\n            provider = await load_bundle(str(provider_path))\n            self.logger.info(f\"Loaded provider: {provider.name}\")\n\n            # Add tools\n            tools_config = Bundle(\n                name=\"app-tools\",\n                version=\"1.0.0\",\n                tools=[\n                    {\n                        \"module\": \"tool-filesystem\",\n                        \"source\": \"git+https://github.com/microsoft/amplifier-module-tool-filesystem@main\",\n                    },\n                    {\n                        \"module\": \"tool-bash\",\n                        \"source\": \"git+https://github.com/microsoft/amplifier-module-tool-bash@main\",\n                    },\n                ],\n            )\n\n            # Compose all bundles\n            composed = foundation.compose(provider).compose(tools_config)\n\n            # Prepare (download modules)\n            self.logger.info(\"Preparing bundles (downloading modules if needed)...\")\n            prepared = await composed.prepare()\n\n            # Create session\n            self.logger.info(\"Creating session...\")\n            self.session = await prepared.create_session()\n            self.logger.info(\"\u2713 Application initialized successfully\")\n\n        except Exception as e:\n            self.logger.error(f\"Initialization failed: {e}\", exc_info=True)\n            raise\n\n    async def execute(self, prompt: str) -> str:\n        \"\"\"Execute a prompt through the agent.\n\n        Args:\n            prompt: User input\n\n        Returns:\n            Agent response\n\n        Raises:\n            RuntimeError: If session not initialized\n        \"\"\"\n        if not self.session:\n            raise RuntimeError(\"Session not initialized. Call initialize() first.\")\n\n        try:\n            self.logger.info(f\"Executing prompt: {prompt[:100]}...\")\n            response = await self.session.execute(prompt)\n            self.logger.info(\"Execution completed successfully\")\n            return response\n\n        except Exception as e:\n            self.logger.error(f\"Execution failed: {e}\", exc_info=True)\n            # In production, you might want to:\n            # - Retry with exponential backoff\n            # - Fallback to a simpler model\n            # - Return a user-friendly error message\n            raise\n\n    async def shutdown(self) -> None:\n        \"\"\"Gracefully shutdown the application.\"\"\"\n        self.logger.info(\"Shutting down application...\")\n\n        if self.session:\n            try:\n                await self.session.cleanup()\n                self.logger.info(\"Session cleaned up\")\n            except Exception as e:\n                self.logger.error(f\"Error during cleanup: {e}\", exc_info=True)\n\n        self.logger.info(\"\u2713 Application shutdown complete\")\n\n    async def __aenter__(self):\n        \"\"\"Context manager support.\"\"\"\n        await self.initialize()\n        return self\n\n    async def __aexit__(self, exc_type, exc_val, exc_tb):\n        \"\"\"Context manager cleanup.\"\"\"\n        await self.shutdown()\n\n\n# =============================================================================\n# SECTION 3: CLI Interface\n# =============================================================================\n\n\nasync def run_interactive_cli(app: AmplifierApp):\n    \"\"\"Interactive CLI mode.\"\"\"\n    print(\"\\n\" + \"=\" * 60)\n    print(\"\ud83e\udd16 Amplifier CLI App - Interactive Mode\")\n    print(\"=\" * 60)\n    print(\"Type your prompts, or 'quit' to exit.\\n\")\n\n    while True:\n        try:\n            # Get user input\n            prompt = input(\"\\n\ud83d\udcac You: \")\n\n            if prompt.lower() in (\"quit\", \"exit\", \"q\"):\n                print(\"\\n\ud83d\udc4b Goodbye!\")\n                break\n\n            if not prompt.strip():\n                continue\n\n            # Execute\n            print(\"\\n\ud83e\udd14 Agent: \", end=\"\", flush=True)\n            response = await app.execute(prompt)\n            print(response)\n\n        except KeyboardInterrupt:\n            print(\"\\n\\n\ud83d\udc4b Interrupted. Goodbye!\")\n            break\n        except Exception as e:\n            print(f\"\\n\u274c Error: {e}\")\n            print(\"The session is still active. You can continue.\")\n\n\nasync def run_single_prompt(app: AmplifierApp, prompt: str):\n    \"\"\"Single prompt mode.\"\"\"\n    print(\"\\n\" + \"=\" * 60)\n    print(\"Executing single prompt...\")\n    print(\"=\" * 60)\n\n    response = await app.execute(prompt)\n    print(\"\\nResponse:\")\n    print(\"-\" * 60)\n    print(response)\n\n\n# =============================================================================\n# SECTION 4: Main Entry Point\n# =============================================================================\n\n\nasync def main():\n    \"\"\"Main application entry point.\"\"\"\n\n    print(\"\ud83d\ude80 Amplifier CLI Application Example\")\n    print(\"=\" * 60)\n\n    # Load and validate configuration\n    try:\n        config = AppConfig.from_env()\n        config.validate()\n        print(\"\u2713 Configuration loaded\")\n        print(f\"  Provider: {config.provider_bundle}\")\n        print(f\"  Log level: {config.log_level}\")\n    except Exception as e:\n        print(f\"\u274c Configuration error: {e}\")\n        return 1\n\n    # Initialize application\n    try:\n        async with AmplifierApp(config) as app:\n            # Choose mode\n            if len(sys.argv) > 1:\n                # Single prompt mode\n                prompt = \" \".join(sys.argv[1:])\n                await run_single_prompt(app, prompt)\n            else:\n                # Interactive mode\n                await run_interactive_cli(app)\n\n    except Exception as e:\n        print(f\"\u274c Application error: {e}\")\n        return 1\n\n    return 0\n\n\nif __name__ == \"__main__\":\n    print(\"\\n\ud83d\udca1 Usage:\")\n    print(\"  Interactive: python 08_cli_application.py\")\n    print(\"  Single prompt: python 08_cli_application.py 'your prompt here'\")\n    print()\n\n    exit_code = asyncio.run(main())\n    sys.exit(exit_code)\n",
+      "advancedOptions": {
+        "provider": [
+          "anthropic-sonnet",
+          "anthropic-opus",
+          "openai-gpt4"
+        ],
+        "streaming": false,
+        "hooks": []
+      }
+    }
+  },
+  "execution": {
+    "requiresInput": true,
+    "defaultPrompt": null,
+    "estimatedDuration": "2-5 seconds",
+    "prerequisites": [
+      "ANTHROPIC_API_KEY environment variable"
+    ]
+  }
+}

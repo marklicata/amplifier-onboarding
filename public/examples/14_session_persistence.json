@@ -1,0 +1,106 @@
+{
+  "id": "14_session_persistence",
+  "title": "Session Persistence & Resume",
+  "tier": 4,
+  "category": "Real-World",
+  "description": "Demonstrates how to persist conversation history across sessions. Long-running\ntasks or conversation",
+  "estimatedTimeMinutes": 5,
+  "minAudience": "developers",
+  "isFeatured": false,
+  "difficulty": "advanced",
+  "tags": [
+    "tools",
+    "composition"
+  ],
+  "githubUrl": "https://github.com/microsoft/amplifier-foundation/blob/main/examples/14_session_persistence.py",
+  "content": {
+    "everyone": {
+      "title": "Session Persistence & Resume",
+      "valueProposition": "Demonstrates how to persist conversation history across sessions. Long-running\ntasks or conversations can be saved and resumed later, maintaining full context.",
+      "howItWorks": [
+        "Set up your AI environment",
+        "Configure the agent with the right capabilities",
+        "Run the example and see results",
+        "Understand what happened"
+      ],
+      "whatYouGet": [
+        "Working example you can run",
+        "Clear understanding of the concept",
+        "Foundation for building more"
+      ]
+    },
+    "developers": {
+      "title": "14_session_persistence.py - Session Persistence & Resume",
+      "valueProposition": "Demonstrates how to persist conversation history across sessions. Long-running\ntasks or conversations can be saved and resumed later, maintaining full context.",
+      "howItWorks": "- Context persistence patterns\n- Session state management\n- Resume capability\n- Long-running workflow patterns\n- Manual persistence implementation",
+      "keyConcepts": [
+        "Context persistence patterns",
+        "Session state management",
+        "Resume capability",
+        "Long-running workflow patterns",
+        "Manual persistence implementation"
+      ],
+      "codeOverview": {
+        "structure": [
+          "Load foundation and provider bundles",
+          "Compose bundles together",
+          "Prepare modules (download if needed)",
+          "Create AI session",
+          "Execute prompts and get responses"
+        ],
+        "keyFunctions": [
+          {
+            "name": "load_bundle",
+            "description": "Loads a bundle from path or URL",
+            "usage": "load_bundle(str(foundation_path)"
+          },
+          {
+            "name": "compose",
+            "description": "Combines multiple bundles",
+            "usage": "compose(provider)"
+          },
+          {
+            "name": "prepare",
+            "description": "Downloads and activates modules",
+            "usage": "prepare()"
+          },
+          {
+            "name": "create_session",
+            "description": "Creates an AI session",
+            "usage": "create_session()"
+          },
+          {
+            "name": "execute",
+            "description": "Executes a prompt",
+            "usage": "execute(full_prompt)"
+          }
+        ]
+      },
+      "codeSnippet": "async def main():\n    \"\"\"Main entry point.\"\"\"\n\n    print(\"\ud83d\ude80 Session Persistence & Resume Demo\")\n    print(\"=\" * 60)\n\n    # Check prerequisites\n    if not os.getenv(\"ANTHROPIC_API_KEY\"):\n        print(\"\\n\u274c ERROR: Set ANTHROPIC_API_KEY environment variable\")\n        return\n\n    # Parse mode\n    mode = sys.argv[1] if len(sys.argv) > 1 else \"run\"\n\n    if mode == \"inspect\":"
+    },
+    "experts": {
+      "title": "14_session_persistence.py - Session Persistence & Resume",
+      "complexity": "Tier 4 - Real-World Applications",
+      "sourceUrl": "https://github.com/microsoft/amplifier-foundation/blob/main/examples/14_session_persistence.py",
+      "architecture": "Demonstrates how to persist conversation history across sessions. Long-running\ntasks or conversations can be saved and resumed later, maintaining full context.",
+      "fullCode": "#!/usr/bin/env python3\n\"\"\"\nExample 14: Session Persistence & Resume\n========================================\n\nVALUE PROPOSITION:\nDemonstrates how to persist conversation history across sessions. Long-running\ntasks or conversations can be saved and resumed later, maintaining full context.\n\nWHAT YOU'LL LEARN:\n- Context persistence patterns\n- Session state management\n- Resume capability\n- Long-running workflow patterns\n- Manual persistence implementation\n\nAUDIENCE:\nDevelopers and PMs working with stateful workflows\n\"\"\"\n\nimport asyncio\nimport json\nimport os\nimport sys\nfrom datetime import datetime\nfrom pathlib import Path\nfrom typing import Any\n\nfrom amplifier_foundation import load_bundle\n\n# =============================================================================\n# SECTION 1: Simple Persistence Implementation\n# =============================================================================\n\n\nclass SimpleSessionPersistence:\n    \"\"\"Simple persistence manager for session state.\n\n    Demonstrates the persistence pattern even if context-persistent\n    module is not available.\n    \"\"\"\n\n    def __init__(self, storage_path: Path):\n        self.storage_path = storage_path\n        self.messages: list[dict[str, Any]] = []\n        self.metadata: dict[str, Any] = {}\n\n    def save(self):\n        \"\"\"Save session state to disk.\"\"\"\n        state = {\"metadata\": self.metadata, \"messages\": self.messages, \"saved_at\": datetime.now().isoformat()}\n\n        with open(self.storage_path, \"w\") as f:\n            json.dump(state, f, indent=2)\n\n    def load(self) -> bool:\n        \"\"\"Load session state from disk.\n\n        Returns:\n            True if state was loaded, False if no state exists\n        \"\"\"\n        if not self.storage_path.exists():\n            return False\n\n        with open(self.storage_path) as f:\n            state = json.load(f)\n\n        self.metadata = state.get(\"metadata\", {})\n        self.messages = state.get(\"messages\", [])\n\n        return True\n\n    def add_message(self, role: str, content: str):\n        \"\"\"Add a message to the conversation history.\"\"\"\n        self.messages.append({\"role\": role, \"content\": content, \"timestamp\": datetime.now().isoformat()})\n\n    def get_context_summary(self) -> str:\n        \"\"\"Get a summary of the conversation for resuming.\"\"\"\n        if not self.messages:\n            return \"\"\n\n        summary_lines = [\"Previous conversation:\"]\n        for msg in self.messages[-5:]:  # Last 5 messages\n            role = msg[\"role\"]\n            content = msg[\"content\"][:100]\n            summary_lines.append(f\"[{role}]: {content}...\")\n\n        return \"\\n\".join(summary_lines)\n\n\n# =============================================================================\n# SECTION 2: Persistent Workflow\n# =============================================================================\n\n\nasync def run_persistent_workflow(session_id: str = \"demo-workflow\"):\n    \"\"\"Run a multi-step workflow with persistence.\n\n    Args:\n        session_id: Unique session identifier\n    \"\"\"\n    storage_path = Path.home() / \".amplifier\" / \"demo_sessions\"\n    storage_path.mkdir(parents=True, exist_ok=True)\n\n    state_file = storage_path / f\"{session_id}.json\"\n\n    # Initialize persistence\n    persistence = SimpleSessionPersistence(state_file)\n    is_resuming = persistence.load()\n\n    if is_resuming:\n        print(\"\\n\" + \"=\" * 60)\n        print(\"\ud83d\udd04 RESUMING Previous Session\")\n        print(\"=\" * 60)\n        print(f\"Loaded state from: {state_file}\")\n        print(f\"Messages in history: {len(persistence.messages)}\")\n        persistence.metadata[\"resume_count\"] = persistence.metadata.get(\"resume_count\", 0) + 1\n        print(f\"Times resumed: {persistence.metadata['resume_count']}\")\n    else:\n        print(\"\\n\" + \"=\" * 60)\n        print(\"\ud83c\udd95 NEW Session\")\n        print(\"=\" * 60)\n        print(f\"State will be saved to: {state_file}\")\n        persistence.metadata = {\"session_id\": session_id, \"created_at\": datetime.now().isoformat(), \"resume_count\": 0}\n\n    # Create Amplifier session\n    foundation_path = Path(__file__).parent.parent\n    foundation = await load_bundle(str(foundation_path))\n    provider = await load_bundle(str(foundation_path / \"providers\" / \"anthropic-sonnet.yaml\"))\n\n    composed = foundation.compose(provider)\n\n    print(\"\u23f3 Preparing session...\")\n    prepared = await composed.prepare()\n    session = await prepared.create_session()\n\n    async with session:\n        if is_resuming:\n            # Resume: Show context and continue\n            print(\"\\n\ud83d\udcdc Previous conversation:\")\n            print(\"-\" * 60)\n            for _i, msg in enumerate(persistence.messages[-3:], 1):\n                role_emoji = \"\ud83d\udc64\" if msg[\"role\"] == \"user\" else \"\ud83e\udd16\"\n                content = msg[\"content\"][:150]\n                print(f\"{role_emoji} [{msg['role']}]: {content}...\")\n            print(\"-\" * 60)\n\n            # Get continuation\n            context_summary = persistence.get_context_summary()\n            prompt = input(\"\\n\ud83d\udcac Continue conversation (or type 'quit' to exit): \")\n\n            if prompt.lower() == \"quit\":\n                print(\"\ud83d\udc4b Saving and exiting...\")\n                persistence.save()\n                return\n\n            full_prompt = f\"{context_summary}\\n\\nUser continues: {prompt}\"\n            persistence.add_message(\"user\", prompt)\n\n            print(\"\\n\ud83e\udd16 Agent:\")\n            response = await session.execute(full_prompt)\n            print(response)\n\n            persistence.add_message(\"assistant\", response)\n\n        else:\n            # New session: Start multi-step task\n            print(\"\\n\ud83d\udcdd Step 1: Starting research task\")\n            print(\"   This simulates a long-running workflow\")\n\n            prompt = \"I'm researching Python async patterns. First, explain asyncio.gather() in 2-3 sentences.\"\n            persistence.add_message(\"user\", prompt)\n\n            response = await session.execute(prompt)\n\n            print(\"\\n\u2713 Step 1 Complete\")\n            print(f\"Response: {response[:200]}...\")\n\n            persistence.add_message(\"assistant\", response)\n\n            # Simulate we want to continue later\n            print(\"\\n\ud83d\udcbe Saving session state...\")\n\n    # Save state after session closes\n    persistence.save()\n    print(f\"\u2713 State saved to: {state_file}\")\n    print(f\"   Size: {state_file.stat().st_size} bytes\")\n    print(f\"   Messages: {len(persistence.messages)}\")\n\n    if not is_resuming:\n        print(\"\\n\" + \"=\" * 60)\n        print(\"\ud83d\udca1 TO RESUME THIS SESSION:\")\n        print(\"=\" * 60)\n        print(f\"Run: python {Path(__file__).name}\")\n        print(\"\\nThe session will load the saved state and you can continue!\")\n\n\n# =============================================================================\n# SECTION 3: State Management Tools\n# =============================================================================\n\n\nasync def inspect_state(session_id: str = \"demo-workflow\"):\n    \"\"\"Inspect saved session state.\"\"\"\n    storage_path = Path.home() / \".amplifier\" / \"demo_sessions\"\n    state_file = storage_path / f\"{session_id}.json\"\n\n    if not state_file.exists():\n        print(f\"\u274c No saved state found: {state_file}\")\n        return\n\n    with open(state_file) as f:\n        state = json.load(f)\n\n    print(\"\\n\" + \"=\" * 60)\n    print(\"\ud83d\udd0d Session State Inspection\")\n    print(\"=\" * 60)\n    print(f\"File: {state_file}\")\n    print(f\"Size: {state_file.stat().st_size} bytes\")\n\n    metadata = state.get(\"metadata\", {})\n    messages = state.get(\"messages\", [])\n\n    print(\"\\nMetadata:\")\n    print(f\"  Session ID: {metadata.get('session_id')}\")\n    print(f\"  Created: {metadata.get('created_at')}\")\n    print(f\"  Resumed: {metadata.get('resume_count', 0)} times\")\n    print(f\"  Last saved: {state.get('saved_at')}\")\n\n    print(f\"\\nMessages: {len(messages)}\")\n\n    # Show message breakdown\n    roles = {}\n    for msg in messages:\n        role = msg.get(\"role\", \"unknown\")\n        roles[role] = roles.get(role, 0) + 1\n\n    for role, count in roles.items():\n        print(f\"  {role}: {count}\")\n\n    # Show recent messages\n    print(\"\\n\ud83d\udcdc Recent conversation:\")\n    for msg in messages[-3:]:\n        role_emoji = \"\ud83d\udc64\" if msg[\"role\"] == \"user\" else \"\ud83e\udd16\"\n        content = msg[\"content\"][:100]\n        print(f\"  {role_emoji} [{msg['role']}]: {content}...\")\n\n\nasync def clear_state(session_id: str = \"demo-workflow\"):\n    \"\"\"Clear saved session state.\"\"\"\n    storage_path = Path.home() / \".amplifier\" / \"demo_sessions\"\n    state_file = storage_path / f\"{session_id}.json\"\n\n    if state_file.exists():\n        state_file.unlink()\n        print(f\"\u2713 Cleared state: {state_file}\")\n    else:\n        print(\"\u2139\ufe0f  No state to clear\")\n\n\n# =============================================================================\n# SECTION 4: Main Entry Point\n# =============================================================================\n\n\nasync def main():\n    \"\"\"Main entry point.\"\"\"\n\n    print(\"\ud83d\ude80 Session Persistence & Resume Demo\")\n    print(\"=\" * 60)\n\n    # Check prerequisites\n    if not os.getenv(\"ANTHROPIC_API_KEY\"):\n        print(\"\\n\u274c ERROR: Set ANTHROPIC_API_KEY environment variable\")\n        return\n\n    # Parse mode\n    mode = sys.argv[1] if len(sys.argv) > 1 else \"run\"\n\n    if mode == \"inspect\":\n        await inspect_state()\n    elif mode == \"clear\":\n        await clear_state()\n    else:\n        await run_persistent_workflow()\n\n    # Summary\n    print(\"\\n\" + \"=\" * 60)\n    print(\"\ud83d\udcda WHAT YOU LEARNED:\")\n    print(\"=\" * 60)\n    print(\"  \u2713 Persist conversation history to disk\")\n    print(\"  \u2713 Resume sessions by loading saved state\")\n    print(\"  \u2713 Maintain context across interruptions\")\n    print(\"  \u2713 Build reliable, stateful workflows\")\n\n    print(\"\\n\ud83d\udca1 PATTERN:\")\n    print(\"  1. Save messages to JSON after each turn\")\n    print(\"  2. Load messages on resume\")\n    print(\"  3. Provide context summary to LLM\")\n    print(\"  4. Continue conversation seamlessly\")\n\n\nif __name__ == \"__main__\":\n    asyncio.run(main())\n",
+      "advancedOptions": {
+        "provider": [
+          "anthropic-sonnet",
+          "anthropic-opus",
+          "openai-gpt4"
+        ],
+        "streaming": false,
+        "hooks": []
+      }
+    }
+  },
+  "execution": {
+    "requiresInput": true,
+    "defaultPrompt": null,
+    "estimatedDuration": "2-5 seconds",
+    "prerequisites": [
+      "ANTHROPIC_API_KEY environment variable"
+    ]
+  }
+}

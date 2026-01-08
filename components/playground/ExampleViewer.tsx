@@ -2,6 +2,8 @@
 
 import { useState, useEffect } from 'react';
 import ReactMarkdown from 'react-markdown';
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
 
 interface ExampleContent {
   everyone?: any;
@@ -46,6 +48,7 @@ export default function ExampleViewer({ exampleId, onExecute, executing }: Examp
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [viewMode, setViewMode] = useState<ViewMode>('developers');
+  const [viewMode, setViewMode] = useState<ViewMode>('developers');
   const [customInput, setCustomInput] = useState('');
   const [showCustomInput, setShowCustomInput] = useState(false);
 
@@ -72,9 +75,9 @@ export default function ExampleViewer({ exampleId, onExecute, executing }: Examp
 
   const handleExecute = () => {
     if (!example) return;
-    
+
     const inputs: any = {};
-    
+
     // Add custom input if provided
     if (example.execution.requiresInput && customInput) {
       if (example.id === '10_meeting_notes') {
@@ -83,7 +86,8 @@ export default function ExampleViewer({ exampleId, onExecute, executing }: Examp
         inputs.prompt = customInput;
       }
     }
-    
+
+    // Execute with streaming enabled by default
     onExecute(example.id, inputs);
   };
 
@@ -151,13 +155,13 @@ export default function ExampleViewer({ exampleId, onExecute, executing }: Examp
             <>▶️ Run Example</>
           )}
         </button>
-        
+
         {example.execution.requiresInput && !showCustomInput && (
           <button
             onClick={() => setShowCustomInput(true)}
             className="px-6 py-3 rounded-lg font-semibold border border-gray-300 text-gray-700 hover:bg-gray-50 transition-colors"
           >
-            ⚙️ Configure Input
+            ⚙️ Custom Prompt
           </button>
         )}
       </div>
@@ -166,9 +170,12 @@ export default function ExampleViewer({ exampleId, onExecute, executing }: Examp
       {example.execution.requiresInput && showCustomInput && (
         <div className="space-y-2 bg-blue-50 p-4 rounded-lg border border-blue-200">
           <div className="flex justify-between items-center">
-            <label className="font-medium text-gray-900">Custom Input</label>
+            <label className="font-medium text-gray-900">Custom Prompt</label>
             <button
-              onClick={() => setShowCustomInput(false)}
+              onClick={() => {
+                setShowCustomInput(false);
+                setCustomInput('');
+              }}
               className="text-sm text-blue-600 hover:text-blue-800"
             >
               ✕ Hide
@@ -268,8 +275,23 @@ export default function ExampleViewer({ exampleId, onExecute, executing }: Examp
             )}
             
             {content.codeSnippet && (
-              <div className="bg-gray-900 text-gray-100 rounded-lg p-4 overflow-x-auto">
-                <pre className="text-sm font-mono">{content.codeSnippet}</pre>
+              <div className="rounded-lg overflow-hidden border border-gray-700">
+                <div className="bg-gray-800 px-4 py-2 text-xs text-gray-400 border-b border-gray-700">
+                  Python
+                </div>
+                <SyntaxHighlighter
+                  language="python"
+                  style={vscDarkPlus}
+                  customStyle={{
+                    margin: 0,
+                    borderRadius: 0,
+                    fontSize: '0.875rem',
+                    lineHeight: '1.5'
+                  }}
+                  showLineNumbers
+                >
+                  {content.codeSnippet}
+                </SyntaxHighlighter>
               </div>
             )}
           </div>
@@ -286,44 +308,38 @@ export default function ExampleViewer({ exampleId, onExecute, executing }: Examp
             </div>
             
             {content.fullCode && (
-              <div className="bg-gray-900 text-gray-100 rounded-lg p-4 overflow-x-auto">
-                <div className="flex justify-between items-center mb-2">
-                  <span className="text-sm text-gray-400">Full Source Code</span>
+              <div className="rounded-lg overflow-hidden border border-gray-700">
+                <div className="bg-gray-800 px-4 py-2 flex justify-between items-center border-b border-gray-700">
+                  <span className="text-xs text-gray-400">Full Source Code</span>
                   <a
                     href={content.sourceUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-sm text-blue-400 hover:text-blue-300"
+                    className="text-xs text-blue-400 hover:text-blue-300"
                   >
                     View on GitHub →
                   </a>
                 </div>
-                <pre className="text-sm font-mono whitespace-pre-wrap">{content.fullCode}</pre>
+                <SyntaxHighlighter
+                  language="python"
+                  style={vscDarkPlus}
+                  customStyle={{
+                    margin: 0,
+                    borderRadius: 0,
+                    fontSize: '0.875rem',
+                    lineHeight: '1.5'
+                  }}
+                  showLineNumbers
+                  wrapLongLines
+                >
+                  {content.fullCode}
+                </SyntaxHighlighter>
               </div>
-            )}
-            
-            {content.advancedOptions && (
-              <details className="bg-purple-50 border border-purple-200 rounded-lg p-4">
-                <summary className="font-semibold text-purple-900 cursor-pointer">
-                  Advanced Options (Future: Configuration UI)
-                </summary>
-                <div className="mt-2 space-y-2 text-sm text-purple-800">
-                  {content.advancedOptions.provider && (
-                    <div>
-                      <strong>Providers:</strong> {content.advancedOptions.provider.join(', ')}
-                    </div>
-                  )}
-                  {content.advancedOptions.streaming !== undefined && (
-                    <div>
-                      <strong>Streaming:</strong> {content.advancedOptions.streaming ? 'Enabled' : 'Disabled'}
-                    </div>
-                  )}
-                </div>
-              </details>
             )}
           </div>
         )}
       </div>
+
 
 
 
