@@ -66,6 +66,7 @@ amplifier-onboarding/
 │   ├── amplifier-warmup.py      # Session warmup
 │   ├── run-bundle.py            # Bundle execution
 │   ├── run-bundle-stream.py     # Streaming bundle execution
+│   ├── validate-deps.py         # Dependency validation script
 │   ├── bundle-metadata.json     # Bundle descriptions
 │   └── bundles/                 # Amplifier bundle configurations
 │       ├── 01-basic-bundle.yaml              # Basic AI agent
@@ -216,7 +217,7 @@ Visit http://localhost:3000
 ### Branch Structure
 - **main**: Production-ready code
 - **feature/***: Feature branches for development
-- Current: `feature/phase-1-implementation`
+- Current: `feature/revised-playground-page`
 
 ### Making Changes
 
@@ -363,6 +364,33 @@ Outputs Server-Sent Events (SSE) format with real-time status updates and result
 
 ## Deployment
 
+### Docker Deployment
+
+The application includes a complete Docker setup for containerized deployment:
+
+**Dockerfile Features:**
+- Base: Node 20 (bookworm-slim)
+- Installs Python 3, pip, git, and build-essential
+- Uses UV package manager for faster Python dependency installation
+- Validates dependencies with `validate-deps.py` before build
+- Builds optimized Next.js production bundle
+- Exposes port 3000
+
+**Docker Compose:**
+- Single-service setup with health checks
+- Volume mount for development (`./lib:/app/lib`)
+- Auto-restart unless stopped
+- HTTP health check endpoint: `/api/chat`
+
+```bash
+# Build and run with Docker Compose
+docker-compose up --build
+
+# Or with Docker directly
+docker build -t amplifier-onboarding .
+docker run -p 3000:3000 --env-file .env amplifier-onboarding
+```
+
 ### Current Deployment Target
 
 - **Platform**: Azure Static Web Apps (transitioning to Container Apps)
@@ -437,7 +465,17 @@ We welcome contributions! Please:
 
 ## Documentation
 
+### Getting Started
 - [Quick Start Guide](./QUICKSTART.md) - Get started in 5 minutes
+- [API Getting Started](./API_GETTING_STARTED.md) - Start using the API with practical examples
+
+### API Documentation
+- [API Documentation](./API_DOCUMENTATION.md) - Complete API reference with examples
+- [API Overview](./API_DOCUMENTATION_OVERVIEW.md) - High-level API architecture overview
+- [API Quick Reference](./API_QUICK_REFERENCE.md) - Quick lookup for endpoints and formats
+- [Documentation Index](./DOCUMENTATION_INDEX.md) - Complete documentation navigation
+
+### Configuration & Bundles
 - [Bundle Metadata](./lib/bundle-metadata.json) - Available bundles and their capabilities
 - Bundle configurations in `lib/bundles/` - YAML files defining each agent
 

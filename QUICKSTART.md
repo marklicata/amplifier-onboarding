@@ -2,6 +2,14 @@
 
 Get the Amplifier Onboarding application running on your local machine in 5 minutes.
 
+## What's New
+
+**Latest Update (January 2026)**: The playground has been completely refactored from a JSON-based example system to a modern, bundle-based architecture. You can now:
+- Execute 5 pre-configured Amplifier bundles with different capabilities
+- View live YAML configurations for each bundle
+- Experience real-time streaming execution with Server-Sent Events (SSE)
+- See AI agents use tools like filesystem access, bash commands, and web search in action
+
 ## Prerequisites
 
 Before you begin, ensure you have:
@@ -55,11 +63,13 @@ pip install -r requirements.txt
 
 This installs:
 - `python-dotenv` - Environment variable management
-- `amplifier-core` - Amplifier kernel (if available)
-- `amplifier-foundation` - Pre-built modules and bundles (if available)
+- `amplifier-core` - Amplifier kernel (from GitHub)
+- `amplifier-foundation` - Pre-built modules and bundles (from GitHub)
 - `anthropic` - Anthropic SDK for Claude API
 
-**Expected time**: 30-60 seconds
+**Note**: The Amplifier packages are installed directly from GitHub repositories. First-time installation may take 1-2 minutes as it downloads and builds the packages.
+
+**Expected time**: 1-2 minutes (first time), 30-60 seconds (subsequent)
 
 ### Troubleshooting Python Installation
 
@@ -87,14 +97,31 @@ source venv/bin/activate
 pip install -r requirements.txt
 ```
 
-**Package not found errors:**
+**Package installation errors:**
 
-If `amplifier-core` or `amplifier-foundation` packages are not available on PyPI, you may need to:
-1. Install them from a private package index
-2. Install from source
-3. Contact the Amplifier team for access
+If you encounter errors installing `amplifier-core` or `amplifier-foundation`:
+1. Ensure you have git installed (required for GitHub installations)
+2. Check your network connection (downloads from GitHub)
+3. Try installing packages individually:
+   ```bash
+   pip install python-dotenv anthropic
+   pip install git+https://github.com/microsoft/amplifier-core@main
+   pip install git+https://github.com/microsoft/amplifier-foundation@main
+   ```
 
 The application will still run in "fallback mode" without these packages, using pre-programmed responses instead of real AI.
+
+**Docker Alternative:**
+
+If you prefer using Docker to avoid Python setup:
+```bash
+# Build and run with Docker Compose
+docker-compose up --build
+
+# Application will be available at http://localhost:3000
+```
+
+The Docker setup uses UV package manager for faster and more reliable Python dependency installation.
 
 ## Step 4: Configure Environment Variables
 
@@ -377,9 +404,9 @@ npm run start
 
 ### Learn More
 
-- Read the full [README.md](./README.md) for architecture details
-- Review [SETUP.md](./SETUP.md) for chat-specific configuration
-- Check [.planning/PHASE_1_MVP.md](./.planning/PHASE_1_MVP.md) for roadmap
+- Read the full [README.md](./README.md) for architecture details and comprehensive documentation
+- Review [API Documentation](./API_DOCUMENTATION.md) for complete API reference
+- Check [Documentation Index](./DOCUMENTATION_INDEX.md) for all available documentation
 
 ## Development Tips
 
