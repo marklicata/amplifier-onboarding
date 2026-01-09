@@ -7,7 +7,7 @@ A modern web application for onboarding new users to Amplifier - an AI-powered d
 Amplifier Onboarding is a Next.js-based web application that introduces users to the Amplifier ecosystem through:
 
 - **Marketing Landing Pages**: Comprehensive elevator pitch and value proposition
-- **Interactive Playground**: Browse and execute real amplifier-foundation examples in your browser
+- **Interactive Playground**: Browse and execute customizable Amplifier bundles with real-time streaming
 - **Interactive Chat**: Real-time AI-powered chat using Amplifier Core and Foundation
 - **System Architecture Visualization**: Clear overview of how Amplifier components work together
 
@@ -42,9 +42,9 @@ amplifier-onboarding/
 │   │   │   ├── route.ts          # Main chat API
 │   │   │   └── warmup/route.ts   # Session warmup
 │   │   └── playground/           # Playground endpoints
-│   │       ├── examples/         # Example metadata
-│   │       ├── execute/          # Basic execution
-│   │       └── execute-stream/   # Streaming execution (SSE)
+│   │       ├── bundle-yaml/      # Bundle YAML retrieval
+│   │       ├── execute-bundle/   # Bundle execution
+│   │       └── execute-bundle-stream/ # Streaming bundle execution (SSE)
 │   ├── elevator-pitch/           # Landing page
 │   ├── playground/               # Playground page
 │   ├── system-overview/          # Architecture page
@@ -64,9 +64,16 @@ amplifier-onboarding/
 ├── lib/                          # Backend Python scripts
 │   ├── amplifier-chat.py        # Chat execution
 │   ├── amplifier-warmup.py      # Session warmup
-│   ├── run-example.py           # Playground execution
-│   └── playground_files/        # Playground bundles
-│       └── bundle.yaml          # Foundation bundle
+│   ├── run-bundle.py            # Bundle execution
+│   ├── run-bundle-stream.py     # Streaming bundle execution
+│   ├── bundle-metadata.json     # Bundle descriptions
+│   └── bundles/                 # Amplifier bundle configurations
+│       ├── 01-basic-bundle.yaml              # Basic AI agent
+│       ├── 02-documentation-bundle.yaml      # Documentation creator
+│       ├── 03-developer-bundle.yaml          # Full-stack developer
+│       ├── 04-code-reviewer-bundle.yaml      # Code reviewer
+│       ├── 05-presentation-creator-bundle.yaml # Presentation creator
+│       └── chat-bundle.yaml                  # Chat bundle
 │
 ├── styles/                       # Global styles
 │   └── globals.css              # Tailwind + CSS variables
@@ -84,14 +91,14 @@ amplifier-onboarding/
 ### Current Implementation
 
 - **Landing Page**: Comprehensive value proposition and product overview
-- **Interactive Playground**: Browse and execute 20+ real amplifier-foundation examples
-  - Example browser with filtering by tier, category, and difficulty
-  - Multiple view modes: Everyone, Developers, and Experts
-  - **Streaming execution** with real-time SSE (Server-Sent Events)
-  - Advanced options: temperature control, logging hooks, debugging hooks
-  - Live execution of examples using Amplifier Foundation
+- **Interactive Playground**: Browse and execute customizable Amplifier bundles
+  - 5 pre-configured bundles showcasing different AI agent capabilities
+  - Bundle browser with tier-based organization (beginner, intermediate, advanced)
+  - **Real-time streaming execution** with SSE (Server-Sent Events)
+  - Live YAML configuration viewer for each bundle
+  - Suggested prompts for each bundle to get started quickly
   - Real-time results with markdown formatting and syntax highlighting
-  - Examples across 4 tiers: Quick Start, Foundation Concepts, Building Applications, Real-World
+  - Bundles include: Basic AI, Documentation Creator, Developer Assistant, Code Reviewer, Presentation Creator
 - **Interactive Chat**: AI-powered chat using Amplifier Foundation bundles
 - **Session Warmup**: Pre-initialized sessions for reduced latency
 - **System Overview**: Visual architecture documentation
@@ -100,13 +107,14 @@ amplifier-onboarding/
 
 ### Planned Features
 
-- **Provider Selection**: Choose between Anthropic, OpenAI, and Azure providers
-- **GitHub Synchronization**: Automatic updates when amplifier-foundation examples change
-- **Code Customization**: Monaco editor integration for editing example code (Expert mode)
-- **Comparison Mode**: Run same example with different providers side-by-side
+- **Custom Bundle Editor**: Monaco editor integration for creating and editing bundle YAML configurations
+- **Provider Selection**: Choose between Anthropic, OpenAI, and Azure providers within bundles
+- **GitHub Synchronization**: Automatic updates when amplifier-foundation bundles change
+- **Comparison Mode**: Run same prompt with different bundles side-by-side
 - **User Authentication**: GitHub OAuth integration (optional)
-- **Execution History**: Save and review past executions
-- **Export & Share**: Download examples as Python files, share execution results
+- **Execution History**: Save and review past bundle executions
+- **Export & Share**: Download bundles as YAML files, share execution results
+- **Community Bundles**: User-contributed bundle library
 
 ## Architecture
 
@@ -252,52 +260,75 @@ If Python dependencies are not installed, the chat operates in fallback mode wit
 
 ## Playground Implementation Details
 
-The playground allows users to explore and execute amplifier-foundation examples:
+The playground allows users to explore and execute customizable Amplifier bundles:
 
 1. **Frontend** (`app/playground/page.tsx`):
-   - Example browser with filtering and search
-   - Multi-mode viewer (Simple, Explorer, Developer, Expert)
-   - Execution panel for results
-   - Real-time execution status
+   - Bundle browser with tier-based organization
+   - Live YAML configuration viewer
+   - Suggested prompts for quick start
+   - Real-time streaming execution panel
+   - Collapsible YAML viewer for better UX
 
-2. **Components** (`components/playground/`):
-   - `ExampleBrowser.tsx`: Browse, filter, and search examples
-   - `ExampleViewer.tsx`: Display example details with mode switching
-   - `ExecutionPanel.tsx`: Show execution results and status
+2. **API Routes**:
+   - `app/api/playground/bundle-yaml/route.ts`: Returns bundle YAML content
+   - `app/api/playground/execute-bundle/route.ts`: Executes bundles with prompts (non-streaming)
+   - `app/api/playground/execute-bundle-stream/route.ts`: Executes bundles with real-time SSE streaming
 
-3. **API Routes**:
-   - `app/api/playground/examples/route.ts`: Returns all example metadata
-   - `app/api/playground/examples/[id]/route.ts`: Returns specific example details
-   - `app/api/playground/execute/route.ts`: Executes examples with inputs
+3. **Python Backend**:
+   - `lib/run-bundle.py`: Loads and executes Amplifier bundles
+   - `lib/run-bundle-stream.py`: Streaming version with real-time output
+   - Reads bundle configurations from `lib/bundles/*.yaml`
+   - Returns structured JSON output with results and metadata
 
-4. **Python Backend** (`lib/run-example.py`):
-   - Loads and executes amplifier-foundation examples
-   - Manages session pooling for performance
-   - Supports custom inputs per example
-   - Returns structured output with metadata and error handling
-   - Currently supports: Hello World, Custom Configuration, Meeting Notes
+4. **Bundle Metadata** (`lib/bundle-metadata.json`):
+   - Describes each available bundle
+   - Includes: name, description, features, suggested prompts, tier
+   - Used by frontend to render bundle cards and information
 
-### Using run-example.py
+### Available Bundles
 
-The `run-example.py` script can be used directly for testing or integration:
+1. **Basic Bundle** (`01-basic-bundle.yaml`) - Beginner
+   - Minimal AI agent with Claude Sonnet 4.5
+   - No special tools, perfect for simple conversations
+   - Use case: General Q&A, simple tasks
+
+2. **Documentation Bundle** (`02-documentation-bundle.yaml`) - Intermediate
+   - Filesystem access + web search capabilities
+   - Creates READMEs, API docs, user guides
+   - Use case: Technical writing, documentation generation
+
+3. **Developer Bundle** (`03-developer-bundle.yaml`) - Intermediate
+   - Filesystem, bash, web search, grep tools
+   - Full-stack development capabilities
+   - Use case: Code creation, debugging, testing
+
+4. **Code Reviewer Bundle** (`04-code-reviewer-bundle.yaml`) - Advanced
+   - Claude Opus 4.5 for deep analysis
+   - Read-only filesystem access
+   - Focus on security, quality, best practices
+   - Use case: Code review, vulnerability scanning
+
+5. **Presentation Creator Bundle** (`05-presentation-creator-bundle.yaml`) - Advanced
+   - Streaming orchestrator for real-time output
+   - Filesystem + web research capabilities
+   - Use case: Creating presentation content, slide decks
+
+### Using run-bundle.py
+
+The `run-bundle.py` script can be used directly for testing or integration:
 
 ```bash
-# Execute an example with JSON input via stdin
+# Execute a bundle with JSON input via stdin
 cd lib
-echo '{"exampleId":"01_hello_world","inputs":{},"mode":"normie"}' | python run-example.py
-
-# Or pass JSON as command-line argument for manual testing
-python run-example.py '{"exampleId":"01_hello_world","inputs":{"prompt":"Write a function to calculate fibonacci"},"mode":"developer"}'
+echo '{"bundleId":"01-basic-bundle","bundlePath":"01-basic-bundle.yaml","prompt":"Explain quantum computing"}' | python run-bundle.py
 ```
 
 **Input format:**
 ```json
 {
-  "exampleId": "01_hello_world",
-  "inputs": {
-    "prompt": "Custom prompt here (optional)"
-  },
-  "mode": "normie|explorer|developer|expert"
+  "bundleId": "01-basic-bundle",
+  "bundlePath": "01-basic-bundle.yaml",
+  "prompt": "Your prompt here"
 }
 ```
 
@@ -305,11 +336,8 @@ python run-example.py '{"exampleId":"01_hello_world","inputs":{"prompt":"Write a
 ```json
 {
   "output": "AI-generated response text",
-  "metadata": {
-    "example_id": "01_hello_world",
-    "mode": "normie",
-    "...": "additional metadata"
-  }
+  "bundleId": "01-basic-bundle",
+  "timestamp": "2026-01-09T12:34:56.789Z"
 }
 ```
 
@@ -317,21 +345,21 @@ python run-example.py '{"exampleId":"01_hello_world","inputs":{"prompt":"Write a
 ```json
 {
   "error": "Error description",
-  "details": "Detailed error message",
-  "traceback": "Python traceback (if applicable)"
+  "traceback": "Python traceback (if applicable)",
+  "timestamp": "2026-01-09T12:34:56.789Z"
 }
 ```
 
-**Supported examples:**
-- `01_hello_world` - Basic Amplifier execution with customizable prompts
-- `02_custom_configuration` - Demonstrates tool composition and configuration
-- `10_meeting_notes` - Extracts structured action items from meeting notes
+### Using run-bundle-stream.py
 
-**View modes:**
-- `normie` - Simple, high-level view for beginners
-- `explorer` - More detailed explanations for learning
-- `developer` - Code-level details for implementation
-- `expert` - Full technical details and internals
+For real-time streaming execution:
+
+```bash
+# Execute with streaming output
+echo '{"bundleId":"05-presentation-creator-bundle","bundlePath":"05-presentation-creator-bundle.yaml","prompt":"Create a tech presentation"}' | python run-bundle-stream.py
+```
+
+Outputs Server-Sent Events (SSE) format with real-time status updates and results.
 
 ## Deployment
 
@@ -386,25 +414,32 @@ We welcome contributions! Please:
 
 ## Roadmap
 
+### Recent Accomplishments (Phase 3)
+- Migrated from examples to bundle-based architecture
+- Implemented real-time streaming execution with SSE
+- Added 5 pre-configured bundles showcasing different capabilities
+- Enhanced playground UI with collapsible YAML viewer
+- Added bundle metadata system for better organization
+
 ### Current Focus
-- Expand playground examples (currently 3, target 20+)
-- Add WebSocket streaming for real-time execution logs
-- Improve example viewer with code editing capabilities
+- Custom bundle editor with Monaco integration
+- Expand bundle library with more specialized configurations
+- Add bundle comparison mode
+- Implement execution history and analytics
 - Add user authentication for saved sessions
-- Expand mobile responsive design
 
 ### Future Plans
-- Recipe builder for custom workflows
-- Execution history and analytics
-- Community-contributed examples
+- Community bundle marketplace
+- Bundle composition and inheritance
 - Advanced debugging tools
 - Performance optimizations
+- Multi-provider support within bundles
 
 ## Documentation
 
 - [Quick Start Guide](./QUICKSTART.md) - Get started in 5 minutes
-- [Setup Guide](./SETUP.md) - Chat-specific setup instructions (if exists)
-- [Playground Documentation](./app/playground/PLAYGROUND_PLAN.md) - Playground architecture and design
+- [Bundle Metadata](./lib/bundle-metadata.json) - Available bundles and their capabilities
+- Bundle configurations in `lib/bundles/` - YAML files defining each agent
 
 ## License
 
@@ -427,5 +462,5 @@ Built with:
 ---
 
 **Status**: Active Development
-**Version**: 0.2.0
-**Last Updated**: 2026-01-07
+**Version**: 0.3.0
+**Last Updated**: 2026-01-09

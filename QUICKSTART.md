@@ -172,34 +172,40 @@ Check the terminal logs for error messages.
 ## Step 8: Try the Playground
 
 1. Navigate to **http://localhost:3000/playground** or click the "Playground" link in the header
-2. Browse the available examples:
-   - **Tier 1**: Foundation examples (Hello World, Custom Configuration)
-   - **Tier 2**: Intermediate examples (Meeting Notes extraction)
-3. Click on an example to view its details
-4. Switch between view modes to see different levels of detail:
-   - **Simple**: High-level overview for beginners
-   - **Explorer**: More details with explanations
-   - **Developer**: Code-level details
-   - **Expert**: Full technical details
-5. Click "Run Example" to execute it
-6. Optionally provide custom inputs (varies by example)
-7. View the execution results in the modal panel
+2. Browse the available bundles organized by tier:
+   - **Beginner**: Basic Bundle (simple AI conversations)
+   - **Intermediate**: Documentation Bundle, Developer Bundle
+   - **Advanced**: Code Reviewer Bundle, Presentation Creator Bundle
+3. Click on a bundle card to view its details
+4. Review the bundle's YAML configuration (collapsible)
+5. Choose a suggested prompt or write your own
+6. Click "Execute Bundle" to run it
+7. Watch real-time streaming execution with status updates
+8. View formatted results with markdown and syntax highlighting
 
-### Example: Hello World
+### Bundle: Basic Bundle
 
-The simplest example to try:
-1. Click on "Hello World" example
-2. Click "Run Example"
-3. See the AI generate code based on the default prompt
-4. Try changing the prompt input to generate different code
+The simplest bundle to try:
+1. Click on "Basic Bundle" card
+2. Choose a suggested prompt like "Explain quantum computing in simple terms"
+3. Click "Execute Bundle"
+4. See the AI respond in real-time with streaming output
 
-### Example: Meeting Notes
+### Bundle: Developer Bundle
 
-A more practical example:
-1. Click on "Meeting Notes to Action Items"
-2. You can use the default meeting notes or paste your own
-3. Click "Run Example"
-4. See the AI extract structured action items from the unstructured notes
+A more powerful bundle:
+1. Click on "Developer Bundle" card
+2. Try a prompt like "Read package.json and explain the project dependencies"
+3. Click "Execute Bundle"
+4. See the AI use filesystem and analysis tools to examine your project
+
+### Bundle: Code Reviewer Bundle
+
+For code quality analysis:
+1. Click on "Code Reviewer Bundle" card
+2. Try "Review this codebase for security vulnerabilities"
+3. Uses Claude Opus for deep analysis
+4. Get comprehensive code review feedback
 
 ## Verification Checklist
 
@@ -213,7 +219,9 @@ A more practical example:
 - [ ] Chat button appears in the header
 - [ ] Chat responds to messages (fallback or AI mode)
 - [ ] Playground page loads at `/playground`
-- [ ] Playground examples can be browsed and executed
+- [ ] Playground bundles can be browsed and executed
+- [ ] Bundle YAML configurations are viewable
+- [ ] Streaming execution works with real-time updates
 
 ## Common Issues & Solutions
 
@@ -301,7 +309,7 @@ Invoke-WebRequest -Uri "https://api.anthropic.com/v1/messages" -Method POST -Hea
 
 If this fails, your API key is invalid.
 
-### Issue: Playground Examples Fail to Execute
+### Issue: Playground Bundles Fail to Execute
 
 Check for these common issues:
 
@@ -314,34 +322,37 @@ Check for these common issues:
    pip install -r requirements.txt
    ```
 
-2. **Bundle File Missing**:
-   - Verify `lib/playground_files/bundle.yaml` exists
-   - This file should be in the repository
+2. **Bundle Files Missing**:
+   - Verify `lib/bundles/` directory exists with YAML files
+   - Should contain: 01-basic-bundle.yaml through 05-presentation-creator-bundle.yaml
+   - These files should be in the repository
 
 3. **Python Script Errors**:
    - Check terminal logs for detailed error messages
-   - The script is at `lib/run-example.py`
+   - The scripts are at `lib/run-bundle.py` and `lib/run-bundle-stream.py`
    - Test manually:
      ```bash
      cd lib
-     echo '{"exampleId":"01_hello_world","inputs":{},"mode":"normie"}' | python run-example.py
+     echo '{"bundleId":"01-basic-bundle","bundlePath":"01-basic-bundle.yaml","prompt":"Hello"}' | python run-bundle.py
      ```
 
 4. **Timeout Issues**:
    - First-time execution may take 30-60 seconds as modules are downloaded
    - Subsequent executions should be faster (2-5 seconds)
    - If consistently timing out, check your network connection
+   - Timeout is set to 60 seconds for bundle execution
 
 ## Next Steps
 
 ### Explore the Application
 
 1. **Landing Page** (`/elevator-pitch`): Learn about Amplifier's value proposition
-2. **Playground** (`/playground`): Explore and execute real amplifier-foundation examples
-   - Browse examples by tier and category
-   - Switch between Simple, Explorer, Developer, and Expert views
-   - Run examples with custom inputs
-   - See real AI execution results
+2. **Playground** (`/playground`): Explore and execute customizable Amplifier bundles
+   - Browse bundles by tier (beginner, intermediate, advanced)
+   - View live YAML configurations for each bundle
+   - Try suggested prompts or write your own
+   - Experience real-time streaming execution
+   - See formatted AI results with markdown and syntax highlighting
 3. **Chat**: Ask questions about Amplifier and see it in action
 4. **System Overview** (`/system-overview`): Understand the architecture
 
@@ -399,11 +410,16 @@ python amplifier-chat.py "What is Amplifier?" "test-session-123"
 
 # Expected output: JSON response with AI message
 
-# Test playground script
+# Test bundle execution script
 cd lib
-echo '{"exampleId":"01_hello_world","inputs":{},"mode":"normie"}' | python run-example.py
+echo '{"bundleId":"01-basic-bundle","bundlePath":"01-basic-bundle.yaml","prompt":"Explain AI"}' | python run-bundle.py
 
-# Expected output: JSON response with example execution result
+# Expected output: JSON response with bundle execution result
+
+# Test streaming bundle execution
+echo '{"bundleId":"01-basic-bundle","bundlePath":"01-basic-bundle.yaml","prompt":"Explain AI"}' | python run-bundle-stream.py
+
+# Expected output: SSE-formatted streaming response
 ```
 
 ### Viewing Logs
@@ -425,7 +441,8 @@ You now have:
 - A running Next.js development server on port 3000
 - Python backend integration with Amplifier
 - AI-powered chat using Claude
-- Interactive playground with real amplifier-foundation examples
+- Interactive playground with 5 customizable Amplifier bundles
+- Real-time streaming execution with SSE
 - A complete local development environment
 
 **Total setup time**: ~5 minutes
@@ -433,7 +450,7 @@ You now have:
 
 **Key features to try:**
 - `/elevator-pitch` - Learn about Amplifier
-- `/playground` - Execute real AI examples
+- `/playground` - Execute customizable AI bundles with real-time streaming
 - Chat button - Ask questions about Amplifier
 - `/system-overview` - Understand the architecture
 

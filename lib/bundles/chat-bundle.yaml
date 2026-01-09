@@ -1,5 +1,5 @@
 bundle:
-  name: amplifier_onboarding_local
+  name: amplifier-onboarding-chat
   version: 1.0.0
   description: Amplifier Onboarding - base bundle for local use.
 
@@ -27,10 +27,10 @@ tools:
 
 context:
   include:
-    - instructions.md                                                                       
-    - amplifier-app-cli.md                                                                  
-    - amplifier-app-log-viewer.md                                                           
-    - amplifier-core.md                                                                     
-    - amplifier-desktop.md                                                                  
-    - amplifier-foundation.md                                                               
-    - amplifier.md   
+    - ../chat_context/instructions.md                                                                       
+    - ../chat_context/amplifier-app-cli.md                                                                  
+    - ../chat_context/amplifier-app-log-viewer.md                                                           
+    - ../chat_context/amplifier-core.md                                                                     
+    - ../chat_context/amplifier-desktop.md                                                                  
+    - ../chat_context/amplifier-foundation.md                                                               
+    - ../chat_context/amplifier.md   
