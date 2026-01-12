@@ -2,6 +2,8 @@
 
 import { ProductExample } from '../examples-data';
 import Link from 'next/link';
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
 
 interface ExampleTemplateProps {
   example: ProductExample;
@@ -11,7 +13,7 @@ interface ExampleTemplateProps {
 
 export default function ExampleTemplate({ example, prevExample, nextExample }: ExampleTemplateProps) {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
+    <div className="min-h-screen bg-white">
       {/* Breadcrumb */}
       <div className="bg-white border-b border-gray-200 py-4">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -91,13 +93,21 @@ export default function ExampleTemplate({ example, prevExample, nextExample }: E
           <div className="space-y-6 max-w-5xl mx-auto">
             {example.enables.map((capability, idx) => (
               <details key={idx} className="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden" open={idx === 0}>
-                <summary className="px-8 py-6 cursor-pointer hover:bg-gray-50 transition-colors">
+                <summary className="px-8 py-6 cursor-pointer hover:bg-gray-50 transition-colors list-none">
                   <div className="flex items-start">
                     <span className="text-2xl font-bold text-blue-600 mr-4">{idx + 1}.</span>
                     <div className="flex-1">
                       <h3 className="text-xl font-bold text-gray-900 mb-2">{capability.title}</h3>
                       <p className="text-gray-600">{capability.description}</p>
                     </div>
+                    <svg 
+                      className="w-6 h-6 text-gray-400 ml-4 flex-shrink-0" 
+                      fill="none" 
+                      stroke="currentColor" 
+                      viewBox="0 0 24 24"
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                    </svg>
                   </div>
                 </summary>
                 <div className="px-8 pb-6 pt-2 border-t border-gray-200 bg-gray-50">
@@ -107,17 +117,33 @@ export default function ExampleTemplate({ example, prevExample, nextExample }: E
                   {capability.yamlExample && (
                     <div className="mb-4">
                       <div className="text-sm font-semibold text-gray-700 mb-2">Example Configuration:</div>
-                      <pre className="bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto text-sm">
-                        <code>{capability.yamlExample}</code>
-                      </pre>
+                      <SyntaxHighlighter 
+                        language="yaml" 
+                        style={vscDarkPlus}
+                        customStyle={{
+                          borderRadius: '0.5rem',
+                          fontSize: '0.875rem',
+                          padding: '1rem'
+                        }}
+                      >
+                        {capability.yamlExample}
+                      </SyntaxHighlighter>
                     </div>
                   )}
                   {capability.codeExample && (
                     <div>
                       <div className="text-sm font-semibold text-gray-700 mb-2">Example Usage:</div>
-                      <pre className="bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto text-sm">
-                        <code>{capability.codeExample}</code>
-                      </pre>
+                      <SyntaxHighlighter 
+                        language="bash" 
+                        style={vscDarkPlus}
+                        customStyle={{
+                          borderRadius: '0.5rem',
+                          fontSize: '0.875rem',
+                          padding: '1rem'
+                        }}
+                      >
+                        {capability.codeExample}
+                      </SyntaxHighlighter>
                     </div>
                   )}
                 </div>
