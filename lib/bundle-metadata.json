@@ -1,10 +1,10 @@
 {
   "bundles": [
     {
-      "id": "01-basic-bundle",
+      "id": "00-basic-bundle",
       "name": "Basic Bundle",
       "description": "The bare minimum bundle to run an Amplifier agent - just a provider and basic orchestrator. No special tools or capabilities, perfect for simple conversations.",
-      "bundlePath": "01-basic-bundle.yaml",
+      "bundlePath": "00-basic-bundle.yaml",
       "icon": "🎯",
       "color": "from-blue-500 to-cyan-500",
       "features": [
@@ -18,6 +18,28 @@
         "Write a haiku about artificial intelligence",
         "What are the key principles of good software design?",
         "Tell me a joke about programming"
+      ],
+      "tier": "beginner"
+    },
+    {
+      "id": "01-chat-bundle",
+      "name": "Chat Bundle",
+      "description": "Have a look at the bundle used for the chat functionality on this site! Similar to the basic bundle but with a set of grounding files for context.",
+      "bundlePath": "01-chat-bundle.yaml",
+      "icon": "🤖",
+      "color": "from-blue-500 to-cyan-500",
+      "features": [
+        "Claude Sonnet 4.5 model",
+        "Basic orchestration loop",
+        "Simple context management",
+        "Grounding files for in-depth context"
+      ],
+      "suggestedPrompts": [
+        "How does Amplifier's \"mechanism not policy\" philosophy actually work in practice?",
+        "What's the relationship between amplifier-core, amplifier-foundation, and the CLI/Desktop apps?",
+        "How does the bundle composition system work, and how would I create my own custom bundle?",
+        "What types of workflows or projects is Amplifier best suited for?",
+        "How can I extend Amplifier with custom tools, providers, or agents?"
       ],
       "tier": "beginner"
     },
