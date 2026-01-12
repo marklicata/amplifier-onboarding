@@ -11,7 +11,7 @@ export default function Header({ onOpenChat }: HeaderProps) {
   const [isExamplesOpen, setIsExamplesOpen] = useState(false);
 
   return (
-    <header className="border-b border-gray-200 bg-white/80 backdrop-blur-sm sticky top-0 z-40">
+    <header className="border-b border-gray-200 bg-white backdrop-blur-sm sticky top-0 z-40">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           <Link href="/">
@@ -144,3 +144,4 @@ export default function Header({ onOpenChat }: HeaderProps) {
     </header>
   );
 }
+
