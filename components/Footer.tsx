@@ -7,17 +7,17 @@ export default function Footer() {
         <div className="flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-gray-600 text-sm">© 2025 Amplifier by Microsoft</p>
           <div className="flex gap-6">
-            <Link href="/elevator-pitch" className="text-gray-600 hover:text-gray-900 text-sm transition-colors">
-              Elevator Pitch
+            <Link href="/" className="text-gray-600 hover:text-gray-900 text-sm transition-colors">
+              Home
             </Link>
-            <Link href="/playground" className="text-gray-600 hover:text-gray-900 text-sm transition-colors">
-              Playground
+            <Link href="/overview" className="text-gray-600 hover:text-gray-900 text-sm transition-colors">
+              Overview
             </Link>
             <Link href="/system-overview" className="text-gray-600 hover:text-gray-900 text-sm transition-colors">
               How it Works
             </Link>
-            <Link href="https://michaeljabbour.github.io/amplifier-dx/" className="text-gray-600 hover:text-gray-900 text-sm transition-colors" target="_blank" rel="noopener noreferrer">
-              Developer Guide
+            <Link href="/playground" className="text-gray-600 hover:text-gray-900 text-sm transition-colors">
+              Playground
             </Link>
           </div>
         </div>

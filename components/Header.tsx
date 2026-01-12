@@ -49,7 +49,8 @@ export default function Header({ onOpenChat }: HeaderProps) {
               </button>
               
               {isExamplesOpen && (
-                <div className="absolute top-full left-0 mt-2 w-64 bg-white rounded-lg shadow-xl border border-gray-200 py-2">
+                <div className="absolute top-full left-0 mt-0 pt-2 w-64">
+                  <div className="bg-white rounded-lg shadow-xl border border-gray-200 py-2">
                   {/* Developer Tools */}
                   <div className="px-4 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wider">
                     Developer Tools
@@ -110,6 +111,7 @@ export default function Header({ onOpenChat }: HeaderProps) {
                   >
                     <span className="mr-2">🤖</span>Copilot Consumer
                   </Link>
+                  </div>
                 </div>
               )}
             </div>
