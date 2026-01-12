@@ -69,12 +69,12 @@ amplifier-onboarding/
 │   ├── validate-deps.py         # Dependency validation script
 │   ├── bundle-metadata.json     # Bundle descriptions
 │   └── bundles/                 # Amplifier bundle configurations
-│       ├── 01-basic-bundle.yaml              # Basic AI agent
+│       ├── 00-basic-bundle.yaml              # Basic AI agent
+│       ├── 01-chat-bundle.yaml               # Chat bundle (dual purpose)
 │       ├── 02-documentation-bundle.yaml      # Documentation creator
 │       ├── 03-developer-bundle.yaml          # Full-stack developer
 │       ├── 04-code-reviewer-bundle.yaml      # Code reviewer
-│       ├── 05-presentation-creator-bundle.yaml # Presentation creator
-│       └── chat-bundle.yaml                  # Chat bundle
+│       └── 05-presentation-creator-bundle.yaml # Presentation creator
 │
 ├── styles/                       # Global styles
 │   └── globals.css              # Tailwind + CSS variables
@@ -93,13 +93,13 @@ amplifier-onboarding/
 
 - **Landing Page**: Comprehensive value proposition and product overview
 - **Interactive Playground**: Browse and execute customizable Amplifier bundles
-  - 5 pre-configured bundles showcasing different AI agent capabilities
+  - 6 pre-configured bundles showcasing different AI agent capabilities
   - Bundle browser with tier-based organization (beginner, intermediate, advanced)
   - **Real-time streaming execution** with SSE (Server-Sent Events)
   - Live YAML configuration viewer for each bundle
   - Suggested prompts for each bundle to get started quickly
   - Real-time results with markdown formatting and syntax highlighting
-  - Bundles include: Basic AI, Documentation Creator, Developer Assistant, Code Reviewer, Presentation Creator
+  - Bundles include: Basic AI, Chat AI, Documentation Creator, Developer Assistant, Code Reviewer, Presentation Creator
 - **Interactive Chat**: AI-powered chat using Amplifier Foundation bundles
 - **Session Warmup**: Pre-initialized sessions for reduced latency
 - **System Overview**: Visual architecture documentation
@@ -288,28 +288,34 @@ The playground allows users to explore and execute customizable Amplifier bundle
 
 ### Available Bundles
 
-1. **Basic Bundle** (`01-basic-bundle.yaml`) - Beginner
+1. **Basic Bundle** (`00-basic-bundle.yaml`) - Beginner
    - Minimal AI agent with Claude Sonnet 4.5
    - No special tools, perfect for simple conversations
    - Use case: General Q&A, simple tasks
 
-2. **Documentation Bundle** (`02-documentation-bundle.yaml`) - Intermediate
+2. **Chat Bundle** (`01-chat-bundle.yaml`) - Beginner
+   - Similar to Basic Bundle but with grounding context files
+   - Powers the site-wide "Got Questions?" chat feature
+   - Also available in playground for exploration
+   - Use case: Learning about Amplifier, asking questions
+
+3. **Documentation Bundle** (`02-documentation-bundle.yaml`) - Intermediate
    - Filesystem access + web search capabilities
    - Creates READMEs, API docs, user guides
    - Use case: Technical writing, documentation generation
 
-3. **Developer Bundle** (`03-developer-bundle.yaml`) - Intermediate
+4. **Developer Bundle** (`03-developer-bundle.yaml`) - Intermediate
    - Filesystem, bash, web search, grep tools
    - Full-stack development capabilities
    - Use case: Code creation, debugging, testing
 
-4. **Code Reviewer Bundle** (`04-code-reviewer-bundle.yaml`) - Advanced
+5. **Code Reviewer Bundle** (`04-code-reviewer-bundle.yaml`) - Advanced
    - Claude Opus 4.5 for deep analysis
    - Read-only filesystem access
    - Focus on security, quality, best practices
    - Use case: Code review, vulnerability scanning
 
-5. **Presentation Creator Bundle** (`05-presentation-creator-bundle.yaml`) - Advanced
+6. **Presentation Creator Bundle** (`05-presentation-creator-bundle.yaml`) - Advanced
    - Streaming orchestrator for real-time output
    - Filesystem + web research capabilities
    - Use case: Creating presentation content, slide decks
@@ -321,14 +327,14 @@ The `run-bundle.py` script can be used directly for testing or integration:
 ```bash
 # Execute a bundle with JSON input via stdin
 cd lib
-echo '{"bundleId":"01-basic-bundle","bundlePath":"01-basic-bundle.yaml","prompt":"Explain quantum computing"}' | python run-bundle.py
+echo '{"bundleId":"00-basic-bundle","bundlePath":"00-basic-bundle.yaml","prompt":"Explain quantum computing"}' | python run-bundle.py
 ```
 
 **Input format:**
 ```json
 {
-  "bundleId": "01-basic-bundle",
-  "bundlePath": "01-basic-bundle.yaml",
+  "bundleId": "00-basic-bundle",
+  "bundlePath": "00-basic-bundle.yaml",
   "prompt": "Your prompt here"
 }
 ```
@@ -337,7 +343,7 @@ echo '{"bundleId":"01-basic-bundle","bundlePath":"01-basic-bundle.yaml","prompt"
 ```json
 {
   "output": "AI-generated response text",
-  "bundleId": "01-basic-bundle",
+  "bundleId": "00-basic-bundle",
   "timestamp": "2026-01-09T12:34:56.789Z"
 }
 ```

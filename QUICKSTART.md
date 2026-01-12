@@ -5,7 +5,7 @@ Get the Amplifier Onboarding application running on your local machine in 5 minu
 ## What's New
 
 **Latest Update (January 2026)**: The playground has been completely refactored from a JSON-based example system to a modern, bundle-based architecture. You can now:
-- Execute 5 pre-configured Amplifier bundles with different capabilities
+- Execute 6 pre-configured Amplifier bundles with different capabilities
 - View live YAML configurations for each bundle
 - Experience real-time streaming execution with Server-Sent Events (SSE)
 - See AI agents use tools like filesystem access, bash commands, and web search in action
@@ -200,7 +200,7 @@ Check the terminal logs for error messages.
 
 1. Navigate to **http://localhost:3000/playground** or click the "Playground" link in the header
 2. Browse the available bundles organized by tier:
-   - **Beginner**: Basic Bundle (simple AI conversations)
+   - **Beginner**: Basic Bundle (simple AI conversations), Chat Bundle (site chat with Amplifier context)
    - **Intermediate**: Documentation Bundle, Developer Bundle
    - **Advanced**: Code Reviewer Bundle, Presentation Creator Bundle
 3. Click on a bundle card to view its details
@@ -351,7 +351,7 @@ Check for these common issues:
 
 2. **Bundle Files Missing**:
    - Verify `lib/bundles/` directory exists with YAML files
-   - Should contain: 01-basic-bundle.yaml through 05-presentation-creator-bundle.yaml
+   - Should contain: 00-basic-bundle.yaml, 01-chat-bundle.yaml, and 02-05 bundles
    - These files should be in the repository
 
 3. **Python Script Errors**:
@@ -360,7 +360,7 @@ Check for these common issues:
    - Test manually:
      ```bash
      cd lib
-     echo '{"bundleId":"01-basic-bundle","bundlePath":"01-basic-bundle.yaml","prompt":"Hello"}' | python run-bundle.py
+     echo '{"bundleId":"00-basic-bundle","bundlePath":"00-basic-bundle.yaml","prompt":"Hello"}' | python run-bundle.py
      ```
 
 4. **Timeout Issues**:
@@ -439,12 +439,12 @@ python amplifier-chat.py "What is Amplifier?" "test-session-123"
 
 # Test bundle execution script
 cd lib
-echo '{"bundleId":"01-basic-bundle","bundlePath":"01-basic-bundle.yaml","prompt":"Explain AI"}' | python run-bundle.py
+echo '{"bundleId":"00-basic-bundle","bundlePath":"00-basic-bundle.yaml","prompt":"Explain AI"}' | python run-bundle.py
 
 # Expected output: JSON response with bundle execution result
 
 # Test streaming bundle execution
-echo '{"bundleId":"01-basic-bundle","bundlePath":"01-basic-bundle.yaml","prompt":"Explain AI"}' | python run-bundle-stream.py
+echo '{"bundleId":"00-basic-bundle","bundlePath":"00-basic-bundle.yaml","prompt":"Explain AI"}' | python run-bundle-stream.py
 
 # Expected output: SSE-formatted streaming response
 ```
@@ -468,7 +468,7 @@ You now have:
 - A running Next.js development server on port 3000
 - Python backend integration with Amplifier
 - AI-powered chat using Claude
-- Interactive playground with 5 customizable Amplifier bundles
+- Interactive playground with 6 customizable Amplifier bundles
 - Real-time streaming execution with SSE
 - A complete local development environment
 
