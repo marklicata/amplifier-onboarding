@@ -48,3 +48,17 @@ body {
   background-color: hsl(var(--background));
   color: hsl(var(--foreground));
 }
+
+/* Rotate chevron when details element is open */
+details[open] summary svg {
+  transform: rotate(180deg);
+}
+
+details summary svg {
+  transition: transform 0.2s ease-in-out;
+}
+
+/* Remove default marker */
+details summary::-webkit-details-marker {
+  display: none;
+}
