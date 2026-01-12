@@ -13,8 +13,11 @@ export default function Footer() {
             <Link href="/overview" className="text-gray-600 hover:text-gray-900 text-sm transition-colors">
               Overview
             </Link>
+            <Link href="/examples" className="text-gray-600 hover:text-gray-900 text-sm transition-colors">
+              Examples
+            </Link>
             <Link href="/system-overview" className="text-gray-600 hover:text-gray-900 text-sm transition-colors">
-              How it Works
+              How It Works
             </Link>
             <Link href="/playground" className="text-gray-600 hover:text-gray-900 text-sm transition-colors">
               Playground
@@ -25,3 +28,4 @@ export default function Footer() {
     </footer>
   );
 }
+
