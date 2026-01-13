@@ -45,7 +45,7 @@ class AmplifierChat:
 
     async def get_amplifier_session(self):
 
-        bundle_path = Path(__file__).parent / "bundles/chat-bundle.yaml"
+        bundle_path = Path(__file__).parent / "bundles/01-chat-bundle.yaml"
         foundation = await load_bundle(f"file://{bundle_path.resolve()}")
 
         # Prepare: resolves module sources, downloads if needed

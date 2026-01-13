@@ -35,7 +35,7 @@ async def warmup_session():
         print("Starting Amplifier session warmup...", file=sys.stderr)
 
         # Load bundle
-        bundle_path = Path(__file__).parent / "bundles/chat-bundle.yaml"
+        bundle_path = Path(__file__).parent / "bundles/01-chat-bundle.yaml"
         foundation = await load_bundle(f"file://{bundle_path.resolve()}")
         print("Bundle loaded", file=sys.stderr)
 
