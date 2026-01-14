@@ -37,7 +37,7 @@ export default function Overview() {
         <section className="bg-white py-12 md:py-20 border-y border-gray-200">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="max-w-4xl mx-auto">
-              <h3 className="text-3xl md:text-4xl font-bold text-center mb-8">Our Vision</h3>
+              <h3 className="text-3xl md:text-4xl font-bold text-center mb-8 text-gray-900">Our Vision</h3>
               <div className="grid md:grid-cols-2 gap-8 mb-12">
                 <div className="text-center p-6">
                   <div className="text-sm font-semibold text-gray-500 mb-3">TODAY</div>
@@ -65,7 +65,7 @@ export default function Overview() {
         <section className="bg-gradient-to-b from-gray-50 to-white py-12 md:py-20">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="max-w-5xl mx-auto">
-              <h3 className="text-3xl md:text-4xl font-bold text-center mb-8">The Paradigm Shift</h3>
+              <h3 className="text-3xl md:text-4xl font-bold text-center mb-8 text-gray-900">The Paradigm Shift</h3>
               
               <div className="grid md:grid-cols-2 gap-8 mb-12">
                 <div className="bg-white rounded-xl shadow-lg p-8 border border-gray-200">
@@ -135,7 +135,7 @@ export default function Overview() {
         <section className="bg-gradient-to-b from-white to-gray-50 py-12 md:py-20">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="max-w-4xl mx-auto">
-              <h3 className="text-3xl md:text-4xl font-bold text-center mb-8">Why Amplifier?</h3>
+              <h3 className="text-3xl md:text-4xl font-bold text-center mb-8 text-gray-900">Why Amplifier?</h3>
               <div className="space-y-8">
                 {/* The Problem */}
                 <div className="bg-white rounded-xl shadow-lg p-6 md:p-8 border border-gray-200">
@@ -192,7 +192,7 @@ export default function Overview() {
         <section className="bg-white py-12 md:py-20 border-y border-gray-200">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="max-w-4xl mx-auto">
-              <h3 className="text-3xl md:text-4xl font-bold text-center mb-8">Platform vs Product: What Amplifier Actually Is</h3>
+              <h3 className="text-3xl md:text-4xl font-bold text-center mb-8 text-gray-900">Platform vs Product: What Amplifier Actually Is</h3>
               
               <div className="bg-gradient-to-br from-purple-50 to-blue-50 rounded-xl shadow-lg p-8 mb-8 border-2 border-purple-200">
                 <h4 className="text-2xl font-bold mb-4 text-gray-900 text-center">The Core Distinction</h4>
@@ -346,3 +346,4 @@ export default function Overview() {
     </div>
   );
 }
+
