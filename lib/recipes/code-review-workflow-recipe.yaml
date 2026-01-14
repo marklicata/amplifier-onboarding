@@ -1,0 +1,99 @@
+recipe:
+  name: code-review-workflow
+  version: 1.0.0
+  description: Multi-agent code review workflow demonstrating VS Code as development intelligence platform
+
+steps:
+  - id: architecture-review
+    name: Architecture Review
+    agent: developer-bundle
+    bundle: 03-developer-bundle.yaml
+    prompt: |
+      Review the codebase architecture for the {{project_type}} project at {{file_path}}.
+      
+      Analyze:
+      - Overall code structure and organization
+      - Design patterns and architectural decisions
+      - SOLID principles compliance
+      - Separation of concerns
+      - Module dependencies and coupling
+      
+      Identify:
+      - Architectural strengths
+      - Areas for improvement
+      - Technical debt
+      - Scalability concerns
+      
+      Provide specific file references and actionable recommendations.
+
+  - id: security-scan
+    name: Security Analysis
+    agent: code-reviewer-bundle
+    bundle: 04-code-reviewer-bundle.yaml
+    prompt: |
+      Perform a comprehensive security review of the {{project_type}} project at {{file_path}}.
+      
+      Focus on:
+      - Input validation and sanitization
+      - Authentication and authorization
+      - SQL injection vulnerabilities
+      - XSS (Cross-Site Scripting) risks
+      - CSRF protection
+      - Sensitive data handling
+      - Dependency vulnerabilities
+      - API security
+      
+      For each issue found:
+      - Severity level (Critical, High, Medium, Low)
+      - Specific location (file:line)
+      - Explanation of the risk
+      - Remediation guidance
+      
+      Prioritize findings by risk level.
+
+  - id: test-coverage-analysis
+    name: Test Coverage & Quality
+    agent: developer-bundle
+    bundle: 03-developer-bundle.yaml
+    prompt: |
+      Analyze test coverage and quality for the {{project_type}} project at {{file_path}}.
+      
+      Evaluate:
+      - Test file organization and structure
+      - Unit test coverage for core functionality
+      - Integration test coverage
+      - Edge case handling
+      - Error condition testing
+      - Test quality (assertions, mocking, setup/teardown)
+      
+      Identify:
+      - Untested critical paths
+      - Fragile or brittle tests
+      - Missing test scenarios
+      - Test maintenance issues
+      
+      Recommend specific test additions with examples.
+
+  - id: documentation-review
+    name: Documentation Completeness
+    agent: documentation-bundle
+    bundle: 02-documentation-bundle.yaml
+    prompt: |
+      Review documentation completeness for the {{project_type}} project at {{file_path}}.
+      
+      Check for:
+      - README clarity and completeness
+      - API documentation
+      - Inline code comments and docstrings
+      - Setup and installation instructions
+      - Usage examples
+      - Contributing guidelines
+      - Architecture documentation
+      
+      Based on the architecture and security findings from previous steps, identify:
+      - Documentation gaps
+      - Outdated information
+      - Missing examples
+      - Unclear explanations
+      
+      Provide specific documentation improvements needed.

@@ -1,0 +1,168 @@
+recipe:
+  name: decision-support-workflow
+  version: 1.0.0
+  description: Multi-perspective decision analysis demonstrating personalized intelligence companion
+
+steps:
+  - id: values-alignment
+    name: Values & Priorities Analysis
+    agent: chat-bundle
+    bundle: 01-chat-bundle.yaml
+    prompt: |
+      Analyze this decision for {{user_name}} from a values and priorities perspective:
+      
+      Decision:
+      {{decision_description}}
+      
+      Context:
+      {{decision_context}}
+      
+      Explore:
+      - Core values at stake (what matters most to this person)
+      - Alignment with stated priorities and goals
+      - Trade-offs between competing values
+      - Short-term vs long-term value alignment
+      - Impact on life balance and well-being
+      
+      Questions to consider:
+      - Which option best honors your core values?
+      - What are you optimizing for (money, time, growth, stability, etc.)?
+      - Which choice feels most authentic to who you are?
+      - What would your future self thank you for?
+      
+      Provide values-based analysis without judgment.
+
+  - id: pattern-analysis
+    name: Past Patterns & Learning
+    agent: chat-bundle
+    bundle: 01-chat-bundle.yaml
+    prompt: |
+      Analyze how {{user_name}} has made similar decisions in the past.
+      
+      Historical Context:
+      {{past_decisions}}
+      
+      Pattern analysis:
+      - How have similar decisions turned out?
+      - What factors led to good outcomes?
+      - What factors led to regrets?
+      - Consistent decision-making patterns
+      - Tendencies under uncertainty
+      - Influence of external pressure
+      
+      Learning from the past:
+      - Lessons from previous similar choices
+      - Red flags that predicted poor outcomes
+      - Green flags that predicted success
+      - Personal growth since those decisions
+      
+      Insights:
+      - What does your pattern suggest about this choice?
+      - How has your decision-making evolved?
+      - What might you be overlooking based on past experience?
+
+  - id: stakeholder-impact
+    name: Stakeholder & Relationship Impact
+    agent: chat-bundle
+    bundle: 01-chat-bundle.yaml
+    prompt: |
+      Analyze the impact on important relationships and stakeholders.
+      
+      Key Relationships:
+      {{stakeholders}}
+      
+      Examine impact on:
+      - Family and close relationships
+      - Professional network and colleagues
+      - Future opportunities and connections
+      - Obligations and commitments to others
+      
+      Consider:
+      - Direct effects on stakeholders
+      - Indirect ripple effects
+      - Communication and transparency needs
+      - Potential conflicts or tensions
+      - Opportunities for collaboration
+      
+      Balance:
+      - Your needs vs others' needs
+      - Independence vs interdependence
+      - Personal goals vs shared goals
+      
+      Provide stakeholder-aware perspective on the decision.
+
+  - id: scenario-planning
+    name: Future Scenarios & Risk Analysis
+    agent: chat-bundle
+    bundle: 01-chat-bundle.yaml
+    prompt: |
+      Develop future scenarios and risk analysis for this decision.
+      
+      For each option, explore:
+      
+      **Best Case Scenario:**
+      - What does wild success look like?
+      - Probability and key factors
+      - Timeline to realize benefits
+      
+      **Realistic Case:**
+      - Most likely outcome
+      - Challenges you'll face
+      - Resources needed
+      
+      **Worst Case Scenario:**
+      - What could go wrong?
+      - Probability and early warning signs
+      - Mitigation strategies
+      - Reversibility (can you undo this?)
+      
+      **Risk Assessment:**
+      - Biggest uncertainties
+      - Controllable vs uncontrollable factors
+      - Downside protection
+      - Asymmetric risk/reward
+      
+      Provide scenario-based decision framework.
+
+  - id: decision-synthesis
+    name: Decision Framework & Recommendation
+    agent: basic-bundle
+    bundle: 00-basic-bundle.yaml
+    prompt: |
+      Synthesize all previous analysis into a comprehensive decision framework for {{user_name}}.
+      
+      Integration of insights:
+      - Values alignment (from step 1)
+      - Pattern learnings (from step 2)
+      - Stakeholder considerations (from step 3)
+      - Scenario planning (from step 4)
+      
+      Decision Framework:
+      
+      **Holistic Assessment:**
+      - Which option scores highest across dimensions?
+      - Where are the strongest alignments?
+      - Where are the biggest tensions?
+      
+      **The Case For Each Option:**
+      - Option A: Strongest arguments
+      - Option B: Strongest arguments
+      - (Other options if applicable)
+      
+      **Decision Criteria Weighting:**
+      - What should matter most in this decision?
+      - How to navigate trade-offs
+      
+      **Recommendation:**
+      - Suggested direction with clear rationale
+      - Confidence level in recommendation
+      - Key factors that could change the recommendation
+      
+      **Next Steps:**
+      - Information to gather before finalizing
+      - Conversations to have
+      - Timeline for decision
+      - How to know if you made the right choice (post-decision)
+      
+      Format as a personalized decision memo that respects the complexity of the choice
+      while providing clear guidance.

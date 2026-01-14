@@ -110,24 +110,71 @@
       "tier": "advanced"
     },
     {
-      "id": "05-presentation-creator-bundle",
-      "name": "Presentation Creator Bundle",
-      "description": "A specialized bundle for creating presentation content with research and file management capabilities. Uses streaming for real-time content generation and includes visual design suggestions.",
-      "bundlePath": "05-presentation-creator-bundle.yaml",
+      "id": "06-data-analyzer-bundle",
+      "name": "Data Analyzer",
+      "description": "Domain-specific data analysis for spreadsheet data, data models, and investment decisions. Expert-level data modeling and analysis capabilities.",
+      "bundlePath": "06-data-analyzer-bundle.yaml",
       "icon": "📊",
-      "color": "from-indigo-600 to-blue-600",
+      "color": "from-emerald-600 to-green-600",
       "features": [
-        "Streaming orchestrator for real-time output",
-        "Filesystem access for slides",
-        "Web research capabilities",
-        "Visual design suggestions",
-        "Speaker notes generation"
+        "Data statement analysis",
+        "Valuation models (DCF, comps)",
+        "Investment analysis (ROI, NPV, IRR)",
+        "Risk assessment and ratios",
+        "Read-only filesystem access",
+        "Web research for benchmarks"
       ],
       "suggestedPrompts": [
-        "Create a presentation about the benefits of microservices architecture",
-        "Design a sales pitch deck for our new AI product",
-        "Generate a technical deep-dive presentation on our system architecture",
-        "Build a training presentation on secure coding practices"
+        "Analyze this data and calculate key metrics",
+        "Review this DCF model for accuracy and validate assumptions",
+        "Perform Porter's Five Forces analysis for this industry",
+        "Assess investment attractiveness and provide recommendation"
+      ],
+      "tier": "intermediate"
+    },
+    {
+      "id": "07-cloud-cost-analyzer-bundle",
+      "name": "Cloud Cost Analyzer",
+      "description": "Infrastructure and FinOps expert for cloud cost optimization, compliance validation, and architecture review across Azure, AWS, and multi-cloud environments.",
+      "bundlePath": "07-cloud-cost-analyzer-bundle.yaml",
+      "icon": "☁️",
+      "color": "from-sky-600 to-blue-600",
+      "features": [
+        "Cost optimization analysis",
+        "Architecture review (Well-Architected)",
+        "Compliance validation (PCI-DSS, HIPAA)",
+        "Resource right-sizing",
+        "Filesystem and bash access",
+        "IaC analysis (ARM, Terraform)"
+      ],
+      "suggestedPrompts": [
+        "Analyze this ARM template for cost optimization opportunities",
+        "Review this Terraform config for security and compliance",
+        "Identify idle or underutilized Azure resources and estimate savings",
+        "Validate this deployment against Azure Well-Architected Framework"
+      ],
+      "tier": "intermediate"
+    },
+    {
+      "id": "08-legal-document-analyzer-bundle",
+      "name": "Legal Document Analyzer",
+      "description": "Expert legal analysis for contract review, clause identification, risk assessment, and compliance validation. Uses Claude Opus for deep legal reasoning.",
+      "bundlePath": "08-legal-document-analyzer-bundle.yaml",
+      "icon": "⚖️",
+      "color": "from-amber-600 to-orange-600",
+      "features": [
+        "Claude Opus 4.5 model",
+        "Contract clause identification",
+        "Risk assessment and flagging",
+        "Compliance review",
+        "Read-only filesystem access",
+        "Web research for precedents"
+      ],
+      "suggestedPrompts": [
+        "Analyze this contract and identify all key clauses",
+        "Review this vendor agreement for unfavorable terms and risks",
+        "Check this NDA for missing or problematic provisions",
+        "Assess compliance with data privacy regulations (GDPR, CCPA)"
       ],
       "tier": "advanced"
     }

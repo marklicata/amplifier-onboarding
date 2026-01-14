@@ -4,6 +4,7 @@
 # Required
 python-dotenv>=1.0.0
 anthropic>=0.7.0
+pyyaml>=6.0.0
 
 # Amplifier packages from GitHub
 git+https://github.com/microsoft/amplifier-core@main
