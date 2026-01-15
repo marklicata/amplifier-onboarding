@@ -1,0 +1,182 @@
+{
+  "bundles": [
+    {
+      "id": "00-basic-bundle",
+      "name": "Basic Bundle",
+      "description": "The bare minimum bundle to run an Amplifier agent - just a provider and basic orchestrator. No special tools or capabilities, perfect for simple conversations.",
+      "bundlePath": "00-basic-bundle.yaml",
+      "icon": "🎯",
+      "color": "from-blue-500 to-cyan-500",
+      "features": [
+        "Claude Sonnet 4.5 model",
+        "Basic orchestration loop",
+        "Simple context management",
+        "No additional tools"
+      ],
+      "suggestedPrompts": [
+        "Explain quantum computing in simple terms",
+        "Write a haiku about artificial intelligence",
+        "What are the key principles of good software design?",
+        "Tell me a joke about programming"
+      ],
+      "tier": "beginner"
+    },
+    {
+      "id": "01-chat-bundle",
+      "name": "Chat Bundle",
+      "description": "Have a look at the bundle used for the chat functionality on this site! Similar to the basic bundle but with a set of grounding files for context.",
+      "bundlePath": "01-chat-bundle.yaml",
+      "icon": "🤖",
+      "color": "from-blue-500 to-cyan-500",
+      "features": [
+        "Claude Sonnet 4.5 model",
+        "Basic orchestration loop",
+        "Simple context management",
+        "Grounding files for in-depth context"
+      ],
+      "suggestedPrompts": [
+        "How does Amplifier's \"mechanism not policy\" philosophy actually work in practice?",
+        "What's the relationship between amplifier-core, amplifier-foundation, and the CLI/Desktop apps?",
+        "How does the bundle composition system work, and how would I create my own custom bundle?",
+        "What types of workflows or projects is Amplifier best suited for?",
+        "How can I extend Amplifier with custom tools, providers, or agents?"
+      ],
+      "tier": "beginner"
+    },
+    {
+      "id": "02-documentation-bundle",
+      "name": "Documentation Bundle",
+      "description": "A specialized bundle for technical documentation with filesystem and web research capabilities. Creates clear, comprehensive documentation including READMEs, API docs, and user guides.",
+      "bundlePath": "02-documentation-bundle.yaml",
+      "icon": "📚",
+      "color": "from-orange-600 to-red-600",
+      "features": [
+        "Filesystem access for doc creation",
+        "Web search for research",
+        "README generation",
+        "API documentation",
+        "User guide creation"
+      ],
+      "suggestedPrompts": [
+        "Create a comprehensive README for this project",
+        "Generate API documentation from the code",
+        "Write a user guide for setting up and using this application",
+        "Document the architecture and design patterns used in this codebase"
+      ],
+      "tier": "intermediate"
+    },
+    {
+      "id": "03-developer-bundle",
+      "name": "Developer Bundle",
+      "description": "A comprehensive developer bundle with filesystem, bash, web search, and code analysis tools. Full-stack development capabilities for building, testing, and debugging code.",
+      "bundlePath": "03-developer-bundle.yaml",
+      "icon": "💻",
+      "color": "from-green-600 to-teal-600",
+      "features": [
+        "Filesystem read/write access",
+        "Bash command execution",
+        "Web search capabilities",
+        "Grep for code search",
+        "Logging hooks enabled"
+      ],
+      "suggestedPrompts": [
+        "Read package.json and explain the project dependencies",
+        "Create a Python script that analyzes log files for errors",
+        "Search the web for best practices in React component testing",
+        "Find all TODO comments in this codebase using grep"
+      ],
+      "tier": "intermediate"
+    },
+    {
+      "id": "04-code-reviewer-bundle",
+      "name": "Code Reviewer Bundle",
+      "description": "A specialized bundle for code review with read-only filesystem access and analysis tools. Uses Claude Opus for deep code analysis focused on quality, security, and best practices.",
+      "bundlePath": "04-code-reviewer-bundle.yaml",
+      "icon": "🔍",
+      "color": "from-purple-600 to-pink-600",
+      "features": [
+        "Claude Opus 4.5 model",
+        "Read-only filesystem access",
+        "Security vulnerability detection",
+        "Best practices validation",
+        "SOLID principles analysis"
+      ],
+      "suggestedPrompts": [
+        "Review this codebase for security vulnerabilities",
+        "Analyze the code structure and suggest improvements",
+        "Check for any SQL injection or XSS vulnerabilities",
+        "Review error handling patterns and suggest best practices"
+      ],
+      "tier": "advanced"
+    },
+    {
+      "id": "06-data-analyzer-bundle",
+      "name": "Data Analyzer",
+      "description": "Domain-specific data analysis for spreadsheet data, data models, and investment decisions. Expert-level data modeling and analysis capabilities.",
+      "bundlePath": "06-data-analyzer-bundle.yaml",
+      "icon": "📊",
+      "color": "from-emerald-600 to-green-600",
+      "features": [
+        "Data statement analysis",
+        "Valuation models (DCF, comps)",
+        "Investment analysis (ROI, NPV, IRR)",
+        "Risk assessment and ratios",
+        "Read-only filesystem access",
+        "Web research for benchmarks"
+      ],
+      "suggestedPrompts": [
+        "Analyze this data and calculate key metrics",
+        "Review this DCF model for accuracy and validate assumptions",
+        "Perform Porter's Five Forces analysis for this industry",
+        "Assess investment attractiveness and provide recommendation"
+      ],
+      "tier": "intermediate"
+    },
+    {
+      "id": "07-cloud-cost-analyzer-bundle",
+      "name": "Cloud Cost Analyzer",
+      "description": "Infrastructure and FinOps expert for cloud cost optimization, compliance validation, and architecture review across Azure, AWS, and multi-cloud environments.",
+      "bundlePath": "07-cloud-cost-analyzer-bundle.yaml",
+      "icon": "☁️",
+      "color": "from-sky-600 to-blue-600",
+      "features": [
+        "Cost optimization analysis",
+        "Architecture review (Well-Architected)",
+        "Compliance validation (PCI-DSS, HIPAA)",
+        "Resource right-sizing",
+        "Filesystem and bash access",
+        "IaC analysis (ARM, Terraform)"
+      ],
+      "suggestedPrompts": [
+        "Analyze this ARM template for cost optimization opportunities",
+        "Review this Terraform config for security and compliance",
+        "Identify idle or underutilized Azure resources and estimate savings",
+        "Validate this deployment against Azure Well-Architected Framework"
+      ],
+      "tier": "intermediate"
+    },
+    {
+      "id": "08-legal-document-analyzer-bundle",
+      "name": "Legal Document Analyzer",
+      "description": "Expert legal analysis for contract review, clause identification, risk assessment, and compliance validation. Uses Claude Opus for deep legal reasoning.",
+      "bundlePath": "08-legal-document-analyzer-bundle.yaml",
+      "icon": "⚖️",
+      "color": "from-amber-600 to-orange-600",
+      "features": [
+        "Claude Opus 4.5 model",
+        "Contract clause identification",
+        "Risk assessment and flagging",
+        "Compliance review",
+        "Read-only filesystem access",
+        "Web research for precedents"
+      ],
+      "suggestedPrompts": [
+        "Analyze this contract and identify all key clauses",
+        "Review this vendor agreement for unfavorable terms and risks",
+        "Check this NDA for missing or problematic provisions",
+        "Assess compliance with data privacy regulations (GDPR, CCPA)"
+      ],
+      "tier": "advanced"
+    }
+  ]
+}

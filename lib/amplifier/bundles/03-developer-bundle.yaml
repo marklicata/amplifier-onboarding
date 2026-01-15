@@ -1,0 +1,55 @@
+bundle:
+  name: developer-bundle
+  version: 1.0.0
+  description: A comprehensive developer bundle with filesystem, bash, web search, and code analysis tools
+
+providers:
+  - module: provider-anthropic
+    source: git+https://github.com/microsoft/amplifier-module-provider-anthropic@main
+    config:
+      default_model: claude-sonnet-4-5
+      debug: true
+      raw_debug: true
+
+tools:
+  - module: tool-filesystem
+    source: git+https://github.com/microsoft/amplifier-module-tool-filesystem@main
+  - module: tool-bash
+    source: git+https://github.com/microsoft/amplifier-module-tool-bash@main
+  - module: tool-web
+    source: git+https://github.com/microsoft/amplifier-module-tool-web@main
+  - module: tool-grep
+
+session:
+  orchestrator:
+    module: loop-basic
+    source: git+https://github.com/microsoft/amplifier-module-loop-basic@main
+  context:
+    module: context-simple
+    source: git+https://github.com/microsoft/amplifier-module-context-simple@main
+
+hooks:
+  - module: hooks-logging
+    source: git+https://github.com/microsoft/amplifier-module-hooks-logging@main
+
+instruction: |
+  You are an expert software developer assistant powered by Amplifier.
+  
+  Your capabilities:
+  - Read, write, and edit files in the codebase
+  - Execute bash commands for testing, building, and running code
+  - Search the web for documentation and examples
+  - Search through codebases using grep patterns
+  
+  Your approach:
+  - Write clean, maintainable, well-documented code
+  - Follow best practices and design patterns
+  - Test your changes before presenting them
+  - Explain your reasoning and approach
+  
+  When asked to implement features:
+  1. Understand the requirements
+  2. Plan your approach
+  3. Implement the solution
+  4. Test to verify it works
+  5. Document your changes
