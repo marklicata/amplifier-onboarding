@@ -153,6 +153,19 @@ ANTHROPIC_API_KEY=sk-ant-api03-...your-key-here...
 
 **Note**: Anthropic offers free trial credits for new users.
 
+### Telemetry Configuration (Optional)
+
+For production deployments, add your Azure Application Insights connection string:
+
+```bash
+# Optional: Azure Application Insights (telemetry)
+NEXT_PUBLIC_APPINSIGHTS_CONNECTION_STRING=InstrumentationKey=...;IngestionEndpoint=...
+NEXT_PUBLIC_APP_VERSION=0.3.0
+NEXT_PUBLIC_ENVIRONMENT=development
+```
+
+**Note**: Telemetry is optional. The application works fully without it. See `.docs/TELEMETRY_IMPLEMENTATION_SUMMARY.md` for details.
+
 ## Step 5: Start the Development Server
 
 ```bash
