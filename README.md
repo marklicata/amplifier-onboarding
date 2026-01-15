@@ -260,7 +260,7 @@ The chat system uses a hybrid approach:
    - 30-second timeout with 1MB buffer
    - Returns JSON response
 
-3. **Python Backend** (`lib/amplifier-chat.py`):
+3. **Python Backend** (`lib/amplifier/python/amplifier-chat.py`):
    - Loads Amplifier Foundation bundle
    - Creates async session with specified provider
    - Executes user message through Amplifier Core
@@ -287,12 +287,12 @@ The playground allows users to explore and execute customizable Amplifier bundle
    - `app/api/playground/execute-bundle-stream/route.ts`: Executes bundles with real-time SSE streaming
 
 3. **Python Backend**:
-   - `lib/run-bundle.py`: Loads and executes Amplifier bundles
-   - `lib/run-bundle-stream.py`: Streaming version with real-time output
-   - Reads bundle configurations from `lib/bundles/*.yaml`
+   - `lib/amplifier/python/run-bundle.py`: Loads and executes Amplifier bundles
+   - `lib/amplifier/python/run-bundle-stream.py`: Streaming version with real-time output
+   - Reads bundle configurations from `lib/amplifier/bundles/*.yaml`
    - Returns structured JSON output with results and metadata
 
-4. **Bundle Metadata** (`lib/bundle-metadata.json`):
+4. **Bundle Metadata** (`lib/amplifier/bundle-metadata.json`):
    - Describes each available bundle
    - Includes: name, description, features, suggested prompts, tier
    - Used by frontend to render bundle cards and information
@@ -524,8 +524,8 @@ We welcome contributions! Please:
 - [Documentation Index](./DOCUMENTATION_INDEX.md) - Complete documentation navigation
 
 ### Configuration & Bundles
-- [Bundle Metadata](./lib/bundle-metadata.json) - Available bundles and their capabilities
-- Bundle configurations in `lib/bundles/` - YAML files defining each agent
+- [Bundle Metadata](./lib/amplifier/bundle-metadata.json) - Available bundles and their capabilities
+- Bundle configurations in `lib/amplifier/bundles/` - YAML files defining each agent
 
 ## License
 

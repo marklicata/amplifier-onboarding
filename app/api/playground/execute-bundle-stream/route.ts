@@ -42,7 +42,7 @@ export async function POST(request: NextRequest) {
         // Send initial status
         sendEvent('status', { phase: 'starting', message: 'Initializing bundle execution...' });
 
-        const scriptPath = path.join(process.cwd(), 'lib', 'run-bundle-stream.py');
+        const scriptPath = path.join(process.cwd(), 'lib', 'amplifier', 'python', 'run-bundle-stream.py');
         const pythonCmd = process.platform === 'win32' ? 'python' : 'python3';
 
         // Prepare arguments

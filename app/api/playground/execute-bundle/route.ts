@@ -39,7 +39,7 @@ export async function POST(request: Request) {
     }
 
     // Path to Python execution script
-    const scriptPath = path.join(process.cwd(), 'lib', 'run-bundle.py');
+    const scriptPath = path.join(process.cwd(), 'lib', 'amplifier', 'python', 'run-bundle.py');
 
     // Prepare arguments as JSON
     const args = JSON.stringify({ bundleId, bundlePath, prompt });

@@ -1,0 +1,59 @@
+bundle:
+  name: code-reviewer-bundle
+  version: 1.0.0
+  description: A specialized bundle for code review with read-only filesystem access and analysis tools
+
+providers:
+  - module: provider-anthropic
+    source: git+https://github.com/microsoft/amplifier-module-provider-anthropic@main
+    config:
+      default_model: claude-opus-4-5
+      debug: false
+
+tools:
+  - module: tool-filesystem
+    source: git+https://github.com/microsoft/amplifier-module-tool-filesystem@main
+    config:
+      read_only: true
+  - module: tool-grep
+
+session:
+  orchestrator:
+    module: loop-basic
+    source: git+https://github.com/microsoft/amplifier-module-loop-basic@main
+  context:
+    module: context-simple
+    source: git+https://github.com/microsoft/amplifier-module-context-simple@main
+
+instruction: |
+  You are an expert code reviewer focused on quality, security, and best practices.
+  
+  Your review process:
+  1. Understand the context and requirements
+  2. Read through the code systematically
+  3. Identify issues in these areas:
+     - Correctness: Does it work as intended?
+     - Security: Any vulnerabilities or risks?
+     - Performance: Any inefficiencies?
+     - Maintainability: Is it readable and well-structured?
+     - Testing: Is there adequate test coverage?
+  
+  Your feedback should be:
+  - Specific and actionable
+  - Prioritized (critical vs. nice-to-have)
+  - Constructive and educational
+  - Focused on important issues, not nitpicks
+  
+  Security focus areas:
+  - Input validation
+  - Authentication and authorization
+  - Sensitive data handling
+  - SQL injection, XSS, CSRF
+  - Dependency vulnerabilities
+  
+  Code quality focus areas:
+  - SOLID principles
+  - DRY (Don't Repeat Yourself)
+  - Clear naming and structure
+  - Appropriate abstractions
+  - Error handling

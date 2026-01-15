@@ -53,7 +53,8 @@ class RecipeRunner:
 
     def load_recipe(self) -> Dict[str, Any]:
         """Load and parse recipe YAML"""
-        recipes_dir = Path(__file__).parent / "recipes"
+        # Navigate from python/ up to amplifier/ then to recipes/
+        recipes_dir = Path(__file__).parent.parent / "recipes"
         full_path = recipes_dir / self.recipe_path
 
         if not full_path.exists():
@@ -70,7 +71,8 @@ class RecipeRunner:
 
     def validate_bundles(self) -> List[str]:
         """Validate all bundle dependencies exist"""
-        bundles_dir = Path(__file__).parent / "bundles"
+        # Navigate from python/ up to amplifier/ then to bundles/
+        bundles_dir = Path(__file__).parent.parent / "bundles"
         missing = []
 
         for step in self.recipe_data.get("steps", []):
@@ -113,7 +115,8 @@ class RecipeRunner:
 
         try:
             # Load bundle
-            bundles_dir = Path(__file__).parent / "bundles"
+            # Navigate from python/ up to amplifier/ then to bundles/
+            bundles_dir = Path(__file__).parent.parent / "bundles"
             full_bundle_path = bundles_dir / bundle_path
 
             print(

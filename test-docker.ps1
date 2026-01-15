@@ -22,7 +22,7 @@ Write-Host ""
 
 # Step 2: Run dependency validation inside the container
 Write-Host "[Step 2/5] Validating dependencies in container..." -ForegroundColor Yellow
-docker run --rm amplifier-onboarding:test python3 lib/validate-deps.py
+docker run --rm amplifier-onboarding:test python3 lib/amplifier/python/validate-deps.py
 
 if ($LASTEXITCODE -ne 0) {
     Write-Host "✗ Dependency validation failed!" -ForegroundColor Red

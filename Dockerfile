@@ -42,7 +42,7 @@ RUN pip3 install --no-cache-dir --break-system-packages -r requirements.txt
 COPY . .
 
 # Validate all dependencies are installed correctly
-RUN python3 lib/validate-deps.py
+RUN python3 lib/amplifier/python/validate-deps.py
 
 # Build Next.js app
 ENV NEXT_TELEMETRY_DISABLED=1
