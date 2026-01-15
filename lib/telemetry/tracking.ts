@@ -76,6 +76,14 @@ export const initializeTelemetry = (): ApplicationInsights | null => {
       envelope.data.app_version = process.env.NEXT_PUBLIC_APP_VERSION || '0.3.0';
       envelope.data.environment = process.env.NEXT_PUBLIC_ENVIRONMENT || 'development';
       
+      // Clean up page names - strip "Amplifier - " prefix
+      if (envelope.baseType === 'PageviewData' && envelope.baseData) {
+        const originalName = envelope.baseData.name || '';
+        // Remove "Amplifier - " prefix to get clean page names
+        const cleanName = originalName.replace(/^Amplifier - /, '');
+        envelope.baseData.name = cleanName;
+      }
+
       // Log automatic events to dev logger
       try {
         if (envelope.baseType === 'PageviewData' && envelope.baseData) {

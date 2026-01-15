@@ -6,7 +6,7 @@ import TelemetryProvider from "@/components/TelemetryProvider";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Amplifier - Program Intelligence, Not Just Code",
+  title: "Amplifier - Home",
   description: "Transform how you build with AI through composable, modular, declarative workflows",
 };
 
