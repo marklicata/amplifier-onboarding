@@ -29,7 +29,7 @@ export async function GET(request: Request) {
     }
 
     // Construct full path to bundle
-    const fullPath = path.join(process.cwd(), 'lib', 'bundles', bundlePath);
+    const fullPath = path.join(process.cwd(), 'lib', 'amplifier', 'bundles', bundlePath);
 
     // Read the YAML file
     try {

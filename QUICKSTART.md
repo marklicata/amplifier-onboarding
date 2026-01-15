@@ -363,13 +363,13 @@ Check for these common issues:
    ```
 
 2. **Bundle Files Missing**:
-   - Verify `lib/bundles/` directory exists with YAML files
+   - Verify `lib/amplifier/bundles/` directory exists with YAML files
    - Should contain: 00-basic-bundle.yaml, 01-chat-bundle.yaml, and 02-05 bundles
    - These files should be in the repository
 
 3. **Python Script Errors**:
    - Check terminal logs for detailed error messages
-   - The scripts are at `lib/run-bundle.py` and `lib/run-bundle-stream.py`
+   - The scripts are at `lib/amplifier/python/run-bundle.py` and `lib/amplifier/python/run-bundle-stream.py`
    - Test manually:
      ```bash
      cd lib

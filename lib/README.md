@@ -9,7 +9,7 @@ Frontend (ChatWindow)
   ↓ HTTP POST /api/chat
 Next.js API Route (src/app/api/chat/route.ts)
   ↓ spawns Python subprocess
-Python Script (src/lib/amplifier-chat.py)
+Python Script (src/lib/amplifier/python/amplifier-chat.py)
   ↓ uses Amplifier Core directly
 Amplifier Response
 ```

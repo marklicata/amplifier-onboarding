@@ -116,7 +116,7 @@ class RecipeRunner:
         try:
             # Load bundle
             # Navigate from python/ up to amplifier/ then to bundles/
-        bundles_dir = Path(__file__).parent.parent / "bundles"
+            bundles_dir = Path(__file__).parent.parent / "bundles"
             full_bundle_path = bundles_dir / bundle_path
 
             print(

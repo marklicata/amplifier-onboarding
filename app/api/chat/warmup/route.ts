@@ -9,7 +9,7 @@ export const dynamic = 'force-dynamic';
 export async function POST() {
   try {
     // Path to Python warmup script
-    const scriptPath = path.join(process.cwd(), 'lib', 'amplifier-warmup.py');
+    const scriptPath = path.join(process.cwd(), 'lib', 'amplifier', 'python', 'amplifier-warmup.py');
 
     console.log('Warming up Amplifier session...');
     const { stdout, stderr } = await execAsync(`python "${scriptPath}"`, {

@@ -35,7 +35,7 @@ export async function POST(request: Request) {
     }
 
     // Path to Python script
-    const scriptPath = path.join(process.cwd(), 'lib', 'amplifier-chat.py');
+    const scriptPath = path.join(process.cwd(), 'lib', 'amplifier', 'python', 'amplifier-chat.py');
 
     // Escape the message for shell safety
     const escapedMessage = message.replace(/"/g, '\\"');

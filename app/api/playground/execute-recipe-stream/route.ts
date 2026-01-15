@@ -49,7 +49,7 @@ export async function POST(request: NextRequest) {
         // Send initial status
         sendEvent('status', { phase: 'starting', message: 'Initializing recipe execution...' });
 
-        const scriptPath = path.join(process.cwd(), 'lib', 'run-recipe-stream.py');
+        const scriptPath = path.join(process.cwd(), 'lib', 'amplifier', 'python', 'run-recipe-stream.py');
         const pythonCmd = process.platform === 'win32' ? 'python' : 'python3';
 
         // Prepare arguments

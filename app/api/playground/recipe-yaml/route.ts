@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { readFileSync, existsSync } from 'fs';
 import { join } from 'path';
 
+export const dynamic = 'force-dynamic';
+
 export async function GET(request: NextRequest) {
   try {
     // Get recipe path from query params
@@ -16,7 +18,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Construct full path to recipe file
-    const recipePath = join(process.cwd(), 'lib', 'recipes', path);
+    const recipePath = join(process.cwd(), 'lib', 'amplifier', 'recipes', path);
 
     // Check if file exists
     if (!existsSync(recipePath)) {
