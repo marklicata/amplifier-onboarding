@@ -1,8 +1,9 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import { trackEvent, trackException, getOrCreateIdentity } from '@/lib/telemetry';
 
 interface ChatWindowProps {
   isOpen: boolean;
@@ -21,15 +22,37 @@ export default function ChatWindow({ isOpen, onClose }: ChatWindowProps) {
     {
       id: '1',
       role: 'assistant',
-      content: "Hi! I'm Amplifier, and I love talking about myself! 🤖\n\nAsk me anything about how I work, what I can do, or why I exist. I'm here to help you understand the future of AI development.",
+      content: "Hi! I'm Amplifier, and I love talking about myself! 🤖\\n\\nAsk me anything about how I work, what I can do, or why I exist. I'm here to help you understand the future of AI development.",
       timestamp: new Date(),
     },
   ]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const sessionStartTime = useRef<number>(0);
+
+  // Track chat open/close
+  useEffect(() => {
+    if (isOpen && sessionStartTime.current === 0) {
+      sessionStartTime.current = Date.now();
+      trackEvent('chat_opened', {
+        from_page: typeof window !== 'undefined' ? window.location.pathname : '',
+        message_count: messages.length
+      });
+    } else if (!isOpen && sessionStartTime.current > 0) {
+      const duration = Date.now() - sessionStartTime.current;
+      trackEvent('chat_closed', {
+        message_count: messages.length,
+        session_duration_ms: duration
+      });
+      sessionStartTime.current = 0;
+    }
+  }, [isOpen, messages.length]);
 
   const handleSendMessage = async () => {
     if (!input.trim() || isLoading) return;
+
+    const identity = getOrCreateIdentity();
+    const messageStartTime = performance.now();
 
     const userMessage: Message = {
       id: Date.now().toString(),
@@ -43,6 +66,14 @@ export default function ChatWindow({ isOpen, onClose }: ChatWindowProps) {
     setInput('');
     setIsLoading(true);
 
+    // Track message sent
+    trackEvent('chat_message_sent', {
+      message_length: messageContent.length,
+      message_number: messages.length,
+      session_id: identity.session_id,
+      is_first_message: messages.length === 1
+    });
+
     try {
       // Call the Amplifier chat API
       const response = await fetch('/api/chat', {
@@ -52,7 +83,7 @@ export default function ChatWindow({ isOpen, onClose }: ChatWindowProps) {
         },
         body: JSON.stringify({
           message: messageContent,
-          sessionId: 'amplifier-chat',
+          sessionId: identity.session_id,
         }),
       });
 
@@ -62,6 +93,8 @@ export default function ChatWindow({ isOpen, onClose }: ChatWindowProps) {
         throw new Error(data.error);
       }
 
+      const messageEndTime = performance.now();
+
       const assistantMessage: Message = {
         id: (Date.now() + 1).toString(),
         role: 'assistant',
@@ -70,14 +103,39 @@ export default function ChatWindow({ isOpen, onClose }: ChatWindowProps) {
       };
 
       setMessages((prev) => [...prev, assistantMessage]);
+
+      // Track response received
+      trackEvent('chat_response_received', {
+        response_length: data.response.length,
+        response_time_ms: messageEndTime - messageStartTime,
+        session_id: identity.session_id,
+        success: true
+      });
+
     } catch (error: any) {
       console.error('Chat error:', error);
+
+      const messageEndTime = performance.now();
+
+      // Track error
+      trackException(error, {
+        context: 'chat_interaction',
+        session_id: identity.session_id,
+        message_length: messageContent.length,
+        response_time_ms: messageEndTime - messageStartTime
+      });
+
+      trackEvent('chat_error', {
+        error_message: error.message,
+        response_time_ms: messageEndTime - messageStartTime,
+        session_id: identity.session_id
+      });
 
       // Show error message to user
       const errorMessage: Message = {
         id: (Date.now() + 1).toString(),
         role: 'assistant',
-        content: `Sorry, I encountered an error: ${error.message}\n\nPlease try again or check the System Overview page to learn more about me!`,
+        content: `Sorry, I encountered an error: ${error.message}\\n\\nPlease try again or check the System Overview page to learn more about me!`,
         timestamp: new Date(),
       };
 

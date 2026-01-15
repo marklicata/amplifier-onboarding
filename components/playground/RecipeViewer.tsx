@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { Recipe } from '@/lib/types/recipe';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import { usePlaygroundTracking } from '@/lib/telemetry';
 
 interface RecipeViewerProps {
   recipe: Recipe;
@@ -17,6 +18,13 @@ export default function RecipeViewer({ recipe, onExecute, isExecuting }: RecipeV
   const [isYamlCollapsed, setIsYamlCollapsed] = useState(true); // Collapsed by default
   const [isBundlesCollapsed, setIsBundlesCollapsed] = useState(false);
   const [inputs, setInputs] = useState<Record<string, string>>({});
+  
+  // Initialize telemetry tracking
+  const playgroundTracking = usePlaygroundTracking({
+    itemId: recipe.id,
+    itemName: recipe.name,
+    itemType: 'recipe'
+  });
 
   // Load recipe YAML when recipe changes
   useEffect(() => {
@@ -49,10 +57,25 @@ export default function RecipeViewer({ recipe, onExecute, isExecuting }: RecipeV
 
   const handleInputChange = (name: string, value: string) => {
     setInputs(prev => ({ ...prev, [name]: value }));
+    
+    // Track parameter modification
+    try {
+      const input = recipe.inputs.find(i => i.name === name);
+      playgroundTracking.trackParameterModified(name, input?.type || 'text');
+    } catch (error) {
+      console.error('Failed to track parameter modification:', error);
+    }
   };
 
   const handleSuggestedInput = (inputName: string, value: string) => {
     setInputs(prev => ({ ...prev, [inputName]: value }));
+    
+    // Track suggested input selection as prompt suggestion
+    try {
+      playgroundTracking.trackPromptSuggestionClicked(value);
+    } catch (error) {
+      console.error('Failed to track suggested input click:', error);
+    }
   };
 
   const handleExecute = () => {
@@ -74,7 +97,7 @@ export default function RecipeViewer({ recipe, onExecute, isExecuting }: RecipeV
     .every(input => inputs[input.name]?.trim());
 
   return (
-    <>
+    <div data-track-context="recipe-viewer">
       {/* Recipe Header */}
       <div className="bg-white rounded-lg shadow-sm border-2 border-purple-300 mb-6">
         <div className="border-b border-purple-200 px-6 py-4">
@@ -104,8 +127,17 @@ export default function RecipeViewer({ recipe, onExecute, isExecuting }: RecipeV
       {/* Recipe YAML Configuration */}
       <div className="bg-white rounded-lg shadow-sm border border-gray-200 mb-6">
         <button
-          onClick={() => setIsYamlCollapsed(!isYamlCollapsed)}
+          onClick={() => {
+            const newState = !isYamlCollapsed;
+            setIsYamlCollapsed(newState);
+            try {
+              playgroundTracking.trackYamlToggled(!newState);
+            } catch (error) {
+              console.error('Failed to track YAML toggle:', error);
+            }
+          }}
           className="w-full text-left flex items-center justify-between px-6 py-4 hover:bg-gray-50 transition-colors"
+          data-track-label="yaml-toggle"
         >
           <h3 className="text-sm font-semibold text-gray-700 flex items-center gap-2">
             <span>📄</span>
@@ -146,8 +178,17 @@ export default function RecipeViewer({ recipe, onExecute, isExecuting }: RecipeV
       {/* Bundles Used in This Recipe */}
       <div className="bg-white rounded-lg shadow-sm border border-gray-200 mb-6">
         <button
-          onClick={() => setIsBundlesCollapsed(!isBundlesCollapsed)}
+          onClick={() => {
+            const newState = !isBundlesCollapsed;
+            setIsBundlesCollapsed(newState);
+            try {
+              playgroundTracking.trackSectionToggled('bundles', !newState);
+            } catch (error) {
+              console.error('Failed to track bundles section toggle:', error);
+            }
+          }}
           className="w-full text-left flex items-center justify-between px-6 py-4 hover:bg-gray-50 transition-colors"
+          data-track-label="bundles-toggle"
         >
           <h3 className="text-sm font-semibold text-gray-700 flex items-center gap-2">
             <span>🔧</span>
@@ -219,6 +260,7 @@ export default function RecipeViewer({ recipe, onExecute, isExecuting }: RecipeV
                             ? 'border-purple-500 bg-purple-50 text-purple-700 font-medium'
                             : 'border-gray-300 bg-white text-gray-700 hover:border-purple-400 hover:bg-purple-50'
                         }`}
+                        data-track-label="suggested-input"
                       >
                         {suggested}
                       </button>
@@ -235,6 +277,7 @@ export default function RecipeViewer({ recipe, onExecute, isExecuting }: RecipeV
                   placeholder={input.placeholder}
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent text-gray-900 bg-white resize-none font-mono text-sm"
                   rows={4}
+                  data-track-label={`parameter-${input.name}`}
                 />
               ) : (
                 <input
@@ -243,6 +286,7 @@ export default function RecipeViewer({ recipe, onExecute, isExecuting }: RecipeV
                   onChange={(e) => handleInputChange(input.name, e.target.value)}
                   placeholder={input.placeholder}
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent text-gray-900 bg-white"
+                  data-track-label={`parameter-${input.name}`}
                 />
               )}
             </div>
@@ -262,6 +306,7 @@ export default function RecipeViewer({ recipe, onExecute, isExecuting }: RecipeV
                   ? 'bg-gray-300 cursor-not-allowed'
                   : 'bg-purple-600 hover:bg-purple-700 shadow-lg hover:shadow-xl'
               }`}
+              data-track-label="execute-recipe"
             >
               {isExecuting ? (
                 <span className="flex items-center gap-2">
@@ -278,6 +323,6 @@ export default function RecipeViewer({ recipe, onExecute, isExecuting }: RecipeV
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 }

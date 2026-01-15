@@ -17,6 +17,8 @@ export default function RecipeCard({ recipe, isSelected, onSelect }: RecipeCardP
           ? 'border-purple-500 bg-gradient-to-br from-purple-500 to-indigo-600 shadow-lg'
           : 'border-purple-300 bg-purple-50 hover:border-purple-500 hover:bg-purple-100 hover:shadow-md'
       }`}
+      data-track-context="recipe-card"
+      data-track-label={`recipe-${recipe.id}`}
     >
       <div className="flex items-start gap-3">
         <div className="text-3xl">{recipe.icon}</div>

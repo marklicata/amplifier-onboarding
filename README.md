@@ -32,6 +32,11 @@ Amplifier Onboarding is a Next.js-based web application that introduces users to
 - **Linting**: ESLint (Next.js config)
 - **CSS Processing**: PostCSS with Autoprefixer
 
+### Telemetry & Analytics
+- **Analytics Platform**: Azure Application Insights
+- **Development Tools**: JSONL event logger with export capabilities
+- **Privacy**: DNT support, consent checking, PII sanitization
+
 ## Project Structure
 
 ```
@@ -105,6 +110,12 @@ amplifier-onboarding/
 - **System Overview**: Visual architecture documentation
 - **Responsive Design**: Mobile-first design with Tailwind CSS
 - **Markdown Support**: Rich formatting for chat and playground responses
+- **Telemetry & Analytics**: Comprehensive user behavior tracking
+  - Universal click tracking on interactive elements
+  - Playground execution tracking (bundles, recipes, timing, success rates)
+  - Chat interaction tracking
+  - Privacy-first design with opt-out support
+  - Development logger for immediate testing feedback
 
 ### Planned Features
 
@@ -435,6 +446,37 @@ pip install -r requirements.txt --force-reinstall
 # Verify installation
 pip list | grep amplifier
 ```
+
+## Telemetry & Analytics
+
+The application includes comprehensive telemetry tracking powered by Azure Application Insights for understanding user behavior and improving the product.
+
+### What's Tracked
+
+- **User Interactions**: Clicks on buttons, links, and interactive elements
+- **Chat Usage**: Message sends, responses, errors, session duration
+- **Playground Activity**: Bundle/recipe selections, executions, timing, success rates
+- **Navigation**: Page views, route changes, dropdown interactions
+- **Performance**: Response times, execution duration, error rates
+
+### Privacy & Control
+
+- **Privacy-First Design**: No PII collection, password/email sanitization
+- **Do Not Track (DNT) Support**: Respects browser DNT settings
+- **Opt-Out**: Elements with `data-track="false"` are not tracked
+- **Anonymous IDs**: Session-based tracking without personal identification
+
+### Development Mode
+
+For developers testing telemetry locally, see [TELEMETRY_DEVELOPMENT_GUIDE.md](./.docs/TELEMETRY_DEVELOPMENT_GUIDE.md) for:
+- Using the debug mode for console logging
+- Exporting events to JSONL files
+- Testing without waiting for Azure ingestion
+
+### Documentation
+
+- [Telemetry Implementation Summary](./.docs/TELEMETRY_IMPLEMENTATION_SUMMARY.md) - Complete implementation details
+- [Telemetry Development Guide](./.docs/TELEMETRY_DEVELOPMENT_GUIDE.md) - Developer testing guide
 
 ## Contributing
 
