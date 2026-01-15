@@ -3,8 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import { trackEvent, trackException } from '@/lib/telemetry';
-import { getOrCreateIdentity } from '@/lib/identity';
+import { trackEvent, trackException, getOrCreateIdentity } from '@/lib/telemetry';
 
 interface ChatWindowProps {
   isOpen: boolean;
@@ -68,7 +67,7 @@ export default function ChatWindow({ isOpen, onClose }: ChatWindowProps) {
     setIsLoading(true);
 
     // Track message sent
-    trackEvent('message_sent', {
+    trackEvent('chat_message_sent', {
       message_length: messageContent.length,
       message_number: messages.length,
       session_id: identity.session_id,
@@ -106,7 +105,7 @@ export default function ChatWindow({ isOpen, onClose }: ChatWindowProps) {
       setMessages((prev) => [...prev, assistantMessage]);
 
       // Track response received
-      trackEvent('response_received', {
+      trackEvent('chat_response_received', {
         response_length: data.response.length,
         response_time_ms: messageEndTime - messageStartTime,
         session_id: identity.session_id,

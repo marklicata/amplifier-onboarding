@@ -8,7 +8,7 @@
  */
 
 import { useEffect } from 'react';
-import { initializeTelemetry, flushTelemetry, trackEvent } from '@/lib/telemetry';
+import { initializeTelemetry, flushTelemetry, trackEvent, setupClickTracking } from '@/lib/telemetry';
 
 export default function TelemetryProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
@@ -16,6 +16,12 @@ export default function TelemetryProvider({ children }: { children: React.ReactN
     const appInsights = initializeTelemetry();
 
     if (appInsights) {
+      // Setup click tracking
+      const cleanupClickTracking = setupClickTracking({
+        debounceMs: 300,
+        sampleRate: 1.0
+      });
+
       // Track page visibility changes
       const handleVisibilityChange = () => {
         if (document.hidden) {
@@ -42,6 +48,7 @@ export default function TelemetryProvider({ children }: { children: React.ReactN
 
       // Cleanup
       return () => {
+        cleanupClickTracking();
         document.removeEventListener('visibilitychange', handleVisibilityChange);
         window.removeEventListener('beforeunload', handleBeforeUnload);
         flushTelemetry();

@@ -4,8 +4,8 @@ import { useState, useEffect, useRef } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import ChatWindow from '@/components/ChatWindow';
-import bundleMetadata from '@/lib/bundle-metadata.json';
-import recipeMetadata from '@/lib/recipe-metadata.json';
+import bundleMetadata from '@/lib/amplifier/bundle-metadata.json';
+import recipeMetadata from '@/lib/amplifier/recipe-metadata.json';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import ReactMarkdown from 'react-markdown';
@@ -14,6 +14,7 @@ import RecipeCard from '@/components/playground/RecipeCard';
 import RecipeViewer from '@/components/playground/RecipeViewer';
 import RecipeExecutionPanel from '@/components/playground/RecipeExecutionPanel';
 import { Recipe, Bundle, isRecipe, isBundle } from '@/lib/types/recipe';
+import { usePlaygroundTracking } from '@/lib/telemetry';
 
 type PlaygroundItem = Bundle | Recipe;
 
@@ -34,6 +35,9 @@ export default function PlaygroundPage() {
   const [bundlesSectionCollapsed, setBundlesSectionCollapsed] = useState(false);
   const [recipesSectionCollapsed, setRecipesSectionCollapsed] = useState(false);
   const resultRef = useRef<HTMLDivElement>(null);
+  
+  // Initialize telemetry tracking
+  const playgroundTracking = usePlaygroundTracking();
 
   // Separate bundles and recipes
   const bundles = bundleMetadata.bundles as Bundle[];
@@ -79,10 +83,28 @@ export default function PlaygroundPage() {
     setIsYamlCollapsed(false);
     setIsPromptCollapsed(false);
     setIsExecutingRecipe(false);
+    
+    // Track selection
+    try {
+      if (isBundle(item)) {
+        playgroundTracking.trackBundleSelected(item.id, item.name);
+      } else if (isRecipe(item)) {
+        playgroundTracking.trackRecipeSelected(item.id, item.name);
+      }
+    } catch (error) {
+      console.error('Failed to track item selection:', error);
+    }
   };
 
   const handlePromptSelect = (prompt: string) => {
     setCustomPrompt(prompt);
+    
+    // Track prompt suggestion click
+    try {
+      playgroundTracking.trackPromptSuggestionClicked(prompt);
+    } catch (error) {
+      console.error('Failed to track prompt suggestion click:', error);
+    }
   };
 
   const handleExecuteBundle = async () => {
@@ -96,6 +118,14 @@ export default function PlaygroundPage() {
     setExecutionResult('');
     setExecutionError(null);
     setExecutionStatus('Initializing...');
+
+    // Track execution start
+    let startTime: number | null = null;
+    try {
+      startTime = playgroundTracking.trackBundleExecutionStart(selectedItem.id, selectedItem.name);
+    } catch (error) {
+      console.error('Failed to track bundle execution start:', error);
+    }
 
     try {
       const response = await fetch('/api/playground/execute-bundle-stream', {
@@ -151,11 +181,29 @@ export default function PlaygroundPage() {
           }
         }
       }
+      
+      // Track successful completion
+      if (startTime !== null) {
+        try {
+          playgroundTracking.trackBundleExecutionComplete(selectedItem.id, selectedItem.name, startTime, true);
+        } catch (error) {
+          console.error('Failed to track bundle execution complete:', error);
+        }
+      }
     } catch (error: any) {
       console.error('Execution error:', error);
       setExecutionError(`Failed to execute: ${error.message}`);
       setIsExecuting(false);
       setExecutionStatus('');
+      
+      // Track failed completion
+      if (startTime !== null) {
+        try {
+          playgroundTracking.trackBundleExecutionComplete(selectedItem.id, selectedItem.name, startTime, false, error.message);
+        } catch (trackError) {
+          console.error('Failed to track bundle execution failure:', trackError);
+        }
+      }
     }
   };
 
@@ -196,6 +244,15 @@ export default function PlaygroundPage() {
   const handleExecuteRecipe = (inputs: Record<string, string>) => {
     setRecipeInputs(inputs);
     setIsExecutingRecipe(true);
+    
+    // Track recipe execution start
+    if (selectedItem && isRecipe(selectedItem)) {
+      try {
+        playgroundTracking.trackRecipeExecutionStart(selectedItem.id, selectedItem.name);
+      } catch (error) {
+        console.error('Failed to track recipe execution start:', error);
+      }
+    }
   };
 
   const handleRecipeRunAgain = () => {
@@ -262,7 +319,15 @@ export default function PlaygroundPage() {
                         </div>
                         <div className="p-6">
                           <button
-                            onClick={() => setIsYamlCollapsed(!isYamlCollapsed)}
+                            onClick={() => {
+                              const newState = !isYamlCollapsed;
+                              setIsYamlCollapsed(newState);
+                              try {
+                                playgroundTracking.trackYamlToggled(!newState);
+                              } catch (error) {
+                                console.error('Failed to track YAML toggle:', error);
+                              }
+                            }}
                             className="w-full text-left flex items-center justify-between mb-3 hover:bg-gray-50 p-2 rounded transition-colors"
                           >
                             <h3 className="text-sm font-semibold text-gray-700 flex items-center gap-2">

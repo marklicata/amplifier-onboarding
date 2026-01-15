@@ -6,6 +6,7 @@ import remarkGfm from 'remark-gfm';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import { Recipe, StepStatus } from '@/lib/types/recipe';
+import { usePlaygroundTracking } from '@/lib/telemetry';
 
 interface RecipeExecutionPanelProps {
   recipe: Recipe;
@@ -24,7 +25,15 @@ export default function RecipeExecutionPanel({ recipe, inputs, onComplete, onRun
   const [error, setError] = useState<string | null>(null);
   const [totalTimeMs, setTotalTimeMs] = useState<number | null>(null);
   const [startTime, setStartTime] = useState<number | null>(null);
+  const [executionStartTime, setExecutionStartTime] = useState<number | null>(null);
   const outputRef = useRef<HTMLDivElement>(null);
+  
+  // Initialize telemetry tracking with recipe context
+  const playgroundTracking = usePlaygroundTracking({
+    itemId: recipe.id,
+    itemName: recipe.name,
+    itemType: 'recipe'
+  });
 
   // Auto-scroll to bottom when new content arrives
   useEffect(() => {
@@ -52,6 +61,15 @@ export default function RecipeExecutionPanel({ recipe, inputs, onComplete, onRun
     
     setSteps(initialSteps);
     setStartTime(Date.now());
+    
+    // Track execution start with performance timing
+    try {
+      const perfStartTime = playgroundTracking.trackRecipeExecutionStart(recipe.id, recipe.name);
+      setExecutionStartTime(perfStartTime);
+    } catch (error) {
+      console.error('Failed to track recipe execution start:', error);
+    }
+    
     executeRecipe();
   };
 
@@ -153,6 +171,16 @@ export default function RecipeExecutionPanel({ recipe, inputs, onComplete, onRun
           ...prev,
           [steps[stepIndex]?.id || `step-${stepIndex}`]: data.output || currentStepOutput
         }));
+        
+        // Track step completion
+        try {
+          const step = steps[stepIndex];
+          if (step) {
+            playgroundTracking.trackRecipeStepComplete(recipe.id, recipe.name, step.name, stepIndex);
+          }
+        } catch (error) {
+          console.error('Failed to track recipe step complete:', error);
+        }
         break;
 
       case 'complete':
@@ -164,6 +192,15 @@ export default function RecipeExecutionPanel({ recipe, inputs, onComplete, onRun
         // Expand last step by default
         if (steps.length > 0) {
           setExpandedSteps(new Set([steps[steps.length - 1].id]));
+        }
+        
+        // Track successful recipe execution completion
+        if (executionStartTime !== null) {
+          try {
+            playgroundTracking.trackRecipeExecutionComplete(recipe.id, recipe.name, executionStartTime, true);
+          } catch (error) {
+            console.error('Failed to track recipe execution complete:', error);
+          }
         }
         // DON'T auto-call onComplete - let user dismiss manually
         break;
@@ -180,6 +217,15 @@ export default function RecipeExecutionPanel({ recipe, inputs, onComplete, onRun
               : s
           ));
         }
+        
+        // Track failed recipe execution
+        if (executionStartTime !== null) {
+          try {
+            playgroundTracking.trackRecipeExecutionComplete(recipe.id, recipe.name, executionStartTime, false, data.error);
+          } catch (error) {
+            console.error('Failed to track recipe execution error:', error);
+          }
+        }
         break;
 
       case 'status':
@@ -193,11 +239,21 @@ export default function RecipeExecutionPanel({ recipe, inputs, onComplete, onRun
   const toggleStepExpanded = (stepId: string) => {
     setExpandedSteps(prev => {
       const next = new Set(prev);
+      const willBeExpanded = !next.has(stepId);
+      
       if (next.has(stepId)) {
         next.delete(stepId);
       } else {
         next.add(stepId);
       }
+      
+      // Track section toggle
+      try {
+        playgroundTracking.trackSectionToggled(`step-${stepId}`, willBeExpanded);
+      } catch (error) {
+        console.error('Failed to track section toggle:', error);
+      }
+      
       return next;
     });
   };
