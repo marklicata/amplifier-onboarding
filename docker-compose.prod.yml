@@ -13,10 +13,11 @@ services:
 
       # Amplifier API Configuration (Local Development)
       AMPLIFIER_USE_API: true
-      AMPLIFIER_API_URL: 
+      AMPLIFIER_API_URL: https://amplifier-api.gentlebay-e0c2022c.eastus.azurecontainerapps.io
       AMPLIFIER_API_TIMEOUT: 60000
-      AMPLIFIER_API_KEY: 
-      AMPLIFIER_APP_ID: 
+      AMPLIFIER_API_KEY: ${AMPLIFIER_API_KEY:-}
+      AMPLIFIER_APP_ID: eafc32f4-076f-11f1-8399-325096b39f47
+
 
     env_file:
       - .env
