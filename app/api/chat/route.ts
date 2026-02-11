@@ -28,7 +28,7 @@ interface ChatResponse {
 export async function POST(request: Request) {
   try {
     const body: ChatRequest = await request.json();
-    const { message, sessionId, userId } = body;
+    const { message, sessionId, userId: bodyUserId } = body;
 
     if (!message || !message.trim()) {
       return Response.json(
@@ -60,9 +60,9 @@ export async function POST(request: Request) {
     // Escape inputs for shell safety
     const escapedMessage = message.replace(/"/g, '\\"');
     const escapedSessionId = sessionId ? sessionId.replace(/"/g, '\\"') : '';
-    const escapedUserId = userId ? userId.replace(/"/g, '\\"') : 'anonymous';
+    const escapedUserId = userId.replace(/"/g, '\\"');
 
-    console.log(`Chat request - sessionId: ${sessionId || 'none'}, userId: ${userId || 'anonymous'}`);
+    console.log(`Chat request - sessionId: ${sessionId || 'none'}, userId: ${userId}`);
 
     // Use correct Python command based on platform
     const pythonCmd = process.platform === 'win32' ? 'python' : 'python3';
