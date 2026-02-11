@@ -18,7 +18,6 @@ services:
       AMPLIFIER_API_KEY: ${AMPLIFIER_API_KEY:-}
       AMPLIFIER_APP_ID: eafc32f4-076f-11f1-8399-325096b39f47
 
-
     env_file:
       - .env
     volumes:

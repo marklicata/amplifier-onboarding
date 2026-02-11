@@ -146,7 +146,6 @@ async def main_async():
         all_ok &= check_env_variable('AMPLIFIER_API_URL', required=True)
         all_ok &= check_env_variable('AMPLIFIER_API_KEY', required=True)
         check_env_variable('AMPLIFIER_APP_ID', required=False)
-        check_env_variable('NEXUS_CLI_USER_TOKEN', required=False)  # Auto-generated if not set
 
         # Check API health
         api_url = os.getenv('AMPLIFIER_API_URL')

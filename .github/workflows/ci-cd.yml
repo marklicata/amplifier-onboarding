@@ -69,6 +69,10 @@ jobs:
           # Start container with a test environment
           docker run -d --name test-container -p 3000:3000 \
             -e ANTHROPIC_API_KEY=test-key \
+            -e AMPLIFIER_USE_API=true \
+            -e AMPLIFIER_API_URL=https://amplifier-api.gentlebay-e0c2022c.eastus.azurecontainerapps.io \
+            -e AMPLIFIER_API_KEY=test-api-key \
+            -e AMPLIFIER_APP_ID=eafc32f4-076f-11f1-8399-325096b39f47 \
             amplifier-onboarding:test
           
           # Wait for container to be ready
@@ -151,4 +155,24 @@ jobs:
             az containerapp update \
               --name ${{ secrets.CONTAINER_APP_NAME }} \
               --resource-group ${{ secrets.RESOURCE_GROUP }} \
-              --image ${{ secrets.ACR_REGISTRY }}/amplifier-onboarding:${{ github.sha }}
+              --image ${{ secrets.ACR_REGISTRY }}/amplifier-onboarding:${{ github.sha }} \
+              --revision-suffix "$REVISION_SUFFIX" \
+              --min-replicas 3 \
+              --max-replicas 10 \
+              --cpu 4 \
+              --memory 8Gi \
+              --scale-rule-name cpu-scale \
+              --scale-rule-type cpu \
+              --scale-rule-metadata type=Utilization value=70 \
+              --scale-rule-name http-scale \
+              --scale-rule-type http \
+              --scale-rule-http-concurrency 50 \
+              --set-env-vars \
+                "NEXT_PUBLIC_APPINSIGHTS_CONNECTION_STRING=secretref:telemetry-connection-string" \
+                "NEXT_PUBLIC_ENVIRONMENT=production" \
+                "NEXT_PUBLIC_APP_VERSION=0.3.0" \
+                "AMPLIFIER_USE_API=true" \
+                "AMPLIFIER_API_URL=https://amplifier-api.gentlebay-e0c2022c.eastus.azurecontainerapps.io" \
+                "AMPLIFIER_API_TIMEOUT=60000" \
+                "AMPLIFIER_API_KEY=secretref:amplifier-api-key" \
+                "AMPLIFIER_APP_ID=eafc32f4-076f-11f1-8399-325096b39f47"

@@ -41,9 +41,6 @@ RUN pip3 install --no-cache-dir --break-system-packages -r requirements.txt
 # Copy application code
 COPY . .
 
-# Validate all dependencies are installed correctly
-RUN python3 lib/amplifier/python/validate-deps.py
-
 # Build Next.js app
 ENV NEXT_TELEMETRY_DISABLED=1
 RUN npm run build
@@ -53,4 +50,5 @@ ENV NODE_ENV=production
 
 EXPOSE 3000
 
-CMD ["npm", "start"]
+# Validate dependencies at runtime, then start the application
+CMD ["sh", "-c", "python3 lib/amplifier/python/validate-deps.py && npm start"]
