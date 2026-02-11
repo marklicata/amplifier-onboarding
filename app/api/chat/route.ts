@@ -26,7 +26,7 @@ interface ChatResponse {
 export async function POST(request: Request) {
   try {
     const body: ChatRequest = await request.json();
-    const { message, sessionId, userId } = body;
+    const { message, sessionId, userId: bodyUserId } = body;
 
     if (!message || !message.trim()) {
       return Response.json(
@@ -35,15 +35,31 @@ export async function POST(request: Request) {
       );
     }
 
+    // Extract Microsoft user ID from Azure EasyAuth headers (if present)
+    // Falls back to body.userId, then 'anonymous' if not available
+    const msUserId = request.headers.get('x-ms-client-principal-id');
+    const msUserEmail = request.headers.get('x-ms-client-principal-name');
+
+    // Priority: Azure EasyAuth headers > body.userId > 'anonymous'
+    const userId = msUserId || bodyUserId || 'anonymous';
+    const userSource = msUserId ? 'azure-easyauth' : (bodyUserId ? 'client-provided' : 'anonymous');
+
+    // Log authentication details
+    if (msUserId) {
+      console.log(`Authenticated via Azure EasyAuth - userId: ${userId}, email: ${msUserEmail || 'N/A'}`);
+    } else {
+      console.log(`User identification - source: ${userSource}, userId: ${userId}`);
+    }
+
     // Path to Python script
     const scriptPath = path.join(process.cwd(), 'lib', 'amplifier', 'python', 'amplifier-chat.py');
 
     // Escape inputs for shell safety
     const escapedMessage = message.replace(/"/g, '\\"');
     const escapedSessionId = sessionId ? sessionId.replace(/"/g, '\\"') : '';
-    const escapedUserId = userId ? userId.replace(/"/g, '\\"') : 'anonymous';
+    const escapedUserId = userId.replace(/"/g, '\\"');
 
-    console.log(`Chat request - sessionId: ${sessionId || 'none'}, userId: ${userId || 'anonymous'}`);
+    console.log(`Chat request - sessionId: ${sessionId || 'none'}, userId: ${userId}`);
 
     // Use correct Python command based on platform
     const pythonCmd = process.platform === 'win32' ? 'python' : 'python3';
