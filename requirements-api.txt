@@ -1,0 +1,16 @@
+# Lightweight requirements for API-based implementation
+# This skips amplifier_core and amplifier_foundation for faster builds
+
+# Required
+python-dotenv>=1.0.0
+anthropic>=0.7.0
+pyyaml>=6.0.0
+
+# API client dependencies
+httpx[http2]>=0.27.0
+pyjwt>=2.8.0
+
+# Note: If you still need to run bundles/recipes locally,
+# use requirements.txt instead, which includes:
+# - amplifier_core
+# - amplifier_foundation

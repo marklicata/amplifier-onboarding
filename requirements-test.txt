@@ -1,0 +1,23 @@
+# Test dependencies for Amplifier API migration
+# Install with: pip install -r requirements-test.txt
+
+# Testing frameworks
+pytest>=8.0.0
+pytest-asyncio>=0.23.0
+
+# API client dependencies (if not already installed)
+httpx[http2]>=0.27.0
+pyjwt>=2.8.0
+pyyaml>=6.0.1
+
+# Utilities
+python-dotenv>=1.0.0
+
+# Mocking (included with Python 3.3+)
+# unittest.mock is built-in
+
+# Optional: Coverage reporting
+# pytest-cov>=4.1.0
+
+# Optional: Better test output
+# pytest-sugar>=1.0.0

@@ -1,0 +1,36 @@
+{
+  "name": "data-analyzer-bundle",
+  "description": "Domain-specific data analysis bundle for spreadsheet data and data models",
+  "config_data": {
+    "bundle": {
+      "name": "data-analyzer-bundle",
+      "version": "1.0.0",
+      "description": "Domain-specific data analysis bundle for spreadsheet data and data models"
+    }
+  },
+  "tags": {
+    "source": "onboarding-app",
+    "type": "bundle"
+  },
+  "session": {
+    "orchestrator": {
+      "module": "loop-basic",
+      "source": "git+https://github.com/microsoft/amplifier-module-loop-basic@main"
+    },
+    "context": {
+      "module": "context-simple",
+      "source": "git+https://github.com/microsoft/amplifier-module-context-simple@main"
+    }
+  },
+  "providers": [
+    {
+      "module": "provider-anthropic",
+      "source": "git+https://github.com/microsoft/amplifier-module-provider-anthropic@main",
+      "config": {
+        "default_model": "claude-sonnet-4-5",
+        "debug": false,
+        "api_key": "${ANTHROPIC_API_KEY}"
+      }
+    }
+  ]
+}

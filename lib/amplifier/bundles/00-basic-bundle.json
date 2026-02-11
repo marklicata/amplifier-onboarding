@@ -1,0 +1,36 @@
+{
+  "name": "basic-bundle",
+  "description": "The bare minimum bundle to run an Amplifier agent - just a provider and basic orchestrator",
+  "config_data": {
+    "bundle": {
+      "name": "basic-bundle",
+      "version": "1.0.0",
+      "description": "The bare minimum bundle to run an Amplifier agent - just a provider and basic orchestrator"
+    }
+  },
+  "tags": {
+    "source": "onboarding-app",
+    "type": "bundle"
+  },
+  "session": {
+    "orchestrator": {
+      "module": "loop-basic",
+      "source": "git+https://github.com/microsoft/amplifier-module-loop-basic@main"
+    },
+    "context": {
+      "module": "context-simple",
+      "source": "git+https://github.com/microsoft/amplifier-module-context-simple@main"
+    }
+  },
+  "providers": [
+    {
+      "module": "provider-anthropic",
+      "source": "git+https://github.com/microsoft/amplifier-module-provider-anthropic@main",
+      "config": {
+        "default_model": "claude-sonnet-4-5",
+        "debug": false,
+        "api_key": "${ANTHROPIC_API_KEY}"
+      }
+    }
+  ]
+}

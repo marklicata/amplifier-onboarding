@@ -6,7 +6,12 @@
     "dev": "next dev -p 3000",
     "build": "next build",
     "start": "next start -p 3000",
-    "lint": "next lint"
+    "lint": "next lint",
+    "test:python": "cd lib/amplifier/python && pytest test_api_client.py -v",
+    "test:python:integration": "cd lib/amplifier/python && set AMPLIFIER_API_INTEGRATION_TESTS=1 && pytest test_api_client.py -v",
+    "test:chat": "python lib/amplifier/python/amplifier-chat.py \"What is Amplifier?\"",
+    "validate:deps": "python lib/amplifier/python/validate-deps.py",
+    "convert:bundles": "cd lib/amplifier/python && python convert_bundles.py"
   },
   "dependencies": {
     "@microsoft/applicationinsights-web": "^3.3.11",

@@ -1,0 +1,36 @@
+{
+  "name": "presentation-creator-bundle",
+  "description": "A specialized bundle for creating presentation content with research and file management capabilities",
+  "config_data": {
+    "bundle": {
+      "name": "presentation-creator-bundle",
+      "version": "1.0.0",
+      "description": "A specialized bundle for creating presentation content with research and file management capabilities"
+    }
+  },
+  "tags": {
+    "source": "onboarding-app",
+    "type": "bundle"
+  },
+  "session": {
+    "orchestrator": {
+      "module": "loop-streaming",
+      "source": "git+https://github.com/microsoft/amplifier-module-loop-streaming@main"
+    },
+    "context": {
+      "module": "context-simple",
+      "source": "git+https://github.com/microsoft/amplifier-module-context-simple@main"
+    }
+  },
+  "providers": [
+    {
+      "module": "provider-anthropic",
+      "source": "git+https://github.com/microsoft/amplifier-module-provider-anthropic@main",
+      "config": {
+        "default_model": "claude-sonnet-4-5",
+        "debug": false,
+        "api_key": "${ANTHROPIC_API_KEY}"
+      }
+    }
+  ]
+}

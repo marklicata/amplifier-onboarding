@@ -1,0 +1,36 @@
+{
+  "name": "code-reviewer-bundle",
+  "description": "A specialized bundle for code review with read-only filesystem access and analysis tools",
+  "config_data": {
+    "bundle": {
+      "name": "code-reviewer-bundle",
+      "version": "1.0.0",
+      "description": "A specialized bundle for code review with read-only filesystem access and analysis tools"
+    }
+  },
+  "tags": {
+    "source": "onboarding-app",
+    "type": "bundle"
+  },
+  "session": {
+    "orchestrator": {
+      "module": "loop-basic",
+      "source": "git+https://github.com/microsoft/amplifier-module-loop-basic@main"
+    },
+    "context": {
+      "module": "context-simple",
+      "source": "git+https://github.com/microsoft/amplifier-module-context-simple@main"
+    }
+  },
+  "providers": [
+    {
+      "module": "provider-anthropic",
+      "source": "git+https://github.com/microsoft/amplifier-module-provider-anthropic@main",
+      "config": {
+        "default_model": "claude-opus-4-5",
+        "debug": false,
+        "api_key": "${ANTHROPIC_API_KEY}"
+      }
+    }
+  ]
+}
