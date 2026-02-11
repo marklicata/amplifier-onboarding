@@ -152,6 +152,12 @@ jobs:
         with:
           azcliversion: latest
           inlineScript: |
+            # Explicitely set subscription
+            az account set --subscription ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+            # Create unique revision suffix from commit SHA
+            REVISION_SUFFIX=$(echo ${{ github.sha }} | cut -c1-8)
+            
             az containerapp update \
               --name ${{ secrets.CONTAINER_APP_NAME }} \
               --resource-group ${{ secrets.RESOURCE_GROUP }} \
@@ -176,3 +182,4 @@ jobs:
                 "AMPLIFIER_API_TIMEOUT=60000" \
                 "AMPLIFIER_API_KEY=secretref:amplifier-api-key" \
                 "AMPLIFIER_APP_ID=eafc32f4-076f-11f1-8399-325096b39f47"
+
