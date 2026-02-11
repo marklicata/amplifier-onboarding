@@ -28,6 +28,7 @@ export default function ChatWindow({ isOpen, onClose }: ChatWindowProps) {
   ]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [amplifierSessionId, setAmplifierSessionId] = useState<string | null>(null);
   const sessionStartTime = useRef<number>(0);
 
   // Track chat open/close
@@ -76,6 +77,7 @@ export default function ChatWindow({ isOpen, onClose }: ChatWindowProps) {
 
     try {
       // Call the Amplifier chat API
+      // Send Amplifier session ID if we have one, otherwise let API create a new session
       const response = await fetch('/api/chat', {
         method: 'POST',
         headers: {
@@ -83,7 +85,8 @@ export default function ChatWindow({ isOpen, onClose }: ChatWindowProps) {
         },
         body: JSON.stringify({
           message: messageContent,
-          sessionId: identity.session_id,
+          sessionId: amplifierSessionId || undefined,
+          userId: identity.anonymous_id,
         }),
       });
 
@@ -91,6 +94,12 @@ export default function ChatWindow({ isOpen, onClose }: ChatWindowProps) {
 
       if (data.error) {
         throw new Error(data.error);
+      }
+
+      // Store the Amplifier session ID for future messages
+      if (data.session_id && data.session_id !== amplifierSessionId) {
+        console.log(`Amplifier session created/updated: ${data.session_id}`);
+        setAmplifierSessionId(data.session_id);
       }
 
       const messageEndTime = performance.now();
@@ -109,6 +118,7 @@ export default function ChatWindow({ isOpen, onClose }: ChatWindowProps) {
         response_length: data.response.length,
         response_time_ms: messageEndTime - messageStartTime,
         session_id: identity.session_id,
+        amplifier_session_id: data.session_id,
         success: true
       });
 
@@ -121,6 +131,7 @@ export default function ChatWindow({ isOpen, onClose }: ChatWindowProps) {
       trackException(error, {
         context: 'chat_interaction',
         session_id: identity.session_id,
+        amplifier_session_id: amplifierSessionId,
         message_length: messageContent.length,
         response_time_ms: messageEndTime - messageStartTime
       });
@@ -128,7 +139,8 @@ export default function ChatWindow({ isOpen, onClose }: ChatWindowProps) {
       trackEvent('chat_error', {
         error_message: error.message,
         response_time_ms: messageEndTime - messageStartTime,
-        session_id: identity.session_id
+        session_id: identity.session_id,
+        amplifier_session_id: amplifierSessionId
       });
 
       // Show error message to user

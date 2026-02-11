@@ -89,11 +89,12 @@ class AmplifierChat:
 
     async def _ensure_session(self):
         """Ensure we have a session ID, creating one if necessary."""
+        # Always ensure client and config are initialized
+        await self._ensure_config()
+
         if self.session_id is not None:
             # Session already exists (reusing from previous call)
             return
-
-        await self._ensure_config()
 
         # Create a new session
         print("Creating new session...", file=sys.stderr)
@@ -133,7 +134,24 @@ class AmplifierChat:
 
             # Send message to session
             print(f"Sending message to Amplifier API: {user_message}", file=sys.stderr)
-            response = await self.client.send_message(self.session_id, user_message)
+            try:
+                response = await self.client.send_message(self.session_id, user_message)
+            except (AttributeError, AmplifierSessionError, AmplifierAPIError) as e:
+                # Check if it's a session not found error
+                error_msg = str(e).lower()
+                if "session not found" in error_msg or isinstance(e, (AttributeError, AmplifierSessionError)):
+                    # If reused session is invalid or client wasn't properly initialized,
+                    # reset and create a new session
+                    old_session_id = self.session_id
+                    print(f"Session not found or invalid (session_id: {old_session_id}): {e}", file=sys.stderr)
+                    print("Automatically creating new session to recover...", file=sys.stderr)
+                    self.session_id = None
+                    await self._ensure_session()
+                    print(f"New session created: {self.session_id}", file=sys.stderr)
+                    response = await self.client.send_message(self.session_id, user_message)
+                else:
+                    # Re-raise other API errors
+                    raise
 
             return json.dumps({
                 "response": response,
