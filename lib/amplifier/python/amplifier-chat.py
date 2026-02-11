@@ -2,11 +2,13 @@
 """
 Simple Amplifier chat script for Q&A about Amplifier itself.
 Runs standalone from Next.js API routes using Amplifier REST API.
+Runs standalone from Next.js API routes using Amplifier REST API.
 """
 
 import sys
 import json
 import asyncio
+import os
 import os
 from pathlib import Path
 from datetime import datetime, timezone
@@ -17,7 +19,19 @@ env_path = Path(__file__).parent.parent / ".env"
 load_dotenv(env_path)
 
 # Import the Amplifier API client
+# Import the Amplifier API client
 try:
+    from amplifier_api_client import (
+        AmplifierAPIClient,
+        AmplifierAPIError,
+        AmplifierAuthError,
+        AmplifierConfigError,
+        AmplifierSessionError
+    )
+    API_CLIENT_AVAILABLE = True
+except ImportError as e:
+    print(f"Warning: Could not import amplifier_api_client: {e}", file=sys.stderr)
+    API_CLIENT_AVAILABLE = False
     from amplifier_api_client import (
         AmplifierAPIClient,
         AmplifierAPIError,
@@ -33,7 +47,27 @@ except ImportError as e:
 
 class AmplifierChat:
     """Simple chat interface to Amplifier via REST API"""
+    """Simple chat interface to Amplifier via REST API"""
 
+    def __init__(self, user_id: str = None, session_id: str = None):
+        """
+        Initialize the chat client.
+
+        Args:
+            user_id: User identifier (anonymous_id or authenticated user_id)
+            session_id: Existing session ID to reuse (optional)
+        """
+        self.user_id = user_id or "anonymous"
+        self.client = None
+        self.config_id = None
+        self.session_id = session_id  # Reuse existing session if provided
+        self.use_api = os.getenv('AMPLIFIER_USE_API', 'true').lower() == 'true'
+
+        if API_CLIENT_AVAILABLE and self.use_api:
+            if self.session_id:
+                print(f"Reusing session {self.session_id} for user {self.user_id}", file=sys.stderr)
+            else:
+                print(f"Amplifier API client loaded for user: {self.user_id}", file=sys.stderr)
     def __init__(self, user_id: str = None, session_id: str = None):
         """
         Initialize the chat client.
@@ -89,12 +123,11 @@ class AmplifierChat:
 
     async def _ensure_session(self):
         """Ensure we have a session ID, creating one if necessary."""
-        # Always ensure client and config are initialized
-        await self._ensure_config()
-
         if self.session_id is not None:
             # Session already exists (reusing from previous call)
             return
+
+        await self._ensure_config()
 
         # Create a new session
         print("Creating new session...", file=sys.stderr)
@@ -109,6 +142,8 @@ class AmplifierChat:
             )
             print(f"Created session: {self.session_id}", file=sys.stderr)
         except Exception as e:
+            print(f"Failed to create session: {e}", file=sys.stderr)
+            raise
             print(f"Failed to create session: {e}", file=sys.stderr)
             raise
 
@@ -134,24 +169,7 @@ class AmplifierChat:
 
             # Send message to session
             print(f"Sending message to Amplifier API: {user_message}", file=sys.stderr)
-            try:
-                response = await self.client.send_message(self.session_id, user_message)
-            except (AttributeError, AmplifierSessionError, AmplifierAPIError) as e:
-                # Check if it's a session not found error
-                error_msg = str(e).lower()
-                if "session not found" in error_msg or isinstance(e, (AttributeError, AmplifierSessionError)):
-                    # If reused session is invalid or client wasn't properly initialized,
-                    # reset and create a new session
-                    old_session_id = self.session_id
-                    print(f"Session not found or invalid (session_id: {old_session_id}): {e}", file=sys.stderr)
-                    print("Automatically creating new session to recover...", file=sys.stderr)
-                    self.session_id = None
-                    await self._ensure_session()
-                    print(f"New session created: {self.session_id}", file=sys.stderr)
-                    response = await self.client.send_message(self.session_id, user_message)
-                else:
-                    # Re-raise other API errors
-                    raise
+            response = await self.client.send_message(self.session_id, user_message)
 
             return json.dumps({
                 "response": response,
@@ -213,7 +231,16 @@ async def main_async():
                 }
             )
         )
+        print(
+            json.dumps(
+                {
+                    "error": "No message provided",
+                    "timestamp": datetime.now(timezone.utc).isoformat(),
+                }
+            )
+        )
         sys.exit(1)
+
 
     user_message = sys.argv[1]
     existing_session_id = sys.argv[2] if len(sys.argv) > 2 and sys.argv[2] else None
@@ -222,10 +249,25 @@ async def main_async():
     # Create chat instance with user_id and existing session
     chat = AmplifierChat(user_id=user_id, session_id=existing_session_id)
 
+    existing_session_id = sys.argv[2] if len(sys.argv) > 2 and sys.argv[2] else None
+    user_id = sys.argv[3] if len(sys.argv) > 3 else "anonymous"
+
+    # Create chat instance with user_id and existing session
+    chat = AmplifierChat(user_id=user_id, session_id=existing_session_id)
+
     try:
+        result = await chat.chat(user_message)
         result = await chat.chat(user_message)
         print(result)  # Print JSON result to stdout
     except Exception as e:
+        print(
+            json.dumps(
+                {
+                    "error": f"Chat execution failed: {str(e)}",
+                    "timestamp": datetime.now(timezone.utc).isoformat(),
+                }
+            )
+        )
         print(
             json.dumps(
                 {
@@ -242,7 +284,15 @@ async def main_async():
 def main():
     """Main entry point for command-line execution."""
     asyncio.run(main_async())
+    finally:
+        await chat.close()
+
+
+def main():
+    """Main entry point for command-line execution."""
+    asyncio.run(main_async())
 
 
 if __name__ == "__main__":
     main()
+

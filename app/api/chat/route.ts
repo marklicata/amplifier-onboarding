@@ -14,10 +14,12 @@ interface ChatRequest {
   message: string;
   sessionId?: string;
   userId?: string;  // Anonymous ID or authenticated user ID
+  userId?: string;  // Anonymous ID or authenticated user ID
 }
 
 interface ChatResponse {
   response: string;
+  session_id?: string;
   session_id?: string;
   timestamp: string;
   error?: string;
@@ -26,7 +28,7 @@ interface ChatResponse {
 export async function POST(request: Request) {
   try {
     const body: ChatRequest = await request.json();
-    const { message, sessionId, userId: bodyUserId } = body;
+    const { message, sessionId, userId } = body;
 
     if (!message || !message.trim()) {
       return Response.json(
@@ -55,14 +57,16 @@ export async function POST(request: Request) {
     const scriptPath = path.join(process.cwd(), 'lib', 'amplifier', 'python', 'amplifier-chat.py');
 
     // Escape inputs for shell safety
+    // Escape inputs for shell safety
     const escapedMessage = message.replace(/"/g, '\\"');
     const escapedSessionId = sessionId ? sessionId.replace(/"/g, '\\"') : '';
-    const escapedUserId = userId.replace(/"/g, '\\"');
+    const escapedUserId = userId ? userId.replace(/"/g, '\\"') : 'anonymous';
 
-    console.log(`Chat request - sessionId: ${sessionId || 'none'}, userId: ${userId}`);
+    console.log(`Chat request - sessionId: ${sessionId || 'none'}, userId: ${userId || 'anonymous'}`);
 
     // Use correct Python command based on platform
     const pythonCmd = process.platform === 'win32' ? 'python' : 'python3';
+    const command = `${pythonCmd} "${scriptPath}" "${escapedMessage}" "${escapedSessionId}" "${escapedUserId}"`;
     const command = `${pythonCmd} "${scriptPath}" "${escapedMessage}" "${escapedSessionId}" "${escapedUserId}"`;
 
     console.log('Executing chat command...');
@@ -88,6 +92,8 @@ export async function POST(request: Request) {
       );
     }
 
+    // Return response with session_id so frontend can maintain session
+    console.log(`Chat response - sessionId: ${result.session_id}`);
     // Return response with session_id so frontend can maintain session
     console.log(`Chat response - sessionId: ${result.session_id}`);
     return Response.json(result);
