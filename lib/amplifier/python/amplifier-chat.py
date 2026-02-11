@@ -286,22 +286,7 @@ async def main_async():
                 }
             )
         )
-        print(
-            json.dumps(
-                {
-                    "error": f"Chat execution failed: {str(e)}",
-                    "timestamp": datetime.now(timezone.utc).isoformat(),
-                }
-            )
-        )
         sys.exit(1)
-    finally:
-        await chat.close()
-
-
-def main():
-    """Main entry point for command-line execution."""
-    asyncio.run(main_async())
     finally:
         await chat.close()
 
