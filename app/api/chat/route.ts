@@ -14,12 +14,10 @@ interface ChatRequest {
   message: string;
   sessionId?: string;
   userId?: string;  // Anonymous ID or authenticated user ID
-  userId?: string;  // Anonymous ID or authenticated user ID
 }
 
 interface ChatResponse {
   response: string;
-  session_id?: string;
   session_id?: string;
   timestamp: string;
   error?: string;
@@ -66,7 +64,6 @@ export async function POST(request: Request) {
 
     // Use correct Python command based on platform
     const pythonCmd = process.platform === 'win32' ? 'python' : 'python3';
-    const command = `${pythonCmd} "${scriptPath}" "${escapedMessage}" "${escapedSessionId}" "${escapedUserId}"`;
     const command = `${pythonCmd} "${scriptPath}" "${escapedMessage}" "${escapedSessionId}" "${escapedUserId}"`;
 
     console.log('Executing chat command...');
