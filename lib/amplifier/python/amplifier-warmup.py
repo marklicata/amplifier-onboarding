@@ -14,6 +14,7 @@ from datetime import datetime, timezone
 try:
     from amplifier_core import AmplifierSession
     from amplifier_foundation import load_bundle
+
     AMPLIFIER_AVAILABLE = True
 except ImportError:
     AMPLIFIER_AVAILABLE = False
@@ -25,11 +26,13 @@ async def warmup_session():
     """Initialize an Amplifier session to warm up caches and downloads"""
 
     if not AMPLIFIER_AVAILABLE:
-        return json.dumps({
-            "status": "skipped",
-            "message": "amplifier-core not available",
-            "timestamp": datetime.now(timezone.utc).isoformat()
-        })
+        return json.dumps(
+            {
+                "status": "skipped",
+                "message": "amplifier-core not available",
+                "timestamp": datetime.now(timezone.utc).isoformat(),
+            }
+        )
 
     try:
         print("Starting Amplifier session warmup...", file=sys.stderr)
@@ -51,19 +54,23 @@ async def warmup_session():
         # Session will be cleaned up when process exits
         # No explicit close method available on AmplifierSession
 
-        return json.dumps({
-            "status": "success",
-            "message": "Session warmed up successfully",
-            "timestamp": datetime.now(timezone.utc).isoformat()
-        })
+        return json.dumps(
+            {
+                "status": "success",
+                "message": "Session warmed up successfully",
+                "timestamp": datetime.now(timezone.utc).isoformat(),
+            }
+        )
 
     except Exception as e:
         print(f"Warmup error: {e}", file=sys.stderr)
-        return json.dumps({
-            "status": "error",
-            "error": str(e),
-            "timestamp": datetime.now(timezone.utc).isoformat()
-        })
+        return json.dumps(
+            {
+                "status": "error",
+                "error": str(e),
+                "timestamp": datetime.now(timezone.utc).isoformat(),
+            }
+        )
 
 
 if __name__ == "__main__":

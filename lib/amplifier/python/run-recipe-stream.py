@@ -182,25 +182,22 @@ class RecipeRunner:
             raise
 
     async def execute(self):
-
-
-
-#         2RecipeExecutionPanel.tsx:189 [progress] Exception occurred: Traceback (most recent call last):
-#   File "C:\Users\malicata\source\amplifier-onboarding\lib\run-recipe-stream.py", line 248, in main
-#     asyncio.run(runner.execute())
-#     ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
-#   File "C:\Users\malicata\AppData\Local\Programs\Python\Python313\Lib\asyncio\runners.py", line 195, in run
-#     return runner.run(main)
-#            ~~~~~~~~~~^^^^^^
-#   File "C:\Users\malicata\AppData\Local\Programs\Python\Python313\Lib\asyncio\runners.py", line 118, in run
-#     return self._loop.run_until_complete(task)
-#            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
-#   File "C:\Users\malicata\AppData\Local\Programs\Python\Python313\Lib\asyncio\base_events.py", line 725, in run_until_complete
-#     return future.result()
-#            ~~~~~~~~~~~~~^^
-#   File "C:\Users\malicata\source\amplifier-onboarding\lib\run-recipe-stream.py", line 193, in execute
-#     raise ValueError(f"Missing bundles: {', '.join(missing)}")
-# ValueError: Missing bundles: bundles/00-basic-bundle.yaml, bundles/01-chat-bundle.yaml, bundles/00-basic-bundle.yaml
+        #         2RecipeExecutionPanel.tsx:189 [progress] Exception occurred: Traceback (most recent call last):
+        #   File "C:\Users\malicata\source\amplifier-onboarding\lib\run-recipe-stream.py", line 248, in main
+        #     asyncio.run(runner.execute())
+        #     ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+        #   File "C:\Users\malicata\AppData\Local\Programs\Python\Python313\Lib\asyncio\runners.py", line 195, in run
+        #     return runner.run(main)
+        #            ~~~~~~~~~~^^^^^^
+        #   File "C:\Users\malicata\AppData\Local\Programs\Python\Python313\Lib\asyncio\runners.py", line 118, in run
+        #     return self._loop.run_until_complete(task)
+        #            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+        #   File "C:\Users\malicata\AppData\Local\Programs\Python\Python313\Lib\asyncio\base_events.py", line 725, in run_until_complete
+        #     return future.result()
+        #            ~~~~~~~~~~~~~^^
+        #   File "C:\Users\malicata\source\amplifier-onboarding\lib\run-recipe-stream.py", line 193, in execute
+        #     raise ValueError(f"Missing bundles: {', '.join(missing)}")
+        # ValueError: Missing bundles: bundles/00-basic-bundle.yaml, bundles/01-chat-bundle.yaml, bundles/00-basic-bundle.yaml
         """Execute all recipe steps sequentially"""
         if not AMPLIFIER_AVAILABLE:
             raise RuntimeError("Amplifier is not installed")
