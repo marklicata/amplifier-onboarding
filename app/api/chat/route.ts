@@ -13,11 +13,12 @@ export const dynamic = 'force-dynamic';
 interface ChatRequest {
   message: string;
   sessionId?: string;
+  userId?: string;  // Anonymous ID or authenticated user ID
 }
 
 interface ChatResponse {
   response: string;
-  session_id: string;
+  session_id?: string;
   timestamp: string;
   error?: string;
 }
@@ -25,7 +26,7 @@ interface ChatResponse {
 export async function POST(request: Request) {
   try {
     const body: ChatRequest = await request.json();
-    const { message, sessionId } = body;
+    const { message, sessionId, userId: bodyUserId } = body;
 
     if (!message || !message.trim()) {
       return Response.json(
@@ -34,16 +35,35 @@ export async function POST(request: Request) {
       );
     }
 
+    // Extract Microsoft user ID from Azure EasyAuth headers (if present)
+    // Falls back to body.userId, then 'anonymous' if not available
+    const msUserId = request.headers.get('x-ms-client-principal-id');
+    const msUserEmail = request.headers.get('x-ms-client-principal-name');
+
+    // Priority: Azure EasyAuth headers > body.userId > 'anonymous'
+    const userId = msUserId || bodyUserId || 'anonymous';
+    const userSource = msUserId ? 'azure-easyauth' : (bodyUserId ? 'client-provided' : 'anonymous');
+
+    // Log authentication details
+    if (msUserId) {
+      console.log(`Authenticated via Azure EasyAuth - userId: ${userId}, email: ${msUserEmail || 'N/A'}`);
+    } else {
+      console.log(`User identification - source: ${userSource}, userId: ${userId}`);
+    }
+
     // Path to Python script
     const scriptPath = path.join(process.cwd(), 'lib', 'amplifier', 'python', 'amplifier-chat.py');
 
-    // Escape the message for shell safety
+    // Escape inputs for shell safety
     const escapedMessage = message.replace(/"/g, '\\"');
     const escapedSessionId = sessionId ? sessionId.replace(/"/g, '\\"') : '';
+    const escapedUserId = userId.replace(/"/g, '\\"');
+
+    console.log(`Chat request - sessionId: ${sessionId || 'none'}, userId: ${userId}`);
 
     // Use correct Python command based on platform
     const pythonCmd = process.platform === 'win32' ? 'python' : 'python3';
-    const command = `${pythonCmd} "${scriptPath}" "${escapedMessage}" "${escapedSessionId}"`;
+    const command = `${pythonCmd} "${scriptPath}" "${escapedMessage}" "${escapedSessionId}" "${escapedUserId}"`;
 
     console.log('Executing chat command...');
     const { stdout, stderr } = await execAsync(command, {
@@ -68,6 +88,8 @@ export async function POST(request: Request) {
       );
     }
 
+    // Return response with session_id so frontend can maintain session
+    console.log(`Chat response - sessionId: ${result.session_id}`);
     return Response.json(result);
 
   } catch (error: any) {

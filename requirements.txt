@@ -6,6 +6,10 @@ python-dotenv>=1.0.0
 anthropic>=0.7.0
 pyyaml>=6.0.0
 
+# API Client Dependencies (for REST API mode)
+httpx[http2]>=0.27.0
+pyjwt>=2.8.0
+
 # Amplifier packages from GitHub | Pin to tested, compatible versions
 git+https://github.com/microsoft/amplifier-core@976fb87335ffe398cf0c1bd1bcd3c2f2c154fc3c
 git+https://github.com/microsoft/amplifier-foundation@d8d76b7e52453d630413eeea0af3df13bebcfc34

@@ -34,6 +34,15 @@ yarn-error.log*
 next-env.d.ts
 
 # developer resources
-/.claude/
-/.docs/
-/.planning/
+.claude/
+.docs/
+.planning/
+__pycache__/
+
+# pytest
+.pytest_cache/
+.cache/
+
+# test artifacts
+*.log
+test_results/

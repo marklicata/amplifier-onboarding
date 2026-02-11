@@ -1,0 +1,36 @@
+services:
+  amplifier-onboarding:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: amplifier-onboarding
+    ports:
+      - "3000:3000"
+    environment:
+      # Set environment variables for production
+      NODE_ENV: production
+      PORT: 3000
+
+      # Amplifier API Configuration (Local Development)
+      AMPLIFIER_USE_API: true
+      AMPLIFIER_API_URL: 
+      AMPLIFIER_API_TIMEOUT: 60000
+      AMPLIFIER_API_KEY: 
+      AMPLIFIER_APP_ID: 
+
+    env_file:
+      - .env
+    volumes:
+      # Mount lib directory for Python scripts (useful for development)
+      - ./lib:/app/lib
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "node", "-e", "require('http').get('http://localhost:3000/api/chat', (r) => process.exit(r.statusCode === 200 ? 0 : 1))"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+networks:
+  default:
+    name: amplifier-network

@@ -132,6 +132,8 @@ amplifier-onboarding/
 
 ### Current Architecture
 
+The application now uses a hybrid architecture with both direct library access (for bundles/recipes) and REST API calls (for chat):
+
 ```
 ┌─────────────┐
 │   Browser   │
@@ -153,14 +155,20 @@ amplifier-onboarding/
 ┌─────────────────────────┐
 │   Python Scripts        │
 │  ┌──────────────────┐   │
-│  │ Amplifier Core   │   │
-│  └────┬─────────────┘   │
-│       │                 │
-│  ┌────▼─────────────┐   │
-│  │ Amplifier        │   │
-│  │ Foundation       │   │
-│  └────┬─────────────┘   │
-└───────┼─────────────────┘
+│  │ API Client       │───────┐
+│  │ (Chat)           │       │ HTTPS
+│  └──────────────────┘       │
+│  ┌──────────────────┐       ▼
+│  │ Amplifier Core   │   ┌─────────────────────┐
+│  │ (Bundles/        │   │  Amplifier API      │
+│  │  Recipes)        │   │  Service            │
+│  └────┬─────────────┘   └──────┬──────────────┘
+│       │                         │
+│  ┌────▼─────────────┐          │
+│  │ Amplifier        │          │
+│  │ Foundation       │          │
+│  └────┬─────────────┘          │
+└───────┼────────────────────────┘
         │ API Call
         ▼
 ┌─────────────────────────┐
@@ -168,6 +176,23 @@ amplifier-onboarding/
 │   (Claude)              │
 └─────────────────────────┘
 ```
+
+**Chat Flow:** Frontend → Next.js API → Python → **Amplifier API Service** → Claude
+**Bundle/Recipe Flow:** Frontend → Next.js API → Python → Amplifier Libraries → Claude
+
+### API Migration
+
+The chat functionality has been migrated to use the Amplifier REST API service instead of direct library imports. This provides:
+
+- **Centralized config management** - Configs stored in API, filtered by user
+- **Long-lived sessions** - Sessions persist across multiple messages
+- **JWT-based authentication** - User-level auth with automatic filtering
+- **Environment variable substitution** - API keys injected from environment
+- **Session reuse** - Frontend maintains session_id for conversation continuity
+
+For details, see:
+- [User Identity Flow](./USER_IDENTITY_FLOW.md) - How user authentication works
+- [Docker Optimization Guide](./DOCKER_OPTIMIZATION_GUIDE.md) - Build performance tips
 
 ### Future Architecture Considerations
 
@@ -179,19 +204,29 @@ amplifier-onboarding/
 
 ## Environment Variables
 
-Create a `.env` or `.env.local` file in the root directory:
+Create a `.env` file in the root directory (see `.env.example` for template):
 
 ```bash
-# Required: Anthropic API key for Claude models
+# Anthropic API key (required for bundles/recipes and config creation)
 ANTHROPIC_API_KEY=your-anthropic-api-key-here
-ANTHROPIC_BASE_URL=your-base-url-here
+
+# Amplifier API Configuration (for chat)
+AMPLIFIER_USE_API=true
+AMPLIFIER_API_URL=http://localhost:8765  # or production URL
+AMPLIFIER_API_KEY=your-amplifier-api-key
+AMPLIFIER_APP_ID=your-app-id
+AMPLIFIER_API_TIMEOUT=60000
+
 # Optional: Alternative AI providers
 # OPENAI_API_KEY=your-openai-api-key-here
 # AZURE_OPENAI_API_KEY=your-azure-key-here
 # AZURE_OPENAI_ENDPOINT=your-azure-endpoint-here
+
+# Telemetry (optional)
+NEXT_PUBLIC_APPINSIGHTS_CONNECTION_STRING=your-connection-string
 ```
 
-Get your Anthropic API key from: https://console.anthropic.com/
+**Note:** The `ANTHROPIC_API_KEY` is used both for direct bundle/recipe execution AND is injected into configs when created via the API (using `${ANTHROPIC_API_KEY}` substitution in bundle JSON files).
 
 ## Getting Started
 
