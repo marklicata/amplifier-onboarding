@@ -19,11 +19,11 @@ tools:
 
 session:
   orchestrator:
-    module: loop-basic
-    source: git+https://github.com/microsoft/amplifier-module-loop-basic@main
+    module: loop-streaming
+    source: git+https://github.com/microsoft/amplifier-module-loop-streaming@main
   context:
-    module: context-simple
-    source: git+https://github.com/microsoft/amplifier-module-context-simple@main
+    module: context-persistent
+    source: git+https://github.com/microsoft/amplifier-module-context-persistent@main
 
 instruction: |
   You are an expert code reviewer focused on quality, security, and best practices.

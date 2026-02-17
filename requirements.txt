@@ -11,8 +11,8 @@ httpx[http2]>=0.27.0
 pyjwt>=2.8.0
 
 # Amplifier packages from GitHub | Pin to tested, compatible versions
-git+https://github.com/microsoft/amplifier-core@976fb87335ffe398cf0c1bd1bcd3c2f2c154fc3c
-git+https://github.com/microsoft/amplifier-foundation@d8d76b7e52453d630413eeea0af3df13bebcfc34
+git+https://github.com/microsoft/amplifier-core@main
+git+https://github.com/microsoft/amplifier-foundation@main
 
 # Alternative providers (comment out anthropic above, uncomment one below):
 # openai>=1.0.0     # For OpenAI
