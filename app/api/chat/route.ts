@@ -62,9 +62,31 @@ export async function POST(request: Request) {
 
     console.log(`Chat request - sessionId: ${sessionId || 'none'}, userId: ${userId}`);
 
+    // Check if user has a custom config saved
+    let configId = '';
+    try {
+      const configResponse = await fetch('http://localhost:3000/api/config', {
+        headers: {
+          'X-User-ID': userId,
+        },
+      });
+      if (configResponse.ok) {
+        const configData = await configResponse.json();
+        if (configData.config) {
+          // User has a custom config - we need the config_id from the API
+          // For now, we'll rely on the default behavior since we're storing in-memory
+          console.log('User has custom config, but config_id not yet persisted to amplifier-app-api');
+        }
+      }
+    } catch (configError) {
+      console.warn('Failed to check for custom config:', configError);
+      // Continue with default config
+    }
+
     // Use correct Python command based on platform
     const pythonCmd = process.platform === 'win32' ? 'python' : 'python3';
-    const command = `${pythonCmd} "${scriptPath}" "${escapedMessage}" "${escapedSessionId}" "${escapedUserId}"`;
+    const escapedConfigId = configId ? configId.replace(/"/g, '\\"') : '';
+    const command = `${pythonCmd} "${scriptPath}" "${escapedMessage}" "${escapedSessionId}" "${escapedUserId}" "${escapedConfigId}"`;
 
     console.log('Executing chat command...');
     const { stdout, stderr } = await execAsync(command, {

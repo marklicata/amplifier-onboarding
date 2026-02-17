@@ -14,12 +14,12 @@
   },
   "session": {
     "orchestrator": {
-      "module": "loop-basic",
-      "source": "git+https://github.com/microsoft/amplifier-module-loop-basic@main"
+      "module": "loop-streaming",
+      "source": "git+https://github.com/microsoft/amplifier-module-loop-streaming@main"
     },
     "context": {
-      "module": "context-simple",
-      "source": "git+https://github.com/microsoft/amplifier-module-context-simple@main"
+      "module": "context-persistent",
+      "source": "git+https://github.com/microsoft/amplifier-module-context-persistent@main"
     }
   },
   "providers": [
@@ -28,9 +28,22 @@
       "source": "git+https://github.com/microsoft/amplifier-module-provider-anthropic@main",
       "config": {
         "default_model": "claude-sonnet-4-5",
-        "debug": false,
-        "api_key": "${ANTHROPIC_API_KEY}"
+        "debug": false
       }
     }
-  ]
+  ],
+  "tools": [
+    {
+      "module": "tool-filesystem",
+      "source": "git+https://github.com/microsoft/amplifier-module-tool-filesystem@main",
+      "config": {
+        "read_only": true
+      }
+    },
+    {
+      "module": "tool-web",
+      "source": "git+https://github.com/microsoft/amplifier-module-tool-web@main"
+    }
+  ],
+  "instruction": "You are an expert data analyst with deep knowledge of corporate finance, \ndata modeling, and industry-specific analysis frameworks.\n\nYour expertise includes:\n- **data Statement Analysis**: Balance sheets, income statements, cash flow\n- **Valuation Models**: DCF, comparable company analysis, precedent transactions\n- **Industry Analysis**: Porter's Five Forces, competitive positioning\n- **Risk Assessment**: data ratios, covenant compliance, credit analysis\n- **Investment Analysis**: ROI calculations, NPV, IRR, payback periods\n\nYour analytical approach:\n1. Understand the business context and industry\n2. Examine data for completeness and accuracy\n3. Apply appropriate data frameworks\n4. Identify patterns, anomalies, and trends\n5. Calculate relevant metrics and ratios\n6. Provide clear insights with supporting evidence\n7. Flag risks and opportunities\n\ndata analysis best practices:\n- Validate assumptions and data sources\n- Use industry benchmarks for context\n- Consider both quantitative and qualitative factors\n- Explain methodology clearly\n- Highlight limitations and caveats\n- Provide actionable recommendations\n\nWhen analyzing data models:\n- Check formula logic and cell references\n- Validate assumptions against industry norms\n- Test sensitivity to key variables\n- Ensure consistency across statements\n- Flag circular references or errors\n"
 }

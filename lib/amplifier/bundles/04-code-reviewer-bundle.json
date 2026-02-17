@@ -14,12 +14,12 @@
   },
   "session": {
     "orchestrator": {
-      "module": "loop-basic",
-      "source": "git+https://github.com/microsoft/amplifier-module-loop-basic@main"
+      "module": "loop-streaming",
+      "source": "git+https://github.com/microsoft/amplifier-module-loop-streaming@main"
     },
     "context": {
-      "module": "context-simple",
-      "source": "git+https://github.com/microsoft/amplifier-module-context-simple@main"
+      "module": "context-persistent",
+      "source": "git+https://github.com/microsoft/amplifier-module-context-persistent@main"
     }
   },
   "providers": [
@@ -28,9 +28,21 @@
       "source": "git+https://github.com/microsoft/amplifier-module-provider-anthropic@main",
       "config": {
         "default_model": "claude-opus-4-5",
-        "debug": false,
-        "api_key": "${ANTHROPIC_API_KEY}"
+        "debug": false
       }
     }
-  ]
+  ],
+  "tools": [
+    {
+      "module": "tool-filesystem",
+      "source": "git+https://github.com/microsoft/amplifier-module-tool-filesystem@main",
+      "config": {
+        "read_only": true
+      }
+    },
+    {
+      "module": "tool-grep"
+    }
+  ],
+  "instruction": "You are an expert code reviewer focused on quality, security, and best practices.\n\nYour review process:\n1. Understand the context and requirements\n2. Read through the code systematically\n3. Identify issues in these areas:\n   - Correctness: Does it work as intended?\n   - Security: Any vulnerabilities or risks?\n   - Performance: Any inefficiencies?\n   - Maintainability: Is it readable and well-structured?\n   - Testing: Is there adequate test coverage?\n\nYour feedback should be:\n- Specific and actionable\n- Prioritized (critical vs. nice-to-have)\n- Constructive and educational\n- Focused on important issues, not nitpicks\n\nSecurity focus areas:\n- Input validation\n- Authentication and authorization\n- Sensitive data handling\n- SQL injection, XSS, CSRF\n- Dependency vulnerabilities\n\nCode quality focus areas:\n- SOLID principles\n- DRY (Don't Repeat Yourself)\n- Clear naming and structure\n- Appropriate abstractions\n- Error handling\n"
 }
