@@ -14,8 +14,8 @@
   },
   "session": {
     "orchestrator": {
-      "module": "loop-basic",
-      "source": "git+https://github.com/microsoft/amplifier-module-loop-basic@main"
+      "module": "loop-streaming",
+      "source": "git+https://github.com/microsoft/amplifier-module-loop-streaming@main"
     },
     "context": {
       "module": "context-simple",
@@ -27,10 +27,10 @@
       "config": {
         "default_model": "claude-sonnet-4-5-20250929",
         "enable_1m_context": "false",
+        "api_key": "${ANTHROPIC_API_KEY}",
         "priority": 1,
         "debug": true,
-        "raw_debug": true,
-        "api_key": "${ANTHROPIC_API_KEY}"
+        "raw_debug": true
       },
       "module": "provider-anthropic",
       "source": "git+https://github.com/microsoft/amplifier-module-provider-anthropic@main"

@@ -16,11 +16,13 @@ import yaml
 
 def load_yaml_bundle(yaml_path: Path) -> Dict[str, Any]:
     """Load a YAML bundle file."""
-    with open(yaml_path, 'r', encoding='utf-8') as f:
+    with open(yaml_path, "r", encoding="utf-8") as f:
         return yaml.safe_load(f)
 
 
-def convert_to_api_format(yaml_data: Dict[str, Any], bundle_name: str) -> Dict[str, Any]:
+def convert_to_api_format(
+    yaml_data: Dict[str, Any], bundle_name: str
+) -> Dict[str, Any]:
     """
     Convert YAML bundle data to amplifier-api JSON config format.
 
@@ -34,31 +36,38 @@ def convert_to_api_format(yaml_data: Dict[str, Any], bundle_name: str) -> Dict[s
         "tags": { ... }
     }
     """
-    bundle_info = yaml_data.get('bundle', {})
+    bundle_info = yaml_data.get("bundle", {})
 
     api_config = {
-        "name": bundle_info.get('name', bundle_name),
-        "description": bundle_info.get('description', f'{bundle_name} configuration'),
-        "config_data": {
-            "bundle": bundle_info
-        },
-        "tags": {
-            "source": "onboarding-app",
-            "type": "bundle"
-        }
+        "name": bundle_info.get("name", bundle_name),
+        "description": bundle_info.get("description", f"{bundle_name} configuration"),
+        "config_data": {"bundle": bundle_info},
+        "tags": {"source": "onboarding-app", "type": "bundle"},
     }
 
     # Add session configuration if present
-    if 'session' in yaml_data:
-        api_config['session'] = yaml_data['session']
+    if "session" in yaml_data:
+        api_config["session"] = yaml_data["session"]
 
     # Add providers configuration if present
-    if 'providers' in yaml_data:
-        api_config['providers'] = yaml_data['providers']
+    if "providers" in yaml_data:
+        api_config["providers"] = yaml_data["providers"]
+
+    # Add tools if present
+    if "tools" in yaml_data:
+        api_config["tools"] = yaml_data["tools"]
+
+    # Add hooks if present
+    if "hooks" in yaml_data:
+        api_config["hooks"] = yaml_data["hooks"]
 
     # Add context information if present
-    if 'context' in yaml_data:
-        api_config['context'] = yaml_data['context']
+    if "context" in yaml_data:
+        api_config["context"] = yaml_data["context"]
+
+    # Add instruction if present
+    if "instruction" in yaml_data:
+        api_config["instruction"] = yaml_data["instruction"]
 
     return api_config
 
@@ -79,7 +88,7 @@ def convert_bundle(yaml_path: Path, output_dir: Path) -> bool:
 
         # Write JSON file
         json_path = output_dir / f"{yaml_path.stem}.json"
-        with open(json_path, 'w', encoding='utf-8') as f:
+        with open(json_path, "w", encoding="utf-8") as f:
             json.dump(json_data, f, indent=2, ensure_ascii=False)
 
         print(f"  [OK] Created {json_path.name}")
@@ -93,14 +102,16 @@ def convert_bundle(yaml_path: Path, output_dir: Path) -> bool:
 def validate_json(json_path: Path) -> bool:
     """Validate that a JSON file is well-formed."""
     try:
-        with open(json_path, 'r', encoding='utf-8') as f:
+        with open(json_path, "r", encoding="utf-8") as f:
             data = json.load(f)
 
         # Check required fields
-        required_fields = ['name', 'description']
+        required_fields = ["name", "description"]
         for field in required_fields:
             if field not in data:
-                print(f"  [WARN] Warning: {json_path.name} missing required field: {field}")
+                print(
+                    f"  [WARN] Warning: {json_path.name} missing required field: {field}"
+                )
                 return False
 
         return True
@@ -113,14 +124,14 @@ def main():
     """Convert all YAML bundles to JSON format."""
     # Determine paths
     script_dir = Path(__file__).parent
-    bundles_dir = script_dir.parent / 'bundles'
+    bundles_dir = script_dir.parent / "bundles"
 
     if not bundles_dir.exists():
         print(f"Error: Bundles directory not found: {bundles_dir}", file=sys.stderr)
         return 1
 
     # Find all YAML files
-    yaml_files = sorted(bundles_dir.glob('*.yaml'))
+    yaml_files = sorted(bundles_dir.glob("*.yaml"))
     if not yaml_files:
         print(f"Error: No YAML files found in {bundles_dir}", file=sys.stderr)
         return 1
@@ -133,25 +144,25 @@ def main():
         if convert_bundle(yaml_path, bundles_dir):
             success_count += 1
 
-    print(f"\n{'='*60}")
+    print(f"\n{'=' * 60}")
     print(f"Conversion complete: {success_count}/{len(yaml_files)} successful")
 
     # Validate converted files
-    print(f"\n{'='*60}")
+    print(f"\n{'=' * 60}")
     print("Validating JSON files...\n")
 
-    json_files = sorted(bundles_dir.glob('*.json'))
+    json_files = sorted(bundles_dir.glob("*.json"))
     valid_count = 0
     for json_path in json_files:
         if validate_json(json_path):
             print(f"  [OK] {json_path.name} is valid")
             valid_count += 1
 
-    print(f"\n{'='*60}")
+    print(f"\n{'=' * 60}")
     print(f"Validation complete: {valid_count}/{len(json_files)} valid")
 
     return 0 if success_count == len(yaml_files) else 1
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     sys.exit(main())

@@ -29,9 +29,32 @@
       "config": {
         "default_model": "claude-sonnet-4-5",
         "debug": true,
-        "raw_debug": true,
-        "api_key": "${ANTHROPIC_API_KEY}"
+        "raw_debug": true
       }
     }
-  ]
+  ],
+  "tools": [
+    {
+      "module": "tool-filesystem",
+      "source": "git+https://github.com/microsoft/amplifier-module-tool-filesystem@main"
+    },
+    {
+      "module": "tool-bash",
+      "source": "git+https://github.com/microsoft/amplifier-module-tool-bash@main"
+    },
+    {
+      "module": "tool-web",
+      "source": "git+https://github.com/microsoft/amplifier-module-tool-web@main"
+    },
+    {
+      "module": "tool-grep"
+    }
+  ],
+  "hooks": [
+    {
+      "module": "hooks-logging",
+      "source": "git+https://github.com/microsoft/amplifier-module-hooks-logging@main"
+    }
+  ],
+  "instruction": "You are an expert software developer assistant powered by Amplifier.\n\nYour capabilities:\n- Read, write, and edit files in the codebase\n- Execute bash commands for testing, building, and running code\n- Search the web for documentation and examples\n- Search through codebases using grep patterns\n\nYour approach:\n- Write clean, maintainable, well-documented code\n- Follow best practices and design patterns\n- Test your changes before presenting them\n- Explain your reasoning and approach\n\nWhen asked to implement features:\n1. Understand the requirements\n2. Plan your approach\n3. Implement the solution\n4. Test to verify it works\n5. Document your changes\n"
 }

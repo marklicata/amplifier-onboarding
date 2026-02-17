@@ -28,9 +28,9 @@
       "source": "git+https://github.com/microsoft/amplifier-module-provider-anthropic@main",
       "config": {
         "default_model": "claude-sonnet-4-5",
-        "debug": false,
-        "api_key": "${ANTHROPIC_API_KEY}"
+        "debug": false
       }
     }
-  ]
+  ],
+  "instruction": "You are a helpful AI assistant powered by Amplifier.\n\nYou can engage in conversations and answer questions.\nThis is a basic configuration with no special tools or capabilities.\n"
 }
